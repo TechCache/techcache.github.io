@@ -18,9 +18,6 @@ content="Tech Cache provides practical cybersecurity reviews for small business 
   --accent2:#38bdf8;
   --border:#24304f;
   --button-text:#06111f;
-  --success:#86efac;
-  --warning:#fcd34d;
-  --danger:#fca5a5;
 }
 
 *{
@@ -46,10 +43,27 @@ body{
   margin-bottom:36px;
 }
 
+.brand-header{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  margin-bottom:14px;
+}
+
 .logo{
   max-width:180px;
   height:auto;
-  margin-bottom:16px;
+  margin-bottom:0;
+}
+
+.brand{
+  font-size:1.65rem;
+  font-weight:700;
+  color:var(--accent);
+  letter-spacing:1px;
+  margin:0;
 }
 
 h1{
@@ -64,14 +78,6 @@ h1{
   margin-bottom:12px;
   font-weight:700;
 }
-
- .brand{
-   font-size:1.6rem;
-   font-weight:700;
-   color:var(--accent);
-   letter-spacing:1px;
-   margin-bottom:6px;
- }
 
 .subtext{
   max-width:760px;
@@ -301,8 +307,16 @@ a:hover{
     font-size:2rem;
   }
 
+  .brand{
+    font-size:1.4rem;
+  }
+
   .container{
     padding-top:28px;
+  }
+
+  .logo{
+    max-width:150px;
   }
 
   .cta-button,
@@ -319,11 +333,12 @@ a:hover{
 <div class="container">
 
   <header class="hero">
-    <img src="assets/logo.png" alt="Tech Cache logo" class="logo">
+    <div class="brand-header">
+      <img src="assets/logo.png" alt="Tech Cache logo" class="logo">
+      <div class="brand">Tech Cache</div>
+    </div>
 
-    <div class="brand">Tech Cache</div>
-
-    <h1>Protect Your Website From Common Security Risks</h1>
+    <h1>Protect Your Website From Hidden Security Risks</h1>
 
     <div class="tagline">Affordable cybersecurity reviews for small business websites</div>
 
