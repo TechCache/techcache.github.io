@@ -9,161 +9,192 @@
 content="Tech Cache provides practical cybersecurity reviews for small business websites including email security, WordPress exposure checks, and website security snapshots.">
 
 <style>
-
 :root{
---bg:#0b1020;
---card:#121933;
---text:#e8ecf3;
---muted:#aab4c8;
---accent:#7dd3fc;
---accent2:#38bdf8;
---border:#24304f;
+  --bg:#0b1020;
+  --card:#121933;
+  --text:#e8ecf3;
+  --muted:#aab4c8;
+  --accent:#7dd3fc;
+  --accent2:#38bdf8;
+  --border:#24304f;
+  --button-text:#06111f;
 }
 
 *{
-box-sizing:border-box;
+  box-sizing:border-box;
 }
 
 body{
-margin:0;
-font-family:Arial,Helvetica,sans-serif;
-background:linear-gradient(180deg,#0b1020 0%,#11182f 100%);
-color:var(--text);
-line-height:1.6;
+  margin:0;
+  font-family:Arial,Helvetica,sans-serif;
+  background:linear-gradient(180deg,#0b1020 0%,#11182f 100%);
+  color:var(--text);
+  line-height:1.6;
 }
 
 .container{
-max-width:860px;
-margin:0 auto;
-padding:40px 20px 60px;
+  max-width:860px;
+  margin:0 auto;
+  padding:40px 20px 60px;
 }
 
 .hero{
-text-align:center;
-margin-bottom:36px;
+  text-align:center;
+  margin-bottom:36px;
 }
 
 .logo{
-max-width:180px;
-height:auto;
-margin-bottom:16px;
+  max-width:180px;
+  height:auto;
+  margin-bottom:16px;
 }
 
 h1{
-margin:0 0 8px;
-font-size:2.4rem;
-color:white;
+  margin:0 0 8px;
+  font-size:2.4rem;
+  color:white;
 }
 
 .tagline{
-font-size:1.15rem;
-color:var(--accent);
-margin-bottom:12px;
-font-weight:600;
+  font-size:1.15rem;
+  color:var(--accent);
+  margin-bottom:12px;
+  font-weight:600;
 }
 
 .subtext{
-max-width:720px;
-margin:0 auto 10px;
-color:var(--muted);
-font-size:1rem;
+  max-width:720px;
+  margin:0 auto 10px;
+  color:var(--muted);
+  font-size:1rem;
 }
 
 .location{
-color:var(--muted);
-font-size:0.95rem;
-margin-top:8px;
+  color:var(--muted);
+  font-size:0.95rem;
+  margin-top:8px;
+}
+
+.cta-wrap{
+  margin-top:22px;
+}
+
+.cta-button{
+  display:inline-block;
+  background:var(--accent2);
+  color:var(--button-text);
+  padding:12px 22px;
+  border-radius:10px;
+  font-weight:700;
+  text-decoration:none;
+  transition:transform 0.15s ease, opacity 0.15s ease;
+}
+
+.cta-button:hover{
+  text-decoration:none;
+  opacity:0.95;
+  transform:translateY(-1px);
 }
 
 .card{
-background:rgba(18,25,51,0.9);
-border:1px solid var(--border);
-border-radius:14px;
-padding:24px;
-margin-bottom:22px;
-box-shadow:0 10px 30px rgba(0,0,0,0.25);
+  background:rgba(18,25,51,0.9);
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:24px;
+  margin-bottom:22px;
+  box-shadow:0 10px 30px rgba(0,0,0,0.25);
 }
 
 h2{
-margin-top:0;
-color:white;
-font-size:1.35rem;
+  margin-top:0;
+  color:white;
+  font-size:1.35rem;
 }
 
 p{
-margin-top:0;
+  margin-top:0;
 }
 
 ul{
-margin:12px 0 0 20px;
-padding:0;
+  margin:12px 0 0 20px;
+  padding:0;
 }
 
 li{
-margin-bottom:8px;
-color:var(--text);
+  margin-bottom:8px;
+  color:var(--text);
 }
 
 .services{
-display:grid;
-gap:16px;
+  display:grid;
+  gap:16px;
 }
 
 .service{
-padding:18px;
-border:1px solid var(--border);
-border-radius:12px;
-background:rgba(255,255,255,0.02);
+  padding:18px;
+  border:1px solid var(--border);
+  border-radius:12px;
+  background:rgba(255,255,255,0.02);
 }
 
 .service h3{
-margin:0 0 8px;
-color:var(--accent);
-font-size:1.1rem;
+  margin:0 0 8px;
+  color:var(--accent);
+  font-size:1.1rem;
 }
 
 .price{
-font-weight:bold;
-color:white;
-margin-bottom:8px;
+  font-weight:bold;
+  color:white;
+  margin-bottom:8px;
 }
 
 .contact-box{
-text-align:center;
+  text-align:center;
 }
 
 .contact-info{
-font-size:1.05rem;
-margin-top:10px;
+  font-size:1.05rem;
+  margin-top:10px;
+}
+
+.response-time{
+  color:var(--muted);
+  font-size:0.95rem;
+  margin-top:14px;
 }
 
 a{
-color:var(--accent);
-text-decoration:none;
+  color:var(--accent);
+  text-decoration:none;
 }
 
 a:hover{
-color:var(--accent2);
-text-decoration:underline;
+  color:var(--accent2);
+  text-decoration:underline;
 }
 
 .footer{
-text-align:center;
-color:var(--muted);
-font-size:0.9rem;
-margin-top:24px;
+  text-align:center;
+  color:var(--muted);
+  font-size:0.9rem;
+  margin-top:24px;
 }
 
 @media (max-width:640px){
-h1{
-font-size:2rem;
-}
+  h1{
+    font-size:2rem;
+  }
 
-.container{
-padding-top:28px;
-}
-}
+  .container{
+    padding-top:28px;
+  }
 
+  .cta-button{
+    width:100%;
+    max-width:320px;
+  }
+}
 </style>
 </head>
 
@@ -171,134 +202,121 @@ padding-top:28px;
 
 <div class="container">
 
-<header class="hero">
+  <header class="hero">
+    <img src="assets/logo.png" alt="Tech Cache logo" class="logo">
 
-<img src="assets/logo.png" alt="Tech Cache logo" class="logo">
+    <h1>Tech Cache</h1>
 
-<h1>Tech Cache</h1>
+    <div class="tagline">Cybersecurity reviews for small business websites</div>
 
-<div class="tagline">Cybersecurity reviews for small business websites</div>
+    <p class="subtext">
+      Tech Cache provides practical security configuration reviews to help
+      businesses identify common website vulnerabilities before attackers do.
+    </p>
 
-<p class="subtext">
-Tech Cache provides practical security configuration reviews to help
-businesses identify common website vulnerabilities before attackers do.
-</p>
+    <p class="subtext">
+      Security reviews performed by a professional Threat and Vulnerability Analyst
+      with experience validating bug bounty submissions and performing internal
+      web application penetration testing.
+    </p>
 
-<p class="subtext">
-Security reviews performed by a professional Threat and Vulnerability Analyst
-with experience validating bug bounty submissions and performing internal
-web application penetration testing.
-</p>
+    <div class="location">Based in Tampa, Florida.</div>
 
-<div class="location">Based in Tampa, Florida.</div>
+    <div class="cta-wrap">
+      <a href="mailto:techcache@proton.me?subject=Security%20Snapshot%20Request" class="cta-button">
+        Request a Security Snapshot
+      </a>
+    </div>
+  </header>
 
-</header>
+  <section class="card">
+    <h2>Why This Matters</h2>
 
+    <p>
+      Many small business websites contain simple configuration issues that can
+      increase exposure to automated attacks, account takeover attempts, and
+      email impersonation.
+    </p>
 
-<section class="card">
+    <p>
+      A short security review can identify these risks early and provide clear,
+      practical steps to improve your security posture.
+    </p>
+  </section>
 
-<h2>Why This Matters</h2>
+  <section class="card">
+    <h2>What Tech Cache Reviews</h2>
 
-<p>
-Many small business websites contain simple configuration issues that can
-increase exposure to automated attacks, account takeover attempts, and
-email impersonation.
-</p>
+    <ul>
+      <li>Email spoofing protection issues such as weak or missing DMARC, SPF, and DKIM enforcement</li>
+      <li>Publicly accessible WordPress admin portals and login exposure</li>
+      <li>Username enumeration through common WordPress endpoints</li>
+      <li>Missing browser security protections such as HSTS and other HTTP security headers</li>
+      <li>Basic website security posture observations for small business websites</li>
+    </ul>
+  </section>
 
-<p>
-A short security review can identify these risks early and provide clear,
-practical steps to improve your security posture.
-</p>
+  <section class="card">
+    <h2>Services</h2>
 
-</section>
+    <div class="services">
+      <div class="service">
+        <h3>Security Snapshot</h3>
+        <div class="price">$39</div>
+        <p>
+          A concise 1-page report covering common website and email security
+          configuration issues, with clear findings and recommended fixes.
+        </p>
+      </div>
 
+      <div class="service">
+        <h3>Remediation Recheck</h3>
+        <div class="price">$29</div>
+        <p>
+          A follow-up review to confirm whether previously identified issues
+          have been addressed.
+        </p>
+      </div>
 
-<section class="card">
+      <div class="service">
+        <h3>Expanded Review</h3>
+        <div class="price">$149</div>
+        <p>
+          A broader manual review for businesses that want a deeper look at
+          their website security posture and additional risk detail.
+        </p>
+      </div>
+    </div>
+  </section>
 
-<h2>What Tech Cache Reviews</h2>
+  <section class="card contact-box">
+    <h2>Contact</h2>
 
-<ul>
+    <p>If you'd like a review or have questions, feel free to reach out.</p>
 
-<li>Email spoofing protection issues such as weak or missing DMARC, SPF, and DKIM enforcement</li>
+    <div class="contact-info">
+      📧 <a href="mailto:techcache@proton.me">techcache@proton.me</a>
+    </div>
 
-<li>Publicly accessible WordPress admin portals and login exposure</li>
+    <div class="contact-info">
+      📱 <a href="tel:+18139069247">813-906-9247</a> (Call or Text)
+    </div>
 
-<li>Username enumeration through common WordPress endpoints</li>
+    <div class="response-time">
+      Typical response time: within 24 hours
+    </div>
 
-<li>Missing browser security protections such as HSTS and other HTTP security headers</li>
+    <p style="margin-top:16px;">
+      GitHub:
+      <a href="https://github.com/techcache" target="_blank" rel="noopener noreferrer">
+        github.com/techcache
+      </a>
+    </p>
+  </section>
 
-<li>Basic website security posture observations for small business websites</li>
-
-</ul>
-
-</section>
-
-
-<section class="card">
-
-<h2>Services</h2>
-
-<div class="services">
-
-<div class="service">
-<h3>Security Snapshot</h3>
-<div class="price">$39</div>
-<p>
-A concise 1-page report covering common website and email security
-configuration issues, with clear findings and recommended fixes.
-</p>
-</div>
-
-<div class="service">
-<h3>Remediation Recheck</h3>
-<div class="price">$29</div>
-<p>
-A follow-up review to confirm whether previously identified issues
-have been addressed.
-</p>
-</div>
-
-<div class="service">
-<h3>Expanded Review</h3>
-<div class="price">$149</div>
-<p>
-A broader manual review for businesses that want a deeper look at
-their website security posture and additional risk detail.
-</p>
-</div>
-
-</div>
-
-</section>
-
-
-<section class="card contact-box">
-
-<h2>Contact</h2>
-
-<p>If you'd like a review or have questions, feel free to reach out.</p>
-
-<div class="contact-info">
-📧 <a href="mailto:techcache@proton.me">techcache@proton.me</a>
-</div>
-
-<div class="contact-info">
-📱 <a href="tel:+18139069247">813-906-9247</a> (Call or Text)
-</div>
-
-<p style="margin-top:16px;">
-GitHub:
-<a href="https://github.com/techcache" target="_blank">
-github.com/techcache
-</a>
-</p>
-
-</section>
-
-
-<div class="footer">
-© 2026 Tech Cache — Practical security reviews for small businesses.
-</div>
+  <div class="footer">
+    © 2026 Tech Cache — Practical security reviews for small businesses.
+  </div>
 
 </div>
 
