@@ -5,65 +5,163 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Tech Cache</title>
 
+<meta name="description"
+content="Tech Cache provides practical cybersecurity reviews for small business websites including email security, WordPress exposure checks, and website security snapshots.">
+
 <style>
 
-body {
-    margin:0;
-    font-family: Arial, Helvetica, sans-serif;
-    background-color:#0f1b2a;
-    color:white;
-    line-height:1.6;
+:root{
+--bg:#0b1020;
+--card:#121933;
+--text:#e8ecf3;
+--muted:#aab4c8;
+--accent:#7dd3fc;
+--accent2:#38bdf8;
+--border:#24304f;
 }
 
-.container {
-    max-width:900px;
-    margin:auto;
-    padding:40px 20px;
+*{
+box-sizing:border-box;
 }
 
-h1 {
-    color:#ffd84d;
-    font-size:40px;
+body{
+margin:0;
+font-family:Arial,Helvetica,sans-serif;
+background:linear-gradient(180deg,#0b1020 0%,#11182f 100%);
+color:var(--text);
+line-height:1.6;
 }
 
-h2 {
-    color:#ffd84d;
-    margin-top:40px;
+.container{
+max-width:860px;
+margin:0 auto;
+padding:40px 20px 60px;
 }
 
-h3 {
-    margin-top:20px;
+.hero{
+text-align:center;
+margin-bottom:36px;
 }
 
-p {
-    margin:10px 0;
+.logo{
+max-width:180px;
+height:auto;
+margin-bottom:16px;
 }
 
-ul {
-    margin-top:10px;
+h1{
+margin:0 0 8px;
+font-size:2.4rem;
+color:white;
 }
 
-.service {
-    background:#16263a;
-    padding:20px;
-    margin-top:20px;
-    border-radius:8px;
+.tagline{
+font-size:1.15rem;
+color:var(--accent);
+margin-bottom:12px;
+font-weight:600;
 }
 
-.footer {
-    margin-top:60px;
-    font-size:14px;
-    color:#ccc;
+.subtext{
+max-width:720px;
+margin:0 auto 10px;
+color:var(--muted);
+font-size:1rem;
 }
 
-a {
-    color:#ffd84d;
-    text-decoration:none;
+.location{
+color:var(--muted);
+font-size:0.95rem;
+margin-top:8px;
 }
 
-hr {
-    margin-top:40px;
-    border:1px solid #2c3e50;
+.card{
+background:rgba(18,25,51,0.9);
+border:1px solid var(--border);
+border-radius:14px;
+padding:24px;
+margin-bottom:22px;
+box-shadow:0 10px 30px rgba(0,0,0,0.25);
+}
+
+h2{
+margin-top:0;
+color:white;
+font-size:1.35rem;
+}
+
+p{
+margin-top:0;
+}
+
+ul{
+margin:12px 0 0 20px;
+padding:0;
+}
+
+li{
+margin-bottom:8px;
+color:var(--text);
+}
+
+.services{
+display:grid;
+gap:16px;
+}
+
+.service{
+padding:18px;
+border:1px solid var(--border);
+border-radius:12px;
+background:rgba(255,255,255,0.02);
+}
+
+.service h3{
+margin:0 0 8px;
+color:var(--accent);
+font-size:1.1rem;
+}
+
+.price{
+font-weight:bold;
+color:white;
+margin-bottom:8px;
+}
+
+.contact-box{
+text-align:center;
+}
+
+.contact-info{
+font-size:1.05rem;
+margin-top:10px;
+}
+
+a{
+color:var(--accent);
+text-decoration:none;
+}
+
+a:hover{
+color:var(--accent2);
+text-decoration:underline;
+}
+
+.footer{
+text-align:center;
+color:var(--muted);
+font-size:0.9rem;
+margin-top:24px;
+}
+
+@media (max-width:640px){
+h1{
+font-size:2rem;
+}
+
+.container{
+padding-top:28px;
+}
 }
 
 </style>
@@ -73,114 +171,133 @@ hr {
 
 <div class="container">
 
-<div style="text-align:center; margin-bottom: 1rem;">
-  <img src="/assets/logo.png" alt="Tech Cache logo" width="180">
-</div>
+<header class="hero">
+
+<img src="assets/logo.png" alt="Tech Cache logo" class="logo">
 
 <h1>Tech Cache</h1>
 
+<div class="tagline">Cybersecurity reviews for small business websites</div>
+
+<p class="subtext">
+Tech Cache provides practical security configuration reviews to help
+businesses identify common website vulnerabilities before attackers do.
+</p>
+
+<p class="subtext">
+Security reviews performed by a professional Threat and Vulnerability Analyst
+with experience validating bug bounty submissions and performing internal
+web application penetration testing.
+</p>
+
+<div class="location">Based in Tampa, Florida.</div>
+
+</header>
+
+
+<section class="card">
+
+<h2>Why This Matters</h2>
+
 <p>
-Cybersecurity reviews for small business websites.
+Many small business websites contain simple configuration issues that can
+increase exposure to automated attacks, account takeover attempts, and
+email impersonation.
 </p>
 
 <p>
-Security reviews performed by a professional Threat and Vulnerability Analyst.
+A short security review can identify these risks early and provide clear,
+practical steps to improve your security posture.
 </p>
 
-<p>
-Experience includes vulnerability validation and web application security testing.
-</p>
-
-<p>
-Tech Cache provides practical security configuration reviews to help businesses identify
-common website vulnerabilities before they become real security incidents.
-</p>
+</section>
 
 
-<h2>Example Findings</h2>
+<section class="card">
+
+<h2>What Tech Cache Reviews</h2>
 
 <ul>
-<li>Exposed WordPress administrative login portals</li>
-<li>Missing email spoofing protections (DMARC)</li>
-<li>Public username enumeration via REST APIs</li>
-<li>Missing browser security protections</li>
+
+<li>Email spoofing protection issues such as weak or missing DMARC, SPF, and DKIM enforcement</li>
+
+<li>Publicly accessible WordPress admin portals and login exposure</li>
+
+<li>Username enumeration through common WordPress endpoints</li>
+
+<li>Missing browser security protections such as HSTS and other HTTP security headers</li>
+
+<li>Basic website security posture observations for small business websites</li>
+
 </ul>
 
+</section>
+
+
+<section class="card">
 
 <h2>Services</h2>
 
+<div class="services">
+
 <div class="service">
-
-<h3>Security Snapshot — $39</h3>
-
+<h3>Security Snapshot</h3>
+<div class="price">$39</div>
 <p>
-A quick passive review of your website and domain configuration.
+A concise 1-page report covering common website and email security
+configuration issues, with clear findings and recommended fixes.
 </p>
+</div>
 
+<div class="service">
+<h3>Remediation Recheck</h3>
+<div class="price">$29</div>
 <p>
-Includes a 1-page report covering common issues such as exposed admin portals,
-missing email spoofing protection, username enumeration, and missing browser security protections.
+A follow-up review to confirm whether previously identified issues
+have been addressed.
 </p>
+</div>
+
+<div class="service">
+<h3>Expanded Review</h3>
+<div class="price">$149</div>
+<p>
+A broader manual review for businesses that want a deeper look at
+their website security posture and additional risk detail.
+</p>
+</div>
 
 </div>
 
-
-<div class="service">
-
-<h3>Remediation Recheck — $29</h3>
-
-<p>
-A follow-up review after updates are made to confirm whether previously identified issues
-appear resolved and to note any remaining concerns.
-</p>
-
-</div>
+</section>
 
 
-<div class="service">
-
-<h3>Expanded Security Review — $149</h3>
-
-<p>
-A broader manual review of publicly accessible web assets and configurations.
-Designed for businesses that want a deeper look beyond the initial snapshot.
-</p>
-
-<p>
-Includes a more detailed report with prioritized findings and recommendations.
-</p>
-
-</div>
-
-
-<p>
-Need something more advanced? Full application security assessments are available on request.
-</p>
-
-
-<hr>
-
+<section class="card contact-box">
 
 <h2>Contact</h2>
 
-<p>
-If you would like a website security snapshot or have questions about your website's security,
-please reach out using the contact information below.
+<p>If you'd like a review or have questions, feel free to reach out.</p>
+
+<div class="contact-info">
+📧 <a href="mailto:techcache@proton.me">techcache@proton.me</a>
+</div>
+
+<div class="contact-info">
+📱 <a href="tel:+18139069247">813-906-9247</a> (Call or Text)
+</div>
+
+<p style="margin-top:16px;">
+GitHub:
+<a href="https://github.com/techcache" target="_blank">
+github.com/techcache
+</a>
 </p>
 
-<p>
-Email: techcache@proton.me<br>
-Phone: (813) 906-9247 — Call or Text
-</p>
+</section>
 
 
 <div class="footer">
-
-<p>
-Tech Cache<br>
-<a href="https://github.com/TechCache">github.com/TechCache</a>
-</p>
-
+© 2026 Tech Cache — Practical security reviews for small businesses.
 </div>
 
 </div>
