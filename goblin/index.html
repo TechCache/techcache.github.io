@@ -717,6 +717,35 @@
       opacity: 0.85;
     }
 
+    .hud-audio {
+      pointer-events: auto;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 5px;
+      padding: 3px 7px;
+      border: 1px solid rgba(154, 154, 138, 0.7);
+      border-radius: 4px;
+      background: rgba(10, 9, 8, 0.62);
+      color: var(--tape);
+      font-family: var(--font-mono);
+      font-size: 0.52rem;
+      letter-spacing: 0;
+      cursor: pointer;
+      box-shadow: 1px 1px 0 rgba(0, 0, 0, 0.8);
+    }
+
+    .hud-audio[aria-pressed="true"] {
+      color: var(--hazard);
+      border-color: rgba(232, 93, 4, 0.78);
+      background: rgba(25, 12, 8, 0.72);
+    }
+
+    .hud-audio:focus-visible {
+      outline: 2px solid var(--neon);
+      outline-offset: 2px;
+    }
+
     /* Controls */
     .controls {
       position: fixed;
@@ -846,6 +875,7 @@
     <span class="hud__label">Goblin Mood</span>
     <span class="hud__value" id="moodText">Annoyed</span>
     <span class="hud__meta">NOT A REAL PHONE · BONK RESPONSIBLY</span>
+    <button type="button" class="hud-audio" id="btnAmbience" aria-pressed="false">AMBIENCE ON</button>
   </div>
 
   <div class="stage">
@@ -1130,6 +1160,7 @@
         let ambientGain = null;
         let ambienceTimer = null;
         let musicTimer = null;
+        let ambienceMuted = false;
 
         function ensureContext() {
           if (!AudioContextCtor) return null;
@@ -1150,7 +1181,7 @@
 
           ambientGain = audio.createGain();
           ambientGain.gain.setValueAtTime(0.0001, audio.currentTime);
-          ambientGain.gain.exponentialRampToValueAtTime(0.16, audio.currentTime + 1.8);
+          ambientGain.gain.exponentialRampToValueAtTime(ambienceMuted ? 0.0001 : 0.16, audio.currentTime + 1.8);
           ambientGain.connect(master);
 
           const humFilter = audio.createBiquadFilter();
@@ -1193,6 +1224,20 @@
           labWake();
           scheduleAmbience();
           scheduleMusic();
+        }
+
+        function setAmbienceMuted(muted) {
+          ambienceMuted = !!muted;
+          const audio = ensureContext();
+          if (!audio || !ambientGain) return ambienceMuted;
+          ambientGain.gain.cancelScheduledValues(audio.currentTime);
+          ambientGain.gain.setValueAtTime(Math.max(ambientGain.gain.value, 0.0001), audio.currentTime);
+          ambientGain.gain.exponentialRampToValueAtTime(ambienceMuted ? 0.0001 : 0.16, audio.currentTime + 0.35);
+          return ambienceMuted;
+        }
+
+        function toggleAmbienceMuted() {
+          return setAmbienceMuted(!ambienceMuted);
         }
 
         function now() {
@@ -1396,6 +1441,8 @@
           bonk: bonk,
           glassSmash: glassSmash,
           startAmbient: startAmbient,
+          setAmbienceMuted: setAmbienceMuted,
+          toggleAmbienceMuted: toggleAmbienceMuted,
           repair: repair,
           worse: worse,
           catastrophic: catastrophic,
@@ -1467,6 +1514,7 @@
         speechBubble: document.getElementById('speechBubble'),
         goblinContainer: document.getElementById('goblin-container'),
         impactBurst: document.getElementById('impactBurst'),
+        ambienceButton: document.getElementById('btnAmbience'),
       };
 
       const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -1991,6 +2039,13 @@
       document.getElementById('btnTape').addEventListener('click', repairWithTape);
       document.getElementById('btnWorse').addEventListener('click', makeItWorse);
       document.getElementById('btnReset').addEventListener('click', resetDamage);
+      els.ambienceButton.addEventListener('click', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        const muted = SoundController.toggleAmbienceMuted();
+        els.ambienceButton.setAttribute('aria-pressed', muted ? 'true' : 'false');
+        els.ambienceButton.textContent = muted ? 'AMBIENCE OFF' : 'AMBIENCE ON';
+      });
 
       setPhrase('Tap me to bonk. This screen can\'t stop you. Legally.', 'idle');
       updateUI();
