@@ -36,8 +36,8 @@
       --z-hud: 30;
       --z-controls: 40;
       --radius: 10px;
-      --goblin-size: clamp(132px, 34vw, 196px);
-      --goblin-bottom: calc(118px + var(--safe-bottom));
+      --goblin-size: clamp(164px, 46vw, 280px);
+      --goblin-bottom: calc(154px + var(--safe-bottom));
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -738,6 +738,13 @@
         transform: rotate(6deg);
       }
     }
+
+    @media (max-height: 700px) {
+      :root {
+        --goblin-size: clamp(150px, 40vw, 230px);
+        --goblin-bottom: calc(142px + var(--safe-bottom));
+      }
+    }
   </style>
 </head>
 <body>
@@ -1033,6 +1040,116 @@
         };
       })();
 
+      /* ============================================================
+         SoundController — tiny generated workshop noises, no assets
+         ============================================================ */
+      const SoundController = (function () {
+        const AudioContextCtor = window.AudioContext || window.webkitAudioContext;
+        let ctx = null;
+        let master = null;
+
+        function ensureContext() {
+          if (!AudioContextCtor) return null;
+          if (!ctx) {
+            ctx = new AudioContextCtor();
+            master = ctx.createGain();
+            master.gain.value = 0.34;
+            master.connect(ctx.destination);
+          }
+          if (ctx.state === 'suspended') ctx.resume();
+          return ctx;
+        }
+
+        function now() {
+          const audio = ensureContext();
+          return audio ? audio.currentTime : 0;
+        }
+
+        function tone(freq, duration, type, start, volume, endFreq) {
+          const audio = ensureContext();
+          if (!audio) return;
+          const t = start == null ? audio.currentTime : start;
+          const osc = audio.createOscillator();
+          const gain = audio.createGain();
+          osc.type = type || 'square';
+          osc.frequency.setValueAtTime(freq, t);
+          if (endFreq) osc.frequency.exponentialRampToValueAtTime(Math.max(20, endFreq), t + duration);
+          gain.gain.setValueAtTime(0.0001, t);
+          gain.gain.exponentialRampToValueAtTime(volume || 0.18, t + 0.012);
+          gain.gain.exponentialRampToValueAtTime(0.0001, t + duration);
+          osc.connect(gain);
+          gain.connect(master);
+          osc.start(t);
+          osc.stop(t + duration + 0.03);
+        }
+
+        function noise(duration, start, volume, lowpass) {
+          const audio = ensureContext();
+          if (!audio) return;
+          const t = start == null ? audio.currentTime : start;
+          const buffer = audio.createBuffer(1, Math.max(1, Math.floor(audio.sampleRate * duration)), audio.sampleRate);
+          const data = buffer.getChannelData(0);
+          for (let i = 0; i < data.length; i++) data[i] = (Math.random() * 2 - 1) * (1 - i / data.length);
+          const src = audio.createBufferSource();
+          const filter = audio.createBiquadFilter();
+          const gain = audio.createGain();
+          src.buffer = buffer;
+          filter.type = 'lowpass';
+          filter.frequency.value = lowpass || 1200;
+          gain.gain.setValueAtTime(volume || 0.12, t);
+          gain.gain.exponentialRampToValueAtTime(0.0001, t + duration);
+          src.connect(filter);
+          filter.connect(gain);
+          gain.connect(master);
+          src.start(t);
+          src.stop(t + duration + 0.03);
+        }
+
+        function bonk() {
+          const t = now();
+          tone(150, 0.16, 'triangle', t, 0.26, 72);
+          tone(540, 0.05, 'square', t + 0.02, 0.08, 260);
+          noise(0.11, t, 0.08, 900);
+        }
+
+        function repair() {
+          const t = now();
+          noise(0.18, t, 0.13, 2600);
+          tone(320, 0.08, 'sawtooth', t + 0.05, 0.08, 420);
+          tone(250, 0.08, 'sawtooth', t + 0.14, 0.07, 340);
+        }
+
+        function worse() {
+          const t = now();
+          tone(90, 0.32, 'sawtooth', t, 0.22, 42);
+          tone(760, 0.12, 'square', t + 0.04, 0.09, 140);
+          noise(0.35, t + 0.02, 0.14, 1700);
+        }
+
+        function catastrophic() {
+          const t = now();
+          tone(55, 0.55, 'sawtooth', t, 0.26, 24);
+          tone(980, 0.22, 'square', t + 0.02, 0.08, 110);
+          tone(140, 0.28, 'triangle', t + 0.24, 0.16, 38);
+          noise(0.55, t, 0.18, 900);
+        }
+
+        function reset() {
+          const t = now();
+          tone(260, 0.07, 'triangle', t, 0.08, 360);
+          tone(410, 0.09, 'triangle', t + 0.08, 0.08, 560);
+          tone(620, 0.12, 'triangle', t + 0.17, 0.07, 760);
+        }
+
+        return {
+          bonk: bonk,
+          repair: repair,
+          worse: worse,
+          catastrophic: catastrophic,
+          reset: reset,
+        };
+      })();
+
       const WARNING_LABELS = [
         'WARRANTY VOID',
         'DO NOT EAT',
@@ -1066,6 +1183,7 @@
       let integrity = 100;
       let bonkTotal = 0;
       let lastImpact = { x: 50, y: 55 };
+      let hasPlayedCatastrophicSound = false;
 
       let counts = { cracks: 0, smudges: 0, glitches: 0, warnings: 0, tape: 0 };
 
@@ -1329,6 +1447,10 @@
         syncGoblinFromIntegrity();
         if (integrity <= 0) {
           setPhrase(GoblinController.pickPhrase('catastrophic'));
+          if (!hasPlayedCatastrophicSound) {
+            SoundController.catastrophic();
+            hasPlayedCatastrophicSound = true;
+          }
         }
       }
 
@@ -1366,6 +1488,7 @@
         }
         integrity = Math.max(0, integrity - amount);
         bonkTotal += 1;
+        SoundController.bonk();
         triggerShake();
         triggerBonkAnim();
         addBonkEffects(amount, heavy);
@@ -1389,6 +1512,8 @@
           return;
         }
         integrity = Math.min(100, integrity + randomInt(15, 25));
+        hasPlayedCatastrophicSound = false;
+        SoundController.repair();
         setPhrase(GoblinController.pickPhrase('repair'));
         GoblinController.setGoblinState('repair');
         GoblinController.addTempClass('goblin-repair', prefersReducedMotion ? 120 : 1400, function () {
@@ -1405,6 +1530,7 @@
         recordImpact(randomFloat(0.2, 0.8) * window.innerWidth, randomFloat(0.2, 0.7) * window.innerHeight);
         integrity = Math.max(0, integrity - randomInt(18, 32));
         bonkTotal += 1;
+        SoundController.worse();
         setPhrase(GoblinController.pickPhrase('worse'));
         triggerShake();
         const worseState = Math.random() > 0.5 ? 'angry' : 'dizzy';
@@ -1428,6 +1554,8 @@
         integrity = 100;
         bonkTotal = 0;
         lastImpact = { x: 50, y: 55 };
+        hasPlayedCatastrophicSound = false;
+        SoundController.reset();
         setPhrase('Fresh pixels. Try not to bonk the engineer immediately.', 'idle');
         document.body.classList.remove(
           'is-shaking', 'is-bonked', 'is-glitching', 'is-worse-glitch', 'is-catastrophic'

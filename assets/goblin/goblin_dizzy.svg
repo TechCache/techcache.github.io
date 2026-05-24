@@ -1,72 +1,149 @@
-<svg width="320" height="320" viewBox="0 0 320 320" xmlns="http://www.w3.org/2000/svg">
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Dizzy Goblin Mascot</title>
+  <desc id="desc">A dizzy state for the same goblin engineer mascot, matching the idle goblin design and proportions.</desc>
+
   <defs>
-    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
-      <feDropShadow dx="0" dy="6" stdDeviation="6" flood-opacity="0.35"/>
+    <filter id="roughShadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="10" stdDeviation="10" flood-color="#000000" flood-opacity="0.35"/>
     </filter>
+
+    <linearGradient id="skinGradient" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#9ad15b"/>
+      <stop offset="1" stop-color="#5f9f33"/>
+    </linearGradient>
+
+    <linearGradient id="bellyGradient" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#c7df7a"/>
+      <stop offset="1" stop-color="#8fb547"/>
+    </linearGradient>
+
+    <pattern id="tapePattern" width="12" height="12" patternUnits="userSpaceOnUse">
+      <rect width="12" height="12" fill="#b8b0a1"/>
+      <path d="M0 6 L12 2 M0 12 L12 8" stroke="#8f8778" stroke-width="1" opacity="0.45"/>
+    </pattern>
+
+    <radialGradient id="starGlow" cx="50%" cy="50%" r="60%">
+      <stop offset="0%" stop-color="#fff8a8"/>
+      <stop offset="100%" stop-color="#ffbf33"/>
+    </radialGradient>
   </defs>
 
-  <!-- dizzy stars -->
-  <g opacity="0.9">
-    <polygon points="80,55 86,70 102,70 89,80 94,95 80,86 66,95 71,80 58,70 74,70"
-      fill="#ffe066"/>
-    <polygon points="240,45 245,57 258,57 248,65 252,78 240,70 228,78 232,65 222,57 235,57"
-      fill="#ffe066"/>
+  <!-- Matching group IDs/classes from idle so Cursor can reuse animation hooks:
+       #goblin-body, #goblin-head, #goblin-eyes, #goblin-mouth,
+       #goblin-left-arm, #goblin-right-arm, #goblin-tools, #goblin-feet -->
+
+  <!-- dizzy orbit -->
+  <g id="dizzy-orbit" opacity="0.95">
+    <path d="M151 82 C200 26 315 27 362 83" fill="none" stroke="#e7dfc8" stroke-width="9" stroke-linecap="round" stroke-dasharray="16 16"/>
+    <path d="M179 61 C221 37 290 37 333 62" fill="none" stroke="#bcb39e" stroke-width="5" stroke-linecap="round" stroke-dasharray="8 12"/>
+    <polygon points="145,80 154,101 177,103 159,118 164,141 145,128 125,141 131,118 113,103 136,101"
+             fill="url(#starGlow)" stroke="#5a3b00" stroke-width="5" stroke-linejoin="round"/>
+    <polygon points="365,70 374,91 397,93 379,108 384,131 365,118 345,131 351,108 333,93 356,91"
+             fill="url(#starGlow)" stroke="#5a3b00" stroke-width="5" stroke-linejoin="round"/>
   </g>
 
-  <!-- body -->
-  <g filter="url(#shadow)">
-    <ellipse cx="160" cy="180" rx="82" ry="88" fill="#67a85d"/>
+  <g id="goblin-dizzy" filter="url(#roughShadow)" transform="rotate(-3 256 260)">
+    <!-- ground shadow -->
+    <ellipse id="ground-shadow" cx="256" cy="437" rx="112" ry="25" fill="#111" opacity="0.24"/>
 
-    <!-- belly -->
-    <ellipse cx="160" cy="205" rx="42" ry="36" fill="#88c27d"/>
-
-    <!-- ears -->
-    <polygon points="100,105 75,55 125,85" fill="#67a85d"/>
-    <polygon points="220,105 245,55 195,85" fill="#67a85d"/>
-
-    <!-- head -->
-    <circle cx="160" cy="120" r="72" fill="#7dcf70"/>
-
-    <!-- dizzy eyes -->
-    <g stroke="#222" stroke-width="5" stroke-linecap="round">
-      <line x1="123" y1="108" x2="140" y2="125"/>
-      <line x1="140" y1="108" x2="123" y2="125"/>
-
-      <line x1="180" y1="108" x2="197" y2="125"/>
-      <line x1="197" y1="108" x2="180" y2="125"/>
+    <!-- feet: same base shape, uneven stance -->
+    <g id="goblin-feet">
+      <path id="left-foot" d="M164 416 C132 421 115 439 128 454 C149 471 199 457 211 435 C216 425 190 413 164 416Z" fill="#56772d" stroke="#2d3f1b" stroke-width="7" stroke-linejoin="round"/>
+      <path id="right-foot" d="M348 416 C380 421 397 439 384 454 C363 471 313 457 301 435 C296 425 322 413 348 416Z" fill="#56772d" stroke="#2d3f1b" stroke-width="7" stroke-linejoin="round"/>
+      <path d="M139 444 L158 437 M176 448 L190 436 M373 444 L354 437 M336 448 L322 436" stroke="#d7e0a3" stroke-width="5" stroke-linecap="round" opacity="0.65"/>
     </g>
 
-    <!-- mouth -->
-    <ellipse cx="160" cy="152" rx="18" ry="10" fill="#3b1d1d"/>
-
-    <!-- tongue -->
-    <ellipse cx="160" cy="157" rx="8" ry="5" fill="#ff7b9c"/>
-
-    <!-- teeth -->
-    <rect x="148" y="144" width="8" height="6" rx="1" fill="#fff"/>
-    <rect x="164" y="144" width="8" height="6" rx="1" fill="#fff"/>
-
-    <!-- arms -->
-    <g stroke="#67a85d" stroke-width="18" stroke-linecap="round">
-      <line x1="92" y1="180" x2="52" y2="210"/>
-      <line x1="228" y1="180" x2="268" y2="205"/>
+    <!-- arms: same style, droopy and dazed -->
+    <g id="goblin-left-arm">
+      <path d="M159 287 C118 295 82 318 75 350 C70 374 101 386 116 365 C130 344 153 331 198 318" fill="#73ad3f" stroke="#2d3f1b" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="76" cy="353" r="20" fill="#77b545" stroke="#2d3f1b" stroke-width="7"/>
+      <path d="M60 349 L43 345 M75 374 L70 390 M91 366 L104 381" stroke="#d7e0a3" stroke-width="5" stroke-linecap="round"/>
     </g>
 
-    <!-- hands -->
-    <circle cx="48" cy="214" r="12" fill="#7dcf70"/>
-    <circle cx="272" cy="209" r="12" fill="#7dcf70"/>
-
-    <!-- legs -->
-    <g stroke="#67a85d" stroke-width="20" stroke-linecap="round">
-      <line x1="135" y1="255" x2="125" y2="292"/>
-      <line x1="185" y1="255" x2="195" y2="292"/>
+    <g id="goblin-right-arm">
+      <path d="M353 287 C394 295 430 318 437 350 C442 374 411 386 396 365 C382 344 359 331 314 318" fill="#73ad3f" stroke="#2d3f1b" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="436" cy="353" r="20" fill="#77b545" stroke="#2d3f1b" stroke-width="7"/>
+      <path d="M452 349 L469 345 M437 374 L442 390 M421 366 L408 381" stroke="#d7e0a3" stroke-width="5" stroke-linecap="round"/>
     </g>
 
-    <!-- feet -->
-    <ellipse cx="120" cy="300" rx="18" ry="10" fill="#4d7f46"/>
-    <ellipse cx="200" cy="300" rx="18" ry="10" fill="#4d7f46"/>
+    <!-- body: same as idle, with tape and wobble marks -->
+    <g id="goblin-body">
+      <path d="M162 294 C156 230 190 189 256 189 C322 189 356 230 350 294 L340 401 C337 432 310 451 256 451 C202 451 175 432 172 401Z" fill="url(#skinGradient)" stroke="#2d3f1b" stroke-width="10" stroke-linejoin="round"/>
+      <ellipse cx="256" cy="345" rx="66" ry="80" fill="url(#bellyGradient)" stroke="#466920" stroke-width="6" opacity="0.92"/>
+      <path d="M199 287 L315 287" stroke="#2d3f1b" stroke-width="7" stroke-linecap="round" opacity="0.3"/>
+      <path d="M202 367 C229 383 284 383 310 367" fill="none" stroke="#466920" stroke-width="6" stroke-linecap="round" opacity="0.45"/>
+
+      <g id="belly-tape" transform="rotate(-8 260 334)">
+        <rect x="213" y="317" width="96" height="31" rx="5" fill="url(#tapePattern)" stroke="#5f584e" stroke-width="4"/>
+        <path d="M222 333 L300 333" stroke="#5f584e" stroke-width="3" stroke-dasharray="7 8" opacity="0.7"/>
+      </g>
+
+      <!-- little dizzy motion marks on body -->
+      <path d="M180 304 C166 316 166 332 181 345" fill="none" stroke="#d7e0a3" stroke-width="5" stroke-linecap="round" opacity="0.65"/>
+      <path d="M332 304 C346 316 346 332 331 345" fill="none" stroke="#d7e0a3" stroke-width="5" stroke-linecap="round" opacity="0.65"/>
+    </g>
+
+    <!-- head and ears: same silhouette as idle -->
+    <g id="goblin-head">
+      <path id="left-ear" d="M165 169 C112 135 76 101 83 82 C94 57 162 91 203 138Z" fill="#7fbd47" stroke="#2d3f1b" stroke-width="9" stroke-linejoin="round"/>
+      <path d="M120 95 C142 105 161 120 179 143" fill="none" stroke="#dba0b0" stroke-width="7" stroke-linecap="round" opacity="0.9"/>
+      <path id="right-ear" d="M347 169 C400 135 436 101 429 82 C418 57 350 91 309 138Z" fill="#7fbd47" stroke="#2d3f1b" stroke-width="9" stroke-linejoin="round"/>
+      <path d="M392 95 C370 105 351 120 333 143" fill="none" stroke="#dba0b0" stroke-width="7" stroke-linecap="round" opacity="0.9"/>
+
+      <path id="head-shape" d="M151 179 C151 104 196 65 256 65 C316 65 361 104 361 179 C361 249 319 293 256 293 C193 293 151 249 151 179Z" fill="url(#skinGradient)" stroke="#2d3f1b" stroke-width="10" stroke-linejoin="round"/>
+
+      <!-- hair tufts: same -->
+      <path id="hair" d="M213 79 L224 43 L244 72 L259 34 L276 73 L296 45 L302 82" fill="none" stroke="#29351a" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"/>
+
+      <!-- loose confused brows -->
+      <g id="goblin-brows" stroke="#263817" stroke-width="9" stroke-linecap="round">
+        <path d="M190 156 C205 143 223 144 236 158"/>
+        <path d="M276 158 C289 144 307 143 322 156"/>
+      </g>
+
+      <!-- dizzy eyes: same placement but spiral pupils -->
+      <g id="goblin-eyes">
+        <ellipse id="left-eye" cx="214" cy="189" rx="27" ry="30" fill="#fff7d5" stroke="#263817" stroke-width="7"/>
+        <ellipse id="right-eye" cx="298" cy="189" rx="27" ry="30" fill="#fff7d5" stroke="#263817" stroke-width="7"/>
+
+        <path id="left-pupil" d="M214 181 C226 181 226 196 214 196 C202 196 202 207 217 207"
+              fill="none" stroke="#263817" stroke-width="6" stroke-linecap="round"/>
+        <path id="right-pupil" d="M298 181 C310 181 310 196 298 196 C286 196 286 207 301 207"
+              fill="none" stroke="#263817" stroke-width="6" stroke-linecap="round"/>
+      </g>
+
+      <!-- nose: same -->
+      <g id="goblin-nose">
+        <path d="M256 201 C245 219 246 231 256 235 C266 231 267 219 256 201Z" fill="#527d2f" stroke="#2d3f1b" stroke-width="5" stroke-linejoin="round"/>
+        <circle cx="247" cy="229" r="3" fill="#203014"/>
+        <circle cx="265" cy="229" r="3" fill="#203014"/>
+      </g>
+
+      <!-- mouth: dazed open squiggle -->
+      <g id="goblin-mouth">
+        <path id="mouth-shape" d="M225 247 C238 264 274 264 287 247 C277 276 235 276 225 247Z" fill="#321313" stroke="#263817" stroke-width="7" stroke-linejoin="round"/>
+        <path d="M246 264 C255 273 268 273 276 264" fill="none" stroke="#f36e88" stroke-width="7" stroke-linecap="round"/>
+        <path d="M238 250 L246 269 L254 250" fill="#f4e6ba" stroke="#263817" stroke-width="4" stroke-linejoin="round"/>
+        <path d="M267 250 L275 269 L283 250" fill="#f4e6ba" stroke="#263817" stroke-width="4" stroke-linejoin="round"/>
+      </g>
+
+      <!-- cheek marks copied -->
+      <path d="M175 224 L197 217 M337 224 L315 217" stroke="#426522" stroke-width="5" stroke-linecap="round" opacity="0.6"/>
+      <path d="M331 133 L348 121 M342 139 L358 131" stroke="#426522" stroke-width="4" stroke-linecap="round" opacity="0.65"/>
+      <path d="M174 133 L190 126 M183 144 L199 137" stroke="#426522" stroke-width="4" stroke-linecap="round" opacity="0.65"/>
+    </g>
+
+    <!-- tools / goblin-engineer details: same motif, dropped wrench -->
+    <g id="goblin-tools">
+      <g id="tiny-wrench" transform="translate(350 360) rotate(77)">
+        <rect x="0" y="0" width="12" height="62" rx="5" fill="#777" stroke="#333" stroke-width="4"/>
+        <path d="M6 -17 C22 -17 29 -2 20 10 L10 1 L2 9 L11 18 C-5 25 -22 14 -20 -3 C-18 -12 -8 -17 6 -17Z" fill="#888" stroke="#333" stroke-width="4" stroke-linejoin="round"/>
+      </g>
+
+      <g id="dizzy-label" transform="rotate(6 186 321)">
+        <rect x="132" y="303" width="108" height="37" rx="4" fill="#f4eac7" stroke="#4a3a23" stroke-width="4"/>
+        <text x="186" y="327" font-family="Comic Sans MS, Chalkboard SE, cursive" font-size="14" font-weight="700" text-anchor="middle" fill="#332716">BONKED?</text>
+      </g>
+    </g>
   </g>
-
-  <!-- dizzy swirl -->
-  <path d="M120 45 Q160 10 200 45" fill="none" stroke="#cfcfcf" stroke-width="4" stroke-dasharray="6 8"/>
 </svg>

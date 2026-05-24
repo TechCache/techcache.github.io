@@ -1,105 +1,179 @@
-<svg width="320" height="320" viewBox="0 0 320 320" xmlns="http://www.w3.org/2000/svg">
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Catastrophic Goblin Mascot</title>
+  <desc id="desc">A catastrophic failure state for the same goblin engineer mascot, matching the idle goblin design and proportions.</desc>
+
   <defs>
-    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
-      <feDropShadow dx="0" dy="8" stdDeviation="8" flood-opacity="0.45"/>
+    <filter id="roughShadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="10" stdDeviation="10" flood-color="#000000" flood-opacity="0.38"/>
     </filter>
 
-    <linearGradient id="fireGlow" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#ffef99"/>
-      <stop offset="50%" stop-color="#ff8a3d"/>
-      <stop offset="100%" stop-color="#ff3b30"/>
+    <linearGradient id="skinGradient" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#9ad15b"/>
+      <stop offset="1" stop-color="#5f9f33"/>
     </linearGradient>
+
+    <linearGradient id="bellyGradient" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#c7df7a"/>
+      <stop offset="1" stop-color="#8fb547"/>
+    </linearGradient>
+
+    <pattern id="tapePattern" width="12" height="12" patternUnits="userSpaceOnUse">
+      <rect width="12" height="12" fill="#b8b0a1"/>
+      <path d="M0 6 L12 2 M0 12 L12 8" stroke="#8f8778" stroke-width="1" opacity="0.45"/>
+    </pattern>
+
+    <linearGradient id="warningGradient" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ffdf4d"/>
+      <stop offset="1" stop-color="#ff7a1a"/>
+    </linearGradient>
+
+    <radialGradient id="smokeGradient" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#b7b7b7" stop-opacity="0.8"/>
+      <stop offset="1" stop-color="#3b3b3b" stop-opacity="0"/>
+    </radialGradient>
   </defs>
 
-  <!-- chaos smoke -->
-  <g opacity="0.5">
-    <circle cx="70" cy="60" r="24" fill="#666"/>
-    <circle cx="95" cy="52" r="18" fill="#777"/>
-    <circle cx="245" cy="70" r="22" fill="#666"/>
-    <circle cx="265" cy="55" r="16" fill="#777"/>
+  <!-- Matching group IDs/classes from idle so Cursor can reuse animation hooks:
+       #goblin-body, #goblin-head, #goblin-eyes, #goblin-mouth,
+       #goblin-left-arm, #goblin-right-arm, #goblin-tools, #goblin-feet -->
+
+  <!-- smoke puffs behind the same character -->
+  <g id="catastrophic-smoke" opacity="0.8">
+    <circle cx="103" cy="94" r="37" fill="url(#smokeGradient)"/>
+    <circle cx="74" cy="141" r="29" fill="url(#smokeGradient)"/>
+    <circle cx="411" cy="100" r="34" fill="url(#smokeGradient)"/>
+    <circle cx="442" cy="153" r="27" fill="url(#smokeGradient)"/>
   </g>
 
-  <!-- warning text -->
-  <text x="25" y="38" font-size="18" fill="#ff4d4d" font-family="monospace">
-    WARNING
-  </text>
+  <g id="goblin-catastrophic" filter="url(#roughShadow)">
+    <!-- ground shadow -->
+    <ellipse id="ground-shadow" cx="256" cy="437" rx="112" ry="25" fill="#111" opacity="0.27"/>
 
-  <!-- goblin -->
-  <g filter="url(#shadow)">
-    <!-- body -->
-    <ellipse cx="160" cy="185" rx="88" ry="94" fill="#6bb25e"/>
-
-    <!-- belly -->
-    <ellipse cx="160" cy="215" rx="45" ry="38" fill="#8fd180"/>
-
-    <!-- ears -->
-    <polygon points="98,102 70,48 128,84" fill="#67a85d"/>
-    <polygon points="222,102 250,48 192,84" fill="#67a85d"/>
-
-    <!-- head -->
-    <circle cx="160" cy="120" r="76" fill="#7fe06f"/>
-
-    <!-- eyes -->
-    <ellipse cx="126" cy="112" rx="14" ry="18" fill="#fff"/>
-    <ellipse cx="194" cy="112" rx="14" ry="18" fill="#fff"/>
-
-    <!-- pupils -->
-    <circle cx="126" cy="116" r="6" fill="#ff3b30"/>
-    <circle cx="194" cy="116" r="6" fill="#ff3b30"/>
-
-    <!-- angry eyebrows -->
-    <g stroke="#2d4728" stroke-width="6" stroke-linecap="round">
-      <line x1="108" y1="92" x2="138" y2="102"/>
-      <line x1="182" y1="102" x2="212" y2="92"/>
+    <!-- warning bursts behind goblin -->
+    <g id="warning-bursts" opacity="0.95">
+      <path d="M55 280 L89 250 L96 294 L133 313 L90 323 L72 362 L62 319 L23 300Z" fill="url(#warningGradient)" stroke="#4b260c" stroke-width="5" stroke-linejoin="round"/>
+      <path d="M427 267 L455 238 L466 279 L500 298 L461 309 L448 348 L433 311 L395 297Z" fill="url(#warningGradient)" stroke="#4b260c" stroke-width="5" stroke-linejoin="round"/>
     </g>
 
-    <!-- catastrophic grin -->
-    <path d="M118 152 Q160 200 202 152" fill="#2b1212"/>
-
-    <!-- teeth -->
-    <g fill="#fff">
-      <rect x="128" y="156" width="8" height="10" rx="1"/>
-      <rect x="142" y="164" width="8" height="10" rx="1"/>
-      <rect x="156" y="168" width="8" height="10" rx="1"/>
-      <rect x="170" y="164" width="8" height="10" rx="1"/>
-      <rect x="184" y="156" width="8" height="10" rx="1"/>
+    <!-- feet: same base shape, slightly splayed -->
+    <g id="goblin-feet">
+      <path id="left-foot" d="M164 416 C132 421 115 439 128 454 C149 471 199 457 211 435 C216 425 190 413 164 416Z" fill="#56772d" stroke="#2d3f1b" stroke-width="7" stroke-linejoin="round"/>
+      <path id="right-foot" d="M348 416 C380 421 397 439 384 454 C363 471 313 457 301 435 C296 425 322 413 348 416Z" fill="#56772d" stroke="#2d3f1b" stroke-width="7" stroke-linejoin="round"/>
+      <path d="M139 444 L158 437 M176 448 L190 436 M373 444 L354 437 M336 448 L322 436" stroke="#d7e0a3" stroke-width="5" stroke-linecap="round" opacity="0.65"/>
     </g>
 
-    <!-- tongue -->
-    <ellipse cx="160" cy="182" rx="16" ry="8" fill="#ff6b81"/>
-
-    <!-- arms flailing -->
-    <g stroke="#67a85d" stroke-width="18" stroke-linecap="round">
-      <line x1="92" y1="178" x2="35" y2="120"/>
-      <line x1="228" y1="178" x2="285" y2="120"/>
+    <!-- arms behind body: same style, thrown upward in panic -->
+    <g id="goblin-left-arm">
+      <path d="M159 287 C112 277 78 237 89 205 C97 181 129 184 140 209 C149 231 168 247 200 259" fill="#73ad3f" stroke="#2d3f1b" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="89" cy="205" r="20" fill="#77b545" stroke="#2d3f1b" stroke-width="7"/>
+      <path d="M73 198 L56 189 M80 219 L68 234 M94 223 L96 242" stroke="#d7e0a3" stroke-width="5" stroke-linecap="round"/>
     </g>
 
-    <!-- hands -->
-    <circle cx="32" cy="118" r="12" fill="#7fe06f"/>
-    <circle cx="288" cy="118" r="12" fill="#7fe06f"/>
-
-    <!-- legs -->
-    <g stroke="#67a85d" stroke-width="22" stroke-linecap="round">
-      <line x1="132" y1="265" x2="110" y2="305"/>
-      <line x1="188" y1="265" x2="210" y2="305"/>
+    <g id="goblin-right-arm">
+      <path d="M353 287 C400 277 434 237 423 205 C415 181 383 184 372 209 C363 231 344 247 312 259" fill="#73ad3f" stroke="#2d3f1b" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="423" cy="205" r="20" fill="#77b545" stroke="#2d3f1b" stroke-width="7"/>
+      <path d="M439 198 L456 189 M432 219 L444 234 M418 223 L416 242" stroke="#d7e0a3" stroke-width="5" stroke-linecap="round"/>
     </g>
 
-    <!-- feet -->
-    <ellipse cx="104" cy="308" rx="20" ry="12" fill="#4d7f46"/>
-    <ellipse cx="216" cy="308" rx="20" ry="12" fill="#4d7f46"/>
-  </g>
+    <!-- body: same as idle, with emergency crack and extra tape -->
+    <g id="goblin-body">
+      <path d="M162 294 C156 230 190 189 256 189 C322 189 356 230 350 294 L340 401 C337 432 310 451 256 451 C202 451 175 432 172 401Z" fill="url(#skinGradient)" stroke="#2d3f1b" stroke-width="10" stroke-linejoin="round"/>
+      <ellipse cx="256" cy="345" rx="66" ry="80" fill="url(#bellyGradient)" stroke="#466920" stroke-width="6" opacity="0.92"/>
+      <path d="M199 287 L315 287" stroke="#2d3f1b" stroke-width="7" stroke-linecap="round" opacity="0.3"/>
+      <path d="M202 367 C229 383 284 383 310 367" fill="none" stroke="#466920" stroke-width="6" stroke-linecap="round" opacity="0.45"/>
 
-  <!-- fire/explosion accents -->
-  <g opacity="0.95">
-    <polygon points="58,180 68,160 78,180 68,172" fill="url(#fireGlow)"/>
-    <polygon points="252,190 264,166 276,190 264,178" fill="url(#fireGlow)"/>
-  </g>
+      <!-- jagged catastrophic crack on belly -->
+      <path d="M255 279 L242 309 L263 331 L247 359 L270 386 L253 415" fill="none" stroke="#1d2613" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" opacity="0.65"/>
+      <path d="M263 331 L290 324 M247 359 L222 374" fill="none" stroke="#1d2613" stroke-width="5" stroke-linecap="round" opacity="0.55"/>
 
-  <!-- catastrophic banner -->
-  <g transform="rotate(-6 160 235)">
-    <rect x="58" y="220" width="204" height="38" rx="8" fill="#ffcc00"/>
-    <text x="75" y="245" font-size="18" font-family="monospace" fill="#1b1b1b">
-      CATASTROPHICALLY FINE
-    </text>
+      <!-- same belly-tape, plus extra panic tape -->
+      <g id="belly-tape" transform="rotate(-8 260 334)">
+        <rect x="213" y="317" width="96" height="31" rx="5" fill="url(#tapePattern)" stroke="#5f584e" stroke-width="4"/>
+        <path d="M222 333 L300 333" stroke="#5f584e" stroke-width="3" stroke-dasharray="7 8" opacity="0.7"/>
+      </g>
+
+      <g id="panic-tape" transform="rotate(15 266 374)">
+        <rect x="207" y="360" width="120" height="24" rx="5" fill="url(#tapePattern)" stroke="#5f584e" stroke-width="4"/>
+        <path d="M219 372 L316 372" stroke="#5f584e" stroke-width="3" stroke-dasharray="6 7" opacity="0.65"/>
+      </g>
+    </g>
+
+    <!-- head and ears: copied from idle, with catastrophic expression -->
+    <g id="goblin-head">
+      <path id="left-ear" d="M165 169 C112 135 76 101 83 82 C94 57 162 91 203 138Z" fill="#7fbd47" stroke="#2d3f1b" stroke-width="9" stroke-linejoin="round"/>
+      <path d="M120 95 C142 105 161 120 179 143" fill="none" stroke="#dba0b0" stroke-width="7" stroke-linecap="round" opacity="0.9"/>
+      <path id="right-ear" d="M347 169 C400 135 436 101 429 82 C418 57 350 91 309 138Z" fill="#7fbd47" stroke="#2d3f1b" stroke-width="9" stroke-linejoin="round"/>
+      <path d="M392 95 C370 105 351 120 333 143" fill="none" stroke="#dba0b0" stroke-width="7" stroke-linecap="round" opacity="0.9"/>
+
+      <path id="head-shape" d="M151 179 C151 104 196 65 256 65 C316 65 361 104 361 179 C361 249 319 293 256 293 C193 293 151 249 151 179Z" fill="url(#skinGradient)" stroke="#2d3f1b" stroke-width="10" stroke-linejoin="round"/>
+
+      <!-- hair tufts, more fried-up but same silhouette -->
+      <path id="hair" d="M213 79 L224 43 L244 72 L259 34 L276 73 L296 45 L302 82" fill="none" stroke="#29351a" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M236 51 L227 27 M282 58 L299 32" stroke="#ffb347" stroke-width="6" stroke-linecap="round" opacity="0.85"/>
+
+      <!-- furious catastrophic eyebrows -->
+      <g id="goblin-brows" stroke="#263817" stroke-width="10" stroke-linecap="round">
+        <path d="M190 149 L234 171"/>
+        <path d="M322 149 L278 171"/>
+      </g>
+
+      <!-- eyes: same placement as idle but manic red pupils -->
+      <g id="goblin-eyes">
+        <ellipse id="left-eye" cx="214" cy="189" rx="27" ry="30" fill="#fff7d5" stroke="#263817" stroke-width="7"/>
+        <ellipse id="right-eye" cx="298" cy="189" rx="27" ry="30" fill="#fff7d5" stroke="#263817" stroke-width="7"/>
+        <circle id="left-pupil" cx="221" cy="195" r="10" fill="#e13b2f"/>
+        <circle id="right-pupil" cx="291" cy="195" r="10" fill="#e13b2f"/>
+        <circle cx="224" cy="191" r="3" fill="#fff" opacity="0.9"/>
+        <circle cx="294" cy="191" r="3" fill="#fff" opacity="0.9"/>
+      </g>
+
+      <!-- nose: same -->
+      <g id="goblin-nose">
+        <path d="M256 201 C245 219 246 231 256 235 C266 231 267 219 256 201Z" fill="#527d2f" stroke="#2d3f1b" stroke-width="5" stroke-linejoin="round"/>
+        <circle cx="247" cy="229" r="3" fill="#203014"/>
+        <circle cx="265" cy="229" r="3" fill="#203014"/>
+      </g>
+
+      <!-- mouth: catastrophic grin, same mouth area and tooth style -->
+      <g id="goblin-mouth">
+        <path id="mouth-shape" d="M207 242 C228 287 284 287 305 242 C283 264 229 264 207 242Z" fill="#321313" stroke="#263817" stroke-width="7" stroke-linejoin="round"/>
+        <path d="M225 250 L233 276 L243 252" fill="#f4e6ba" stroke="#263817" stroke-width="4" stroke-linejoin="round"/>
+        <path d="M249 259 L256 285 L265 259" fill="#f4e6ba" stroke="#263817" stroke-width="4" stroke-linejoin="round"/>
+        <path d="M276 252 L286 276 L294 250" fill="#f4e6ba" stroke="#263817" stroke-width="4" stroke-linejoin="round"/>
+        <path d="M238 274 C250 283 270 283 282 274" fill="none" stroke="#f36e88" stroke-width="7" stroke-linecap="round"/>
+      </g>
+
+      <!-- cheek marks/scars copied + one glowing stress mark -->
+      <path d="M175 224 L197 217 M337 224 L315 217" stroke="#426522" stroke-width="5" stroke-linecap="round" opacity="0.6"/>
+      <path d="M331 133 L348 121 M342 139 L358 131" stroke="#426522" stroke-width="4" stroke-linecap="round" opacity="0.65"/>
+      <path d="M174 133 L190 126 M183 144 L199 137" stroke="#ff6b3a" stroke-width="4" stroke-linecap="round" opacity="0.75"/>
+    </g>
+
+    <!-- tools / goblin-engineer details: same motif, tool flying loose -->
+    <g id="goblin-tools">
+      <g id="tiny-wrench" transform="translate(347 310) rotate(58)">
+        <rect x="0" y="0" width="12" height="62" rx="5" fill="#777" stroke="#333" stroke-width="4"/>
+        <path d="M6 -17 C22 -17 29 -2 20 10 L10 1 L2 9 L11 18 C-5 25 -22 14 -20 -3 C-18 -12 -8 -17 6 -17Z" fill="#888" stroke="#333" stroke-width="4" stroke-linejoin="round"/>
+      </g>
+
+      <g id="warning-sticker" transform="rotate(-10 183 321)">
+        <rect x="130" y="303" width="106" height="37" rx="4" fill="#f39b2f" stroke="#412814" stroke-width="4"/>
+        <text x="183" y="327" font-family="Verdana, Arial, sans-serif" font-size="12" font-weight="700" text-anchor="middle" fill="#2a180b">STILL FINE</text>
+      </g>
+    </g>
+
+    <!-- catastrophic banner matching handwritten label style -->
+    <g id="floating-label" transform="rotate(-6 256 34)">
+      <path d="M118 16 H394 Q407 16 407 30 V56 Q407 70 394 70 H118 Q105 70 105 56 V30 Q105 16 118 16Z" fill="#f4eac7" stroke="#4a3a23" stroke-width="4"/>
+      <text x="256" y="48" font-family="Comic Sans MS, Chalkboard SE, cursive" font-size="20" text-anchor="middle" fill="#332716">CATASTROPHICALLY FINE</text>
+    </g>
+
+    <!-- tiny sparks -->
+    <g id="sparks" stroke="#ffdb4d" stroke-width="7" stroke-linecap="round" opacity="0.95">
+      <path d="M72 240 L50 223"/>
+      <path d="M92 228 L88 201"/>
+      <path d="M422 236 L448 217"/>
+      <path d="M401 225 L407 198"/>
+    </g>
   </g>
 </svg>

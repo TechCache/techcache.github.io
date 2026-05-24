@@ -1,76 +1,168 @@
-<svg width="320" height="320" viewBox="0 0 320 320" xmlns="http://www.w3.org/2000/svg">
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Repair Goblin Mascot</title>
+  <desc id="desc">A repair state for the same goblin engineer mascot, matching the idle goblin design and proportions.</desc>
+
   <defs>
-    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
-      <feDropShadow dx="0" dy="6" stdDeviation="6" flood-opacity="0.35"/>
+    <filter id="roughShadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="10" stdDeviation="10" flood-color="#000000" flood-opacity="0.35"/>
     </filter>
+
+    <linearGradient id="skinGradient" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#9ad15b"/>
+      <stop offset="1" stop-color="#5f9f33"/>
+    </linearGradient>
+
+    <linearGradient id="bellyGradient" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#c7df7a"/>
+      <stop offset="1" stop-color="#8fb547"/>
+    </linearGradient>
+
+    <pattern id="tapePattern" width="12" height="12" patternUnits="userSpaceOnUse">
+      <rect width="12" height="12" fill="#b8b0a1"/>
+      <path d="M0 6 L12 2 M0 12 L12 8" stroke="#8f8778" stroke-width="1" opacity="0.45"/>
+    </pattern>
+
+    <linearGradient id="checkGradient" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#d7ff86"/>
+      <stop offset="1" stop-color="#58cf58"/>
+    </linearGradient>
   </defs>
 
-  <!-- duct tape -->
-  <g transform="rotate(-8 160 110)">
-    <rect x="110" y="90" width="100" height="28" rx="4" fill="#8b8f95"/>
-    <line x1="120" y1="104" x2="200" y2="104" stroke="#b8bcc2" stroke-width="2" stroke-dasharray="4 4"/>
+  <!-- Matching group IDs/classes from idle so Cursor can reuse animation hooks:
+       #goblin-body, #goblin-head, #goblin-eyes, #goblin-mouth,
+       #goblin-left-arm, #goblin-right-arm, #goblin-tools, #goblin-feet -->
+
+  <!-- repair sparkles / plus signs -->
+  <g id="repair-symbols" opacity="0.95">
+    <circle cx="90" cy="105" r="22" fill="#f4eac7" stroke="#4a3a23" stroke-width="4"/>
+    <path d="M90 93 V117 M78 105 H102" stroke="#58cf58" stroke-width="7" stroke-linecap="round"/>
+    <circle cx="421" cy="111" r="20" fill="#f4eac7" stroke="#4a3a23" stroke-width="4"/>
+    <path d="M411 111 L419 119 L433 99" fill="none" stroke="#58cf58" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
   </g>
 
-  <!-- body -->
-  <g filter="url(#shadow)">
-    <ellipse cx="160" cy="180" rx="82" ry="88" fill="#67a85d"/>
+  <g id="goblin-repair" filter="url(#roughShadow)">
+    <!-- ground shadow -->
+    <ellipse id="ground-shadow" cx="256" cy="437" rx="112" ry="25" fill="#111" opacity="0.24"/>
 
-    <!-- belly -->
-    <ellipse cx="160" cy="205" rx="42" ry="36" fill="#88c27d"/>
-
-    <!-- ears -->
-    <polygon points="100,105 75,55 125,85" fill="#67a85d"/>
-    <polygon points="220,105 245,55 195,85" fill="#67a85d"/>
-
-    <!-- head -->
-    <circle cx="160" cy="120" r="72" fill="#7dcf70"/>
-
-    <!-- eyes -->
-    <ellipse cx="128" cy="116" rx="10" ry="14" fill="#fff"/>
-    <ellipse cx="192" cy="116" rx="10" ry="14" fill="#fff"/>
-
-    <circle cx="130" cy="120" r="4" fill="#222"/>
-    <circle cx="194" cy="120" r="4" fill="#222"/>
-
-    <!-- eyebrows -->
-    <g stroke="#355c31" stroke-width="5" stroke-linecap="round">
-      <line x1="115" y1="98" x2="138" y2="102"/>
-      <line x1="182" y1="102" x2="205" y2="98"/>
+    <!-- feet: same base shape -->
+    <g id="goblin-feet">
+      <path id="left-foot" d="M164 416 C132 421 115 439 128 454 C149 471 199 457 211 435 C216 425 190 413 164 416Z" fill="#56772d" stroke="#2d3f1b" stroke-width="7" stroke-linejoin="round"/>
+      <path id="right-foot" d="M348 416 C380 421 397 439 384 454 C363 471 313 457 301 435 C296 425 322 413 348 416Z" fill="#56772d" stroke="#2d3f1b" stroke-width="7" stroke-linejoin="round"/>
+      <path d="M139 444 L158 437 M176 448 L190 436 M373 444 L354 437 M336 448 L322 436" stroke="#d7e0a3" stroke-width="5" stroke-linecap="round" opacity="0.65"/>
     </g>
 
-    <!-- mouth -->
-    <path d="M140 152 Q160 170 180 152" fill="none" stroke="#3b1d1d" stroke-width="5" stroke-linecap="round"/>
+    <!-- left arm holding roll of tape -->
+    <g id="goblin-left-arm">
+      <path d="M159 287 C120 278 93 246 101 217 C108 190 142 191 153 215 C163 237 179 251 207 260" fill="#73ad3f" stroke="#2d3f1b" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="101" cy="217" r="20" fill="#77b545" stroke="#2d3f1b" stroke-width="7"/>
+      <path d="M85 211 L68 203 M94 235 L84 250 M112 233 L119 252" stroke="#d7e0a3" stroke-width="5" stroke-linecap="round"/>
 
-    <!-- arms -->
-    <g stroke="#67a85d" stroke-width="18" stroke-linecap="round">
-      <line x1="92" y1="180" x2="58" y2="195"/>
-      <line x1="228" y1="180" x2="262" y2="195"/>
+      <!-- tape roll in hand -->
+      <g id="tape-roll" transform="translate(65 172)">
+        <circle cx="31" cy="31" r="25" fill="#9aa0a7" stroke="#333" stroke-width="5"/>
+        <circle cx="31" cy="31" r="12" fill="#f4eac7" stroke="#333" stroke-width="4"/>
+        <path d="M54 27 C84 17 101 19 112 30 L99 45 C86 38 72 37 55 43Z" fill="url(#tapePattern)" stroke="#5f584e" stroke-width="4" stroke-linejoin="round"/>
+      </g>
     </g>
 
-    <!-- hands -->
-    <circle cx="54" cy="198" r="12" fill="#7dcf70"/>
-    <circle cx="266" cy="198" r="12" fill="#7dcf70"/>
+    <!-- right arm with wrench -->
+    <g id="goblin-right-arm">
+      <path d="M353 287 C391 281 417 252 414 222 C411 195 377 191 363 214 C350 237 334 252 305 260" fill="#73ad3f" stroke="#2d3f1b" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="414" cy="222" r="20" fill="#77b545" stroke="#2d3f1b" stroke-width="7"/>
+      <path d="M431 217 L448 208 M419 244 L426 260 M402 240 L391 256" stroke="#d7e0a3" stroke-width="5" stroke-linecap="round"/>
 
-    <!-- wrench -->
-    <g transform="rotate(18 248 178)">
-      <rect x="236" y="170" width="12" height="42" rx="4" fill="#9aa1a8"/>
-      <circle cx="242" cy="165" r="10" fill="none" stroke="#9aa1a8" stroke-width="6"/>
+      <!-- wrench in hand -->
+      <g id="hand-wrench" transform="translate(419 169) rotate(28)">
+        <rect x="0" y="0" width="12" height="62" rx="5" fill="#777" stroke="#333" stroke-width="4"/>
+        <path d="M6 -17 C22 -17 29 -2 20 10 L10 1 L2 9 L11 18 C-5 25 -22 14 -20 -3 C-18 -12 -8 -17 6 -17Z" fill="#888" stroke="#333" stroke-width="4" stroke-linejoin="round"/>
+      </g>
     </g>
 
-    <!-- legs -->
-    <g stroke="#67a85d" stroke-width="20" stroke-linecap="round">
-      <line x1="135" y1="255" x2="125" y2="292"/>
-      <line x1="185" y1="255" x2="195" y2="292"/>
+    <!-- body: same as idle, with extra repair patches -->
+    <g id="goblin-body">
+      <path d="M162 294 C156 230 190 189 256 189 C322 189 356 230 350 294 L340 401 C337 432 310 451 256 451 C202 451 175 432 172 401Z" fill="url(#skinGradient)" stroke="#2d3f1b" stroke-width="10" stroke-linejoin="round"/>
+      <ellipse cx="256" cy="345" rx="66" ry="80" fill="url(#bellyGradient)" stroke="#466920" stroke-width="6" opacity="0.92"/>
+      <path d="M199 287 L315 287" stroke="#2d3f1b" stroke-width="7" stroke-linecap="round" opacity="0.3"/>
+      <path d="M202 367 C229 383 284 383 310 367" fill="none" stroke="#466920" stroke-width="6" stroke-linecap="round" opacity="0.45"/>
+
+      <!-- existing belly tape -->
+      <g id="belly-tape" transform="rotate(-8 260 334)">
+        <rect x="213" y="317" width="96" height="31" rx="5" fill="url(#tapePattern)" stroke="#5f584e" stroke-width="4"/>
+        <path d="M222 333 L300 333" stroke="#5f584e" stroke-width="3" stroke-dasharray="7 8" opacity="0.7"/>
+      </g>
+
+      <!-- new repair tape over shoulder/chest -->
+      <g id="fresh-repair-tape" transform="rotate(13 258 294)">
+        <rect x="207" y="280" width="104" height="25" rx="5" fill="url(#tapePattern)" stroke="#5f584e" stroke-width="4"/>
+        <path d="M219 292 L300 292" stroke="#5f584e" stroke-width="3" stroke-dasharray="6 7" opacity="0.65"/>
+      </g>
     </g>
 
-    <!-- feet -->
-    <ellipse cx="120" cy="300" rx="18" ry="10" fill="#4d7f46"/>
-    <ellipse cx="200" cy="300" rx="18" ry="10" fill="#4d7f46"/>
-  </g>
+    <!-- head and ears: same silhouette as idle -->
+    <g id="goblin-head">
+      <path id="left-ear" d="M165 169 C112 135 76 101 83 82 C94 57 162 91 203 138Z" fill="#7fbd47" stroke="#2d3f1b" stroke-width="9" stroke-linejoin="round"/>
+      <path d="M120 95 C142 105 161 120 179 143" fill="none" stroke="#dba0b0" stroke-width="7" stroke-linecap="round" opacity="0.9"/>
+      <path id="right-ear" d="M347 169 C400 135 436 101 429 82 C418 57 350 91 309 138Z" fill="#7fbd47" stroke="#2d3f1b" stroke-width="9" stroke-linejoin="round"/>
+      <path d="M392 95 C370 105 351 120 333 143" fill="none" stroke="#dba0b0" stroke-width="7" stroke-linecap="round" opacity="0.9"/>
 
-  <!-- floating repair symbols -->
-  <g opacity="0.9">
-    <text x="70" y="70" font-size="26" fill="#ffe066">+</text>
-    <text x="235" y="80" font-size="22" fill="#7cff95">✓</text>
+      <path id="head-shape" d="M151 179 C151 104 196 65 256 65 C316 65 361 104 361 179 C361 249 319 293 256 293 C193 293 151 249 151 179Z" fill="url(#skinGradient)" stroke="#2d3f1b" stroke-width="10" stroke-linejoin="round"/>
+
+      <!-- hair tufts: same -->
+      <path id="hair" d="M213 79 L224 43 L244 72 L259 34 L276 73 L296 45 L302 82" fill="none" stroke="#29351a" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"/>
+
+      <!-- duct tape bandage across forehead -->
+      <g id="forehead-tape" transform="rotate(-7 255 126)">
+        <rect x="196" y="111" width="118" height="30" rx="5" fill="url(#tapePattern)" stroke="#5f584e" stroke-width="4"/>
+        <path d="M210 126 L302 126" stroke="#5f584e" stroke-width="3" stroke-dasharray="7 8" opacity="0.7"/>
+      </g>
+
+      <!-- skeptical repair eyebrows -->
+      <g id="goblin-brows" stroke="#263817" stroke-width="9" stroke-linecap="round">
+        <path d="M187 155 C204 145 222 148 236 160"/>
+        <path d="M276 160 C291 148 311 145 326 155"/>
+      </g>
+
+      <!-- eyes: same placement, suspicious side-eye -->
+      <g id="goblin-eyes">
+        <ellipse id="left-eye" cx="214" cy="189" rx="27" ry="30" fill="#fff7d5" stroke="#263817" stroke-width="7"/>
+        <ellipse id="right-eye" cx="298" cy="189" rx="27" ry="30" fill="#fff7d5" stroke="#263817" stroke-width="7"/>
+        <circle id="left-pupil" cx="224" cy="193" r="9" fill="#263817"/>
+        <circle id="right-pupil" cx="308" cy="193" r="9" fill="#263817"/>
+        <circle cx="227" cy="189" r="3" fill="#fff" opacity="0.9"/>
+        <circle cx="311" cy="189" r="3" fill="#fff" opacity="0.9"/>
+      </g>
+
+      <!-- nose: same -->
+      <g id="goblin-nose">
+        <path d="M256 201 C245 219 246 231 256 235 C266 231 267 219 256 201Z" fill="#527d2f" stroke="#2d3f1b" stroke-width="5" stroke-linejoin="round"/>
+        <circle cx="247" cy="229" r="3" fill="#203014"/>
+        <circle cx="265" cy="229" r="3" fill="#203014"/>
+      </g>
+
+      <!-- mouth: offended/confused repair frown -->
+      <g id="goblin-mouth">
+        <path id="mouth-shape" d="M226 255 C244 239 271 239 288 255" fill="none" stroke="#263817" stroke-width="8" stroke-linecap="round"/>
+        <path d="M246 247 L253 262 L261 247" fill="#f4e6ba" stroke="#263817" stroke-width="4" stroke-linejoin="round"/>
+        <path d="M269 247 L277 262 L284 247" fill="#f4e6ba" stroke="#263817" stroke-width="4" stroke-linejoin="round"/>
+      </g>
+
+      <!-- cheek marks copied -->
+      <path d="M175 224 L197 217 M337 224 L315 217" stroke="#426522" stroke-width="5" stroke-linecap="round" opacity="0.6"/>
+      <path d="M331 133 L348 121 M342 139 L358 131" stroke="#426522" stroke-width="4" stroke-linecap="round" opacity="0.65"/>
+      <path d="M174 133 L190 126 M183 144 L199 137" stroke="#426522" stroke-width="4" stroke-linecap="round" opacity="0.65"/>
+    </g>
+
+    <!-- tools / label details -->
+    <g id="goblin-tools">
+      <g id="repair-label" transform="rotate(-6 256 55)">
+        <path d="M161 35 H351 Q363 35 363 48 V74 Q363 87 351 87 H161 Q149 87 149 74 V48 Q149 35 161 35Z" fill="#f4eac7" stroke="#4a3a23" stroke-width="4"/>
+        <text x="256" y="65" font-family="Comic Sans MS, Chalkboard SE, cursive" font-size="18" text-anchor="middle" fill="#332716">LOAD-BEARING TAPE</text>
+      </g>
+
+      <g id="quality-check" transform="rotate(9 332 333)">
+        <rect x="290" y="314" width="84" height="36" rx="4" fill="url(#checkGradient)" stroke="#2f5b20" stroke-width="4"/>
+        <text x="332" y="338" font-family="Verdana, Arial, sans-serif" font-size="13" font-weight="700" text-anchor="middle" fill="#172b12">FIXED?</text>
+      </g>
+    </g>
   </g>
 </svg>
