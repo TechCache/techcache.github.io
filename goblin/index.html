@@ -1126,6 +1126,10 @@
         const AudioContextCtor = window.AudioContext || window.webkitAudioContext;
         let ctx = null;
         let master = null;
+        let ambientStarted = false;
+        let ambientGain = null;
+        let ambienceTimer = null;
+        let musicTimer = null;
 
         function ensureContext() {
           if (!AudioContextCtor) return null;
@@ -1137,6 +1141,58 @@
           }
           if (ctx.state === 'suspended') ctx.resume();
           return ctx;
+        }
+
+        function startAmbient() {
+          const audio = ensureContext();
+          if (!audio || ambientStarted) return;
+          ambientStarted = true;
+
+          ambientGain = audio.createGain();
+          ambientGain.gain.setValueAtTime(0.0001, audio.currentTime);
+          ambientGain.gain.exponentialRampToValueAtTime(0.16, audio.currentTime + 1.8);
+          ambientGain.connect(master);
+
+          const humFilter = audio.createBiquadFilter();
+          humFilter.type = 'lowpass';
+          humFilter.frequency.value = 180;
+
+          const hum = audio.createOscillator();
+          const humGain = audio.createGain();
+          hum.type = 'sawtooth';
+          hum.frequency.value = 48;
+          humGain.gain.value = 0.16;
+          hum.connect(humFilter);
+          humFilter.connect(humGain);
+          humGain.connect(ambientGain);
+          hum.start();
+
+          const lamp = audio.createOscillator();
+          const lampGain = audio.createGain();
+          lamp.type = 'triangle';
+          lamp.frequency.value = 96;
+          lamp.detune.value = -8;
+          lampGain.gain.value = 0.07;
+          lamp.connect(lampGain);
+          lampGain.connect(ambientGain);
+          lamp.start();
+
+          const droneNotes = [146.83, 196, 220];
+          droneNotes.forEach(function (freq, index) {
+            const osc = audio.createOscillator();
+            const gain = audio.createGain();
+            osc.type = index === 0 ? 'triangle' : 'sine';
+            osc.frequency.value = freq;
+            osc.detune.value = randomFloat(-6, 6);
+            gain.gain.value = index === 0 ? 0.045 : 0.022;
+            osc.connect(gain);
+            gain.connect(ambientGain);
+            osc.start();
+          });
+
+          labWake();
+          scheduleAmbience();
+          scheduleMusic();
         }
 
         function now() {
@@ -1185,6 +1241,79 @@
           src.stop(t + duration + 0.03);
         }
 
+        function ambientNoise(duration, start, volume, filterFreq, filterType) {
+          const audio = ensureContext();
+          if (!audio || !ambientGain) return;
+          const t = start == null ? audio.currentTime : start;
+          const buffer = audio.createBuffer(1, Math.max(1, Math.floor(audio.sampleRate * duration)), audio.sampleRate);
+          const data = buffer.getChannelData(0);
+          for (let i = 0; i < data.length; i++) data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / data.length, 1.5);
+          const src = audio.createBufferSource();
+          const filter = audio.createBiquadFilter();
+          const gain = audio.createGain();
+          src.buffer = buffer;
+          filter.type = filterType || 'bandpass';
+          filter.frequency.value = filterFreq || 900;
+          filter.Q.value = 4;
+          gain.gain.setValueAtTime(volume, t);
+          gain.gain.exponentialRampToValueAtTime(0.0001, t + duration);
+          src.connect(filter);
+          filter.connect(gain);
+          gain.connect(ambientGain);
+          src.start(t);
+          src.stop(t + duration + 0.04);
+        }
+
+        function ambientTone(freq, duration, start, volume, type) {
+          const audio = ensureContext();
+          if (!audio || !ambientGain) return;
+          const t = start == null ? audio.currentTime : start;
+          const osc = audio.createOscillator();
+          const gain = audio.createGain();
+          osc.type = type || 'sine';
+          osc.frequency.setValueAtTime(freq, t);
+          gain.gain.setValueAtTime(0.0001, t);
+          gain.gain.exponentialRampToValueAtTime(volume, t + 0.08);
+          gain.gain.exponentialRampToValueAtTime(0.0001, t + duration);
+          osc.connect(gain);
+          gain.connect(ambientGain);
+          osc.start(t);
+          osc.stop(t + duration + 0.08);
+        }
+
+        function labWake() {
+          const t = now();
+          ambientNoise(0.42, t, 0.12, 1400, 'bandpass');
+          ambientNoise(0.24, t + 0.18, 0.09, 2800, 'highpass');
+          ambientTone(73.42, 2.8, t, 0.08, 'triangle');
+          ambientTone(146.83, 2.2, t + 0.08, 0.045, 'sine');
+          ambientTone(392, 0.18, t + 0.28, 0.032, 'triangle');
+        }
+
+        function scheduleAmbience() {
+          if (!ambientStarted) return;
+          clearTimeout(ambienceTimer);
+          ambienceTimer = setTimeout(function () {
+            const t = now();
+            if (Math.random() > 0.28) ambientNoise(randomFloat(0.1, 0.28), t, randomFloat(0.035, 0.075), randomFloat(700, 2400), Math.random() > 0.5 ? 'bandpass' : 'highpass');
+            if (Math.random() > 0.5) ambientTone(randomFloat(330, 820), randomFloat(0.08, 0.22), t + randomFloat(0.02, 0.22), randomFloat(0.014, 0.032), 'triangle');
+            scheduleAmbience();
+          }, randomInt(650, 1900));
+        }
+
+        function scheduleMusic() {
+          if (!ambientStarted) return;
+          clearTimeout(musicTimer);
+          musicTimer = setTimeout(function () {
+            const t = now();
+            const root = [110, 130.81, 146.83][randomInt(0, 2)];
+            ambientTone(root, 3.2, t, 0.035, 'sine');
+            ambientTone(root * 1.5, 2.4, t + 0.6, 0.022, 'triangle');
+            ambientTone(root * 2, 1.8, t + 1.35, 0.016, 'sine');
+            scheduleMusic();
+          }, randomInt(5200, 10500));
+        }
+
         function glassShard(t, freq, volume, duration) {
           tone(freq, duration, 'sine', t, volume, freq * 0.82);
           tone(freq * 1.48, duration * 0.72, 'triangle', t + 0.006, volume * 0.34, freq * 1.12);
@@ -1220,6 +1349,7 @@
         }
 
         function bonk() {
+          startAmbient();
           const t = now();
           tone(145, 0.075, 'triangle', t, 0.035, 82);
           tone(480, 0.025, 'square', t + 0.018, 0.008, 280);
@@ -1227,6 +1357,7 @@
         }
 
         function repair() {
+          startAmbient();
           const t = now();
           noise(0.18, t, 0.13, 2600);
           tone(320, 0.08, 'sawtooth', t + 0.05, 0.08, 420);
@@ -1234,6 +1365,7 @@
         }
 
         function worse() {
+          startAmbient();
           const t = now();
           tone(90, 0.32, 'sawtooth', t, 0.22, 42);
           tone(760, 0.12, 'square', t + 0.04, 0.09, 140);
@@ -1242,6 +1374,7 @@
         }
 
         function catastrophic() {
+          startAmbient();
           const t = now();
           tone(55, 0.55, 'sawtooth', t, 0.26, 24);
           tone(980, 0.22, 'square', t + 0.02, 0.08, 110);
@@ -1252,6 +1385,7 @@
         }
 
         function reset() {
+          startAmbient();
           const t = now();
           tone(260, 0.07, 'triangle', t, 0.08, 360);
           tone(410, 0.09, 'triangle', t + 0.08, 0.08, 560);
@@ -1261,6 +1395,7 @@
         return {
           bonk: bonk,
           glassSmash: glassSmash,
+          startAmbient: startAmbient,
           repair: repair,
           worse: worse,
           catastrophic: catastrophic,
