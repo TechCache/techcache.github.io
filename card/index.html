@@ -304,51 +304,6 @@ h1{
   flex:0 0 auto;
 }
 
-.qr-wrap{
-  display:grid;
-  grid-template-columns:112px 1fr;
-  gap:16px;
-  align-items:center;
-}
-
-.qr-placeholder{
-  position:relative;
-  width:112px;
-  aspect-ratio:1;
-  border:1px solid #b3d4ff;
-  border-radius:var(--radius);
-  background:
-    linear-gradient(90deg,rgba(23,43,77,0.08) 1px,transparent 1px),
-    linear-gradient(rgba(23,43,77,0.08) 1px,transparent 1px),
-    #fff;
-  background-size:14px 14px;
-}
-
-.qr-placeholder::before,
-.qr-placeholder::after{
-  content:"";
-  position:absolute;
-  width:28px;
-  height:28px;
-  border:7px solid var(--text);
-  border-radius:4px;
-  background:#fff;
-}
-
-.qr-placeholder::before{left:12px;top:12px}
-.qr-placeholder::after{right:12px;bottom:12px}
-
-.qr-note strong{
-  display:block;
-  margin-bottom:4px;
-}
-
-.qr-note a{
-  color:var(--blue-dark);
-  font-weight:800;
-  overflow-wrap:anywhere;
-}
-
 footer{
   padding:18px 4px 0;
   color:var(--muted);
@@ -428,13 +383,6 @@ footer{
     </div>
   </section>
 
-  <section class="section-card" aria-labelledby="qr-heading">
-    <h2 id="qr-heading">Page QR</h2>
-    <div class="qr-wrap">
-      <div class="qr-placeholder" role="img" aria-label="QR code placeholder for techcachet.com/card"></div>
-      <p class="qr-note"><strong>techcachet.com/card</strong><a href="https://techcachet.com/card/">Open digital card</a></p>
-    </div>
-  </section>
 </main>
 
 <footer>
