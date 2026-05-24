@@ -1,0 +1,129 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Idle Goblin Mascot</title>
+  <desc id="desc">A small angry goblin engineer character for a cursed phone stand app, designed with separate SVG groups for animation.</desc>
+
+  <defs>
+    <filter id="roughShadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="10" stdDeviation="10" flood-color="#000000" flood-opacity="0.35"/>
+    </filter>
+    <linearGradient id="skinGradient" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#9ad15b"/>
+      <stop offset="1" stop-color="#5f9f33"/>
+    </linearGradient>
+    <linearGradient id="bellyGradient" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#c7df7a"/>
+      <stop offset="1" stop-color="#8fb547"/>
+    </linearGradient>
+    <pattern id="tapePattern" width="12" height="12" patternUnits="userSpaceOnUse">
+      <rect width="12" height="12" fill="#b8b0a1"/>
+      <path d="M0 6 L12 2 M0 12 L12 8" stroke="#8f8778" stroke-width="1" opacity="0.45"/>
+    </pattern>
+  </defs>
+
+  <!-- Use these groups/classes in CSS later:
+       #goblin-body, #goblin-head, #goblin-eyes, #goblin-mouth,
+       #goblin-left-arm, #goblin-right-arm, #goblin-tools, #goblin-feet -->
+
+  <g id="goblin-idle" filter="url(#roughShadow)">
+    <!-- ground shadow -->
+    <ellipse id="ground-shadow" cx="256" cy="437" rx="112" ry="25" fill="#111" opacity="0.24"/>
+
+    <!-- feet -->
+    <g id="goblin-feet">
+      <path id="left-foot" d="M171 417 C139 421 123 438 135 453 C154 470 200 457 211 435 C216 425 196 414 171 417Z" fill="#56772d" stroke="#2d3f1b" stroke-width="7" stroke-linejoin="round"/>
+      <path id="right-foot" d="M341 417 C373 421 389 438 377 453 C358 470 312 457 301 435 C296 425 316 414 341 417Z" fill="#56772d" stroke="#2d3f1b" stroke-width="7" stroke-linejoin="round"/>
+      <path d="M146 444 L164 438 M178 448 L191 436 M366 444 L348 438 M334 448 L321 436" stroke="#d7e0a3" stroke-width="5" stroke-linecap="round" opacity="0.65"/>
+    </g>
+
+    <!-- arms behind body -->
+    <g id="goblin-left-arm">
+      <path d="M159 287 C118 304 96 342 109 370 C119 391 151 385 161 359 C167 343 181 328 202 322" fill="#73ad3f" stroke="#2d3f1b" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="109" cy="370" r="20" fill="#77b545" stroke="#2d3f1b" stroke-width="7"/>
+      <path d="M93 365 L78 356 M98 382 L84 392 M113 388 L110 405" stroke="#d7e0a3" stroke-width="5" stroke-linecap="round"/>
+    </g>
+    <g id="goblin-right-arm">
+      <path d="M353 287 C396 304 418 342 403 370 C392 391 361 384 351 359 C345 342 331 328 310 322" fill="#73ad3f" stroke="#2d3f1b" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="403" cy="370" r="20" fill="#77b545" stroke="#2d3f1b" stroke-width="7"/>
+      <path d="M419 365 L434 356 M414 382 L428 392 M399 388 L402 405" stroke="#d7e0a3" stroke-width="5" stroke-linecap="round"/>
+    </g>
+
+    <!-- body -->
+    <g id="goblin-body">
+      <path d="M162 294 C156 230 190 189 256 189 C322 189 356 230 350 294 L340 401 C337 432 310 451 256 451 C202 451 175 432 172 401Z" fill="url(#skinGradient)" stroke="#2d3f1b" stroke-width="10" stroke-linejoin="round"/>
+      <ellipse cx="256" cy="345" rx="66" ry="80" fill="url(#bellyGradient)" stroke="#466920" stroke-width="6" opacity="0.92"/>
+      <path d="M199 287 L315 287" stroke="#2d3f1b" stroke-width="7" stroke-linecap="round" opacity="0.3"/>
+      <path d="M202 367 C229 383 284 383 310 367" fill="none" stroke="#466920" stroke-width="6" stroke-linecap="round" opacity="0.45"/>
+
+      <!-- messy tape patch on belly -->
+      <g id="belly-tape" transform="rotate(-8 260 334)">
+        <rect x="213" y="317" width="96" height="31" rx="5" fill="url(#tapePattern)" stroke="#5f584e" stroke-width="4"/>
+        <path d="M222 333 L300 333" stroke="#5f584e" stroke-width="3" stroke-dasharray="7 8" opacity="0.7"/>
+      </g>
+    </g>
+
+    <!-- head and ears -->
+    <g id="goblin-head">
+      <path id="left-ear" d="M165 169 C112 135 76 101 83 82 C94 57 162 91 203 138Z" fill="#7fbd47" stroke="#2d3f1b" stroke-width="9" stroke-linejoin="round"/>
+      <path d="M120 95 C142 105 161 120 179 143" fill="none" stroke="#dba0b0" stroke-width="7" stroke-linecap="round" opacity="0.9"/>
+      <path id="right-ear" d="M347 169 C400 135 436 101 429 82 C418 57 350 91 309 138Z" fill="#7fbd47" stroke="#2d3f1b" stroke-width="9" stroke-linejoin="round"/>
+      <path d="M392 95 C370 105 351 120 333 143" fill="none" stroke="#dba0b0" stroke-width="7" stroke-linecap="round" opacity="0.9"/>
+
+      <path id="head-shape" d="M151 179 C151 104 196 65 256 65 C316 65 361 104 361 179 C361 249 319 293 256 293 C193 293 151 249 151 179Z" fill="url(#skinGradient)" stroke="#2d3f1b" stroke-width="10" stroke-linejoin="round"/>
+
+      <!-- hair tufts -->
+      <path id="hair" d="M213 79 L224 43 L244 72 L259 34 L276 73 L296 45 L302 82" fill="none" stroke="#29351a" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"/>
+
+      <!-- eyebrows -->
+      <g id="goblin-brows" stroke="#263817" stroke-width="9" stroke-linecap="round">
+        <path d="M194 160 L232 174"/>
+        <path d="M318 160 L280 174"/>
+      </g>
+
+      <!-- eyes -->
+      <g id="goblin-eyes">
+        <ellipse id="left-eye" cx="214" cy="189" rx="25" ry="28" fill="#fff7d5" stroke="#263817" stroke-width="7"/>
+        <ellipse id="right-eye" cx="298" cy="189" rx="25" ry="28" fill="#fff7d5" stroke="#263817" stroke-width="7"/>
+        <circle id="left-pupil" cx="221" cy="195" r="8" fill="#161616"/>
+        <circle id="right-pupil" cx="291" cy="195" r="8" fill="#161616"/>
+        <circle cx="224" cy="191" r="3" fill="#fff" opacity="0.8"/>
+        <circle cx="294" cy="191" r="3" fill="#fff" opacity="0.8"/>
+      </g>
+
+      <!-- nose -->
+      <g id="goblin-nose">
+        <path d="M256 201 C245 219 246 231 256 235 C266 231 267 219 256 201Z" fill="#527d2f" stroke="#2d3f1b" stroke-width="5" stroke-linejoin="round"/>
+        <circle cx="247" cy="229" r="3" fill="#203014"/>
+        <circle cx="265" cy="229" r="3" fill="#203014"/>
+      </g>
+
+      <!-- mouth -->
+      <g id="goblin-mouth">
+        <path id="mouth-shape" d="M214 245 C237 263 275 263 298 245" fill="none" stroke="#263817" stroke-width="8" stroke-linecap="round"/>
+        <path d="M235 250 L242 271 L251 254" fill="#f4e6ba" stroke="#263817" stroke-width="4" stroke-linejoin="round"/>
+        <path d="M276 254 L285 271 L292 250" fill="#f4e6ba" stroke="#263817" stroke-width="4" stroke-linejoin="round"/>
+      </g>
+
+      <!-- cheek marks/scars -->
+      <path d="M175 224 L197 217 M337 224 L315 217" stroke="#426522" stroke-width="5" stroke-linecap="round" opacity="0.6"/>
+      <path d="M331 133 L348 121 M342 139 L358 131" stroke="#426522" stroke-width="4" stroke-linecap="round" opacity="0.65"/>
+    </g>
+
+    <!-- tools / goblin-engineer details -->
+    <g id="goblin-tools">
+      <g id="tiny-wrench" transform="translate(322 326) rotate(23)">
+        <rect x="0" y="0" width="12" height="62" rx="5" fill="#777" stroke="#333" stroke-width="4"/>
+        <path d="M6 -17 C22 -17 29 -2 20 10 L10 1 L2 9 L11 18 C-5 25 -22 14 -20 -3 C-18 -12 -8 -17 6 -17Z" fill="#888" stroke="#333" stroke-width="4" stroke-linejoin="round"/>
+      </g>
+      <g id="warning-sticker" transform="rotate(9 183 321)">
+        <rect x="143" y="306" width="79" height="34" rx="4" fill="#f39b2f" stroke="#412814" stroke-width="4"/>
+        <text x="183" y="329" font-family="Verdana, Arial, sans-serif" font-size="12" font-weight="700" text-anchor="middle" fill="#2a180b">WORKS?</text>
+      </g>
+    </g>
+
+    <!-- tiny handwritten label -->
+    <g id="floating-label" transform="rotate(-6 256 34)">
+      <path d="M176 18 H336 Q348 18 348 30 V53 Q348 65 336 65 H176 Q164 65 164 53 V30 Q164 18 176 18Z" fill="#f4eac7" stroke="#4a3a23" stroke-width="4"/>
+      <text x="256" y="45" font-family="Comic Sans MS, Chalkboard SE, cursive" font-size="19" text-anchor="middle" fill="#332716">DO NOT BONK</text>
+    </g>
+  </g>
+</svg>

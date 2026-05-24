@@ -11,6 +11,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="preload" href="/assets/goblin/goblin_idle.svg" as="image" type="image/svg+xml">
   <style>
     :root {
       --bg-deep: #0a0908;
@@ -35,6 +36,8 @@
       --z-hud: 30;
       --z-controls: 40;
       --radius: 10px;
+      --goblin-size: clamp(132px, 34vw, 196px);
+      --goblin-bottom: calc(118px + var(--safe-bottom));
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -116,9 +119,27 @@
 
     @keyframes glitch-offset {
       0%, 100% { transform: translate(0, 0); filter: none; }
-      25% { transform: translate(-4px, 2px); filter: hue-rotate(20deg); }
-      50% { transform: translate(5px, -2px); }
-      75% { transform: translate(-3px, -1px); filter: contrast(1.2); }
+      12% { transform: translate(-6px, 3px); filter: hue-rotate(35deg) saturate(1.3); }
+      25% { transform: translate(7px, -4px); filter: contrast(1.25); }
+      38% { transform: translate(-5px, 2px); filter: hue-rotate(-15deg); }
+      50% { transform: translate(8px, -3px); }
+      62% { transform: translate(-7px, 1px); filter: contrast(1.35) brightness(1.1); }
+      75% { transform: translate(4px, -2px); filter: hue-rotate(25deg); }
+      88% { transform: translate(-4px, 3px); }
+    }
+
+    body.is-glitching.is-worse-glitch {
+      animation: glitch-offset 0.28s steps(5) 3;
+    }
+
+    body.is-glitching.is-worse-glitch .screen-bg {
+      animation: worse-scanlines 0.35s steps(3) 2;
+    }
+
+    @keyframes worse-scanlines {
+      0%, 100% { filter: none; }
+      33% { filter: contrast(1.2) brightness(0.9); }
+      66% { filter: hue-rotate(12deg) saturate(1.2); }
     }
 
   /* Full-viewport damage overlays */
@@ -312,56 +333,71 @@
       52% { filter: brightness(0.95); }
     }
 
-    /* Goblin stage */
+    /* Goblin stage: fixed viewport character, never a boxed panel */
     .stage {
       position: fixed;
       inset: 0;
       z-index: var(--z-stage);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-end;
-      padding-bottom: calc(120px + var(--safe-bottom));
       pointer-events: none;
     }
 
     .goblin-zone {
       pointer-events: auto;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-end;
       background: none;
       border: none;
       cursor: pointer;
       -webkit-user-select: none;
       user-select: none;
-      padding: 0 16px 8%;
-      max-width: 100%;
     }
 
-    .goblin-zone:focus-visible {
+    #goblin-container:focus-visible {
       outline: 2px solid var(--neon);
       outline-offset: 6px;
       border-radius: 12px;
     }
 
     .speech-bubble {
-      position: relative;
+      position: fixed;
+      left: 50%;
+      bottom: calc(var(--goblin-bottom) + var(--goblin-size) - 2px);
+      z-index: calc(var(--z-stage) + 1);
       max-width: min(92vw, 340px);
-      margin-bottom: 12px;
-      background: var(--off-white);
+      background:
+        linear-gradient(145deg, #d8d0bc 0%, var(--off-white) 35%, #cfc6b0 100%);
       color: var(--bg-deep);
       font-family: var(--font-hand);
       font-size: clamp(1rem, 4.2vw, 1.2rem);
       font-weight: 700;
-      padding: 10px 14px;
-      border-radius: 12px;
+      padding: 12px 16px 10px;
+      border-radius: 4px;
       border: 2px solid var(--grime);
-      box-shadow: 3px 3px 0 var(--grime);
+      box-shadow: 3px 3px 0 var(--grime), inset 0 0 0 1px rgba(255, 255, 255, 0.35);
       text-align: center;
       line-height: 1.25;
-      transition: transform 0.2s ease;
+      opacity: 0;
+      pointer-events: none;
+      transform: translate(-50%, 6px) rotate(-1deg);
+      transition: opacity 0.28s ease, transform 0.28s ease;
+    }
+
+    .speech-bubble.is-visible {
+      opacity: 1;
+      transform: translate(-50%, 0) rotate(-1deg);
+      animation: speech-wobble 5s ease-in-out infinite;
+    }
+
+    .speech-bubble::before {
+      content: "";
+      position: absolute;
+      top: -7px;
+      left: 18%;
+      width: 42%;
+      height: 14px;
+      background: linear-gradient(135deg, var(--tape) 0%, var(--tape-shine) 50%, var(--tape) 100%);
+      border-radius: 1px;
+      transform: rotate(-4deg);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3);
+      opacity: 0.92;
     }
 
     .speech-bubble::after {
@@ -371,39 +407,162 @@
       left: 50%;
       transform: translateX(-50%);
       border: 10px solid transparent;
-      border-top-color: var(--off-white);
+      border-top-color: #cfc6b0;
       border-bottom: none;
     }
 
-    body.is-bonked .speech-bubble {
-      animation: bonk-pop 0.35s ease;
+    @keyframes speech-wobble {
+      0%, 100% { transform: translate(-50%, 0) rotate(-1deg); }
+      50% { transform: translate(-50%, -2px) rotate(0.8deg); }
+    }
+
+    body.is-bonked .speech-bubble.is-visible {
+      animation: bonk-pop 0.35s ease, speech-wobble 5s ease-in-out 0.35s infinite;
     }
 
     @keyframes bonk-pop {
-      0% { transform: scale(1); }
-      40% { transform: scale(1.06) rotate(-2deg); }
-      100% { transform: scale(1); }
+      0% { transform: translate(-50%, 0) scale(1) rotate(-1deg); }
+      40% { transform: translate(-50%, 0) scale(1.06) rotate(-3deg); }
+      100% { transform: translate(-50%, 0) scale(1) rotate(-1deg); }
     }
 
-    .goblin {
-      width: clamp(110px, 32vw, 150px);
-      height: auto;
-      transition: transform 0.15s ease;
+    /* External SVG goblin — GoblinController target */
+    #goblin-container {
+      position: fixed;
+      left: 50%;
+      bottom: var(--goblin-bottom);
+      z-index: var(--z-stage);
+      width: var(--goblin-size);
+      height: var(--goblin-size);
+      margin-left: calc(var(--goblin-size) * -0.5);
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      transform-origin: center bottom;
+      animation: goblin-idle-float 3.4s ease-in-out infinite;
       filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.55));
+      -webkit-user-select: none;
+      user-select: none;
+      pointer-events: auto;
+      touch-action: manipulation;
     }
 
-    .goblin-zone:active .goblin,
-    body.is-bonked .goblin {
-      transform: scale(0.92) translateY(4px);
+    #goblin-container img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: bottom center;
+      pointer-events: none;
+      display: block;
     }
 
-    body.is-boxed .goblin {
-      animation: goblin-squish 0.4s ease;
+    @keyframes goblin-idle-float {
+      0%, 100% { transform: translateY(0) scale(1) rotate(0deg); }
+      45%, 55% { transform: translateY(-5px) scale(1.02, 0.98) rotate(-0.6deg); }
+      75% { transform: translateY(-2px) scale(0.99, 1.01) rotate(0.5deg); }
     }
 
-    @keyframes goblin-squish {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(0.85, 1.1); }
+    @keyframes goblin-bonk-squash {
+      0% { transform: translateY(0) scale(1, 1); }
+      35% { transform: translateY(8px) scale(1.1, 0.78); }
+      55% { transform: translateY(3px) scale(0.95, 1.05); }
+      100% { transform: translateY(0) scale(1, 1); }
+    }
+
+    @keyframes goblin-shake {
+      0%, 100% { transform: translateX(0); }
+      20% { transform: translateX(-5px); }
+      40% { transform: translateX(6px); }
+      60% { transform: translateX(-4px); }
+      80% { transform: translateX(3px); }
+    }
+
+    @keyframes goblin-repair-wobble {
+      0%, 100% { transform: rotate(0deg) translateY(0); }
+      25% { transform: rotate(2deg) translateY(-2px); }
+      75% { transform: rotate(-2deg) translateY(-1px); }
+    }
+
+    @keyframes goblin-catastrophic-pulse {
+      0%, 100% { transform: scale(1) translateY(0); }
+      50% { transform: scale(1.04) translateY(-3px); }
+    }
+
+    @keyframes goblin-angry-shake {
+      0%, 100% { transform: translate(0, 0); }
+      25% { transform: translate(-2px, 1px) rotate(-1deg); }
+      50% { transform: translate(3px, -1px) rotate(1deg); }
+      75% { transform: translate(-2px, 0) rotate(-0.5deg); }
+    }
+
+    #goblin-container.goblin-hit {
+      animation: goblin-bonk-squash 0.48s ease forwards, goblin-shake 0.48s ease;
+    }
+
+    #goblin-container.goblin-shake {
+      animation: goblin-shake 0.45s ease;
+    }
+
+    #goblin-container.goblin-repair {
+      animation: goblin-repair-wobble 2s ease-in-out 2;
+    }
+
+    #goblin-container.goblin-catastrophic,
+    #goblin-container[data-state="catastrophic"] {
+      animation: goblin-catastrophic-pulse 0.55s ease-in-out infinite, goblin-angry-shake 0.25s ease-in-out infinite;
+    }
+
+    #goblin-container:active {
+      transform: translateY(4px) scale(0.97, 1.02);
+    }
+
+    .impact-burst {
+      position: absolute;
+      left: 50%;
+      top: 38%;
+      width: 56px;
+      height: 56px;
+      margin: -28px 0 0 -28px;
+      pointer-events: none;
+      opacity: 0;
+      z-index: 2;
+    }
+
+    .impact-burst.is-active {
+      animation: impact-burst-pop 0.42s ease-out forwards;
+    }
+
+    .impact-burst::before,
+    .impact-burst::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      border: 3px solid var(--off-white);
+    }
+
+    .impact-burst::after {
+      inset: 12px;
+      border-color: var(--hazard);
+      border-width: 2px;
+    }
+
+    @keyframes impact-burst-pop {
+      0% { opacity: 0; transform: scale(0.3) rotate(0deg); }
+      25% { opacity: 1; transform: scale(1) rotate(8deg); }
+      100% { opacity: 0; transform: scale(1.6) rotate(-12deg); }
+    }
+
+    @keyframes goblin-flail {
+      0% { transform: rotate(0deg) translateY(0); }
+      25% { transform: rotate(-10deg) translateY(-4px); }
+      50% { transform: rotate(12deg) translateY(2px); }
+      75% { transform: rotate(-8deg) translateY(-2px); }
+      100% { transform: rotate(0deg) translateY(0); }
+    }
+
+    #goblin-container.goblin-worse {
+      animation: goblin-flail 0.55s ease-in-out 2;
     }
 
     /* Minimal HUD */
@@ -567,6 +726,17 @@
       body.is-glitching {
         animation: none;
       }
+      #goblin-container,
+      #goblin-container[data-state="catastrophic"],
+      .impact-burst.is-active {
+        animation: none !important;
+      }
+      #goblin-container.goblin-hit {
+        transform: translateY(6px) scale(1.05, 0.9);
+      }
+      #goblin-container.goblin-worse {
+        transform: rotate(6deg);
+      }
     }
   </style>
 </head>
@@ -593,30 +763,12 @@
   </div>
 
   <div class="stage">
-    <button type="button" class="goblin-zone" id="goblinZone" aria-label="Bonk the goblin engineer">
-      <p class="speech-bubble" id="speechBubble" role="status" aria-live="polite">
-        Your screen is load-bearing. Somehow.
-      </p>
-      <svg class="goblin" id="goblin" viewBox="0 0 120 130" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <ellipse cx="60" cy="95" rx="38" ry="28" fill="#3d6b2e"/>
-        <path d="M30 70 Q20 50 35 35 Q60 20 85 35 Q100 50 90 70 Q95 85 60 88 Q25 85 30 70" fill="#4a8f38"/>
-        <ellipse cx="42" cy="52" rx="14" ry="16" fill="#5cb848"/>
-        <ellipse cx="78" cy="52" rx="14" ry="16" fill="#5cb848"/>
-        <circle cx="38" cy="50" r="5" fill="#1a1410"/>
-        <circle cx="82" cy="50" r="5" fill="#1a1410"/>
-        <circle cx="39" cy="48" r="2" fill="#fff"/>
-        <circle cx="83" cy="48" r="2" fill="#fff"/>
-        <path d="M48 62 Q60 58 72 62" stroke="#1a1410" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-        <path d="M35 68 Q30 75 38 78" stroke="#2d5a22" stroke-width="3" fill="none"/>
-        <path d="M85 68 Q90 75 82 78" stroke="#2d5a22" stroke-width="3" fill="none"/>
-        <path d="M52 72 L48 82 L56 78 Z" fill="#e8c4a0"/>
-        <path d="M68 72 L72 82 L64 78 Z" fill="#e8c4a0"/>
-        <ellipse cx="60" cy="38" rx="22" ry="8" fill="#3d6b2e"/>
-        <path d="M45 28 L42 18 L50 22 Z" fill="#3d6b2e"/>
-        <path d="M75 28 L78 18 L70 22 Z" fill="#3d6b2e"/>
-        <text x="60" y="115" text-anchor="middle" font-family="Caveat, cursive" font-size="11" fill="#39ff14">ENGINEER</text>
-      </svg>
-    </button>
+    <p class="speech-bubble is-visible" id="speechBubble" role="status" aria-live="polite">
+      Your screen is load-bearing. Somehow.
+    </p>
+    <div id="goblin-container" class="goblin-zone" data-state="idle" role="button" tabindex="0" aria-label="Bonk the goblin engineer">
+      <span class="impact-burst" id="impactBurst" aria-hidden="true"></span>
+    </div>
   </div>
 
   <nav class="controls" aria-label="Controls">
@@ -636,53 +788,250 @@
       // TODO: NFC world's-worst-phone-stand product hook — read tag ID, personalize goblin greeting, analytics ping
       // TODO: Optional muted bonk sound — <audio> with user toggle, default muted
 
-      // --- Customize phrases: add strings to GOBLIN_PHRASES ---
-      const GOBLIN_PHRASES = [
-        'STOP TOUCHING LOAD-BEARING PIXELS.',
-        'This is fine. Legally.',
-        'Your warranty left the room.',
-        'I fixed it with emotional support tape.',
-        'Structural integrity is a social construct.',
-        'DO NOT BONK THE ENGINEER.',
-        'That crack was already there.',
-        'Congratulations, you made it worse.',
-        'OSHA has entered the chat.',
-        'Held together by hope and poor decisions.',
-        'This stand was rated for a single sigh.',
-        'You bonked the load-bearing attitude.',
-        'The pixels filed a complaint.',
-        'I am not paid enough for this cardboard.',
-        'Your phone is judging you silently.',
-        'Goblin OSHA says: bonk responsibly.',
-        'That was not in the assembly manual.',
-        'We\'re past "stable" and into "vibes".',
-        'The duct tape is doing emotional labor.',
-        'Your stand has achieved critical wobble.',
-        'Bonk detected. Morale decreased.',
-        'This is a feature, not a catastrophe.',
-        'The gum holding it together is nervous.',
-        'Styrofoam core says please stop.',
-        'You have angered the cardboard spirits.',
-        'Engineering goblin does not approve.',
-        'Fine. Everything is fine. Bonk again.',
-      ];
+      /* ============================================================
+         GoblinController — external SVG asset state machine
+         API: init, setGoblinState, showPhrase, pickPhrase,
+              addTempClass, triggerImpactBurst, resolvePostBonkState,
+              syncFromIntegrity, reset, getState
+         ============================================================ */
+      const GoblinController = (function () {
+        const ASSET_BASE = '/assets/goblin/goblin_';
+        const VALID_STATES = ['idle', 'angry', 'bonked', 'dizzy', 'repair', 'catastrophic'];
+        const TEMP_CLASSES = ['goblin-hit', 'goblin-shake', 'goblin-repair', 'goblin-worse'];
 
-      const TAPE_COMPLAINTS = [
-        'You can\'t tape over a personality problem.',
-        'That tape has union rules. It won\'t help.',
-        'I see you. I judge you. The tape judges you.',
-        'Gray on gray. Bold choice.',
-        'You\'re just decorating the disaster now.',
-        'The goblin is not impressed by silver rectangles.',
-      ];
+        const PHRASES = {
+          idle: [
+            'Your screen is load-bearing. Somehow.',
+            'Tap me to bonk. This screen can\'t stop you. Legally.',
+            'THIS WAS STRUCTURALLY QUESTIONABLE.',
+            'Fine. Everything is fine. Bonk again.',
+            'This is fine. Legally.',
+          ],
+          angry: [
+            'STOP TOUCHING LOAD-BEARING PIXELS.',
+            'DO NOT BONK THE ENGINEER.',
+            'Engineering goblin does not approve.',
+            'You have angered the cardboard spirits.',
+            'The pixels filed a complaint.',
+            'I am not paid enough for this cardboard.',
+            'Bonk detected. Morale decreased.',
+            'That was not in the assembly manual.',
+          ],
+          bonked: [
+            'Ow. That was my thinking horn.',
+            'YOU HIT THE IMPORTANT PART.',
+            'You bonked the load-bearing attitude.',
+            'Hey! I\'m load-bearing too!',
+            'That crack was already there. Probably.',
+            'Goblin OSHA says: bonk responsibly.',
+          ],
+          dizzy: [
+            'Everything is spinning. Or is that the screen?',
+            'The gum holding it together is nervous.',
+            'Your stand has achieved critical wobble.',
+            'We\'re past "stable" and into "vibes".',
+            'Styrofoam core says please stop.',
+          ],
+          repair: [
+            'I fixed it with emotional support tape.',
+            'THAT TAPE WAS LOAD-BEARING.',
+            'THAT WAS LOAD-BEARING TAPE.',
+            'You can\'t tape over a personality problem.',
+            'That tape has union rules. It won\'t help.',
+            'Gray on gray. Bold choice.',
+            'You taped the engineer. That\'s assault with adhesive.',
+            'The duct tape is doing emotional labor.',
+            'Emergency tape resurrection. Still not fine.',
+          ],
+          catastrophic: [
+            'CATASTROPHICALLY FINE.',
+            'WE ARE CATASTROPHICALLY FINE.',
+            'It\'s already catastrophically fine. Hit reset.',
+            'Structural integrity is a social construct.',
+            'Held together by hope and poor decisions.',
+            'This is a feature, not a catastrophe.',
+          ],
+          general: [
+            'STOP TOUCHING LOAD-BEARING PIXELS.',
+            'This is fine. Legally.',
+            'Your warranty left the room.',
+            'THE WARRANTY HAS LEFT THE CHAT.',
+            'I fixed it with emotional support tape.',
+            'Structural integrity is a social construct.',
+            'DO NOT BONK THE ENGINEER.',
+            'That crack was already there.',
+            'Congratulations, you made it worse.',
+            'OSHA has entered the chat.',
+            'Held together by hope and poor decisions.',
+            'This stand was rated for a single sigh.',
+            'You bonked the load-bearing attitude.',
+            'The pixels filed a complaint.',
+            'I am not paid enough for this cardboard.',
+            'Your phone is judging you silently.',
+            'Goblin OSHA says: bonk responsibly.',
+            'That was not in the assembly manual.',
+            'We\'re past "stable" and into "vibes".',
+            'The duct tape is doing emotional labor.',
+            'Your stand has achieved critical wobble.',
+            'Bonk detected. Morale decreased.',
+            'This is a feature, not a catastrophe.',
+            'The gum holding it together is nervous.',
+            'Styrofoam core says please stop.',
+            'You have angered the cardboard spirits.',
+            'Engineering goblin does not approve.',
+            'Fine. Everything is fine. Bonk again.',
+          ],
+          worse: [
+            'You asked for this. The stand listened.',
+            'MAXIMUM CHAOS MODE ENGAGED.',
+            'Why. Just… why.',
+            'The goblin has never been more awake.',
+            'We\'re so past "fine" we can see "fine" from here.',
+            'Congratulations, you made it worse.',
+          ],
+        };
 
-      const WORSE_PHRASES = [
-        'You asked for this. The stand listened.',
-        'MAXIMUM CHAOS MODE ENGAGED.',
-        'Why. Just… why.',
-        'The goblin has never been more awake.',
-        'We\'re so past "fine" we can see "fine" from here.',
-      ];
+        let container = null;
+        let sprite = null;
+        let speechBubble = null;
+        let impactBurst = null;
+        let currentState = 'idle';
+        let tempTimer = null;
+        let lastPhraseIndex = -1;
+        let prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        function assetPath(state) {
+          return ASSET_BASE + state + '.svg';
+        }
+
+        function init(opts) {
+          container = opts.container;
+          speechBubble = opts.speechBubble;
+          impactBurst = opts.impactBurst;
+
+          sprite = document.createElement('img');
+          sprite.id = 'goblinSprite';
+          sprite.alt = '';
+          sprite.setAttribute('aria-hidden', 'true');
+          sprite.setAttribute('decoding', 'async');
+          container.appendChild(sprite);
+
+          VALID_STATES.forEach(function (s) {
+            const preload = new Image();
+            preload.src = assetPath(s);
+          });
+
+          setGoblinState('idle');
+        }
+
+        function setGoblinState(stateName) {
+          if (VALID_STATES.indexOf(stateName) === -1) return;
+          currentState = stateName;
+          sprite.src = assetPath(stateName);
+          container.dataset.state = stateName;
+          container.classList.toggle('goblin-catastrophic', stateName === 'catastrophic');
+        }
+
+        function clearTempTimer() {
+          if (tempTimer) {
+            clearTimeout(tempTimer);
+            tempTimer = null;
+          }
+        }
+
+        function clearTempClasses() {
+          TEMP_CLASSES.forEach(function (c) {
+            container.classList.remove(c);
+          });
+        }
+
+        function addTempClass(className, durationMs, onDone) {
+          clearTempTimer();
+          clearTempClasses();
+          container.classList.add(className);
+          tempTimer = setTimeout(function () {
+            container.classList.remove(className);
+            tempTimer = null;
+            if (onDone) onDone();
+          }, prefersReducedMotion ? 80 : durationMs);
+        }
+
+        function pickPhrase(stateOrList) {
+          const list = typeof stateOrList === 'string'
+            ? (PHRASES[stateOrList] || PHRASES.general)
+            : stateOrList;
+          if (list.length === 1) return list[0];
+          let idx;
+          do {
+            idx = Math.floor(Math.random() * list.length);
+          } while (idx === lastPhraseIndex && list.length > 1);
+          lastPhraseIndex = idx;
+          return list[idx];
+        }
+
+        function showPhrase(text, state) {
+          speechBubble.textContent = text || pickPhrase(state || currentState);
+          speechBubble.classList.remove('is-visible');
+          void speechBubble.offsetWidth;
+          speechBubble.classList.add('is-visible');
+        }
+
+        function triggerImpactBurst() {
+          impactBurst.classList.remove('is-active');
+          void impactBurst.offsetWidth;
+          impactBurst.classList.add('is-active');
+          setTimeout(function () {
+            impactBurst.classList.remove('is-active');
+          }, prefersReducedMotion ? 80 : 450);
+        }
+
+        function resolvePostBonkState(integrity) {
+          if (integrity <= 0) return 'catastrophic';
+          if (integrity < 30 && Math.random() > 0.45) return 'dizzy';
+          if (integrity < 60) return 'angry';
+          return 'idle';
+        }
+
+        function syncFromIntegrity(integrity) {
+          if (integrity <= 0) {
+            setGoblinState('catastrophic');
+            return;
+          }
+          if (currentState === 'catastrophic' || currentState === 'bonked' || currentState === 'repair') return;
+          if (integrity < 30) {
+            setGoblinState(Math.random() > 0.5 ? 'dizzy' : 'angry');
+          } else if (integrity < 60) {
+            setGoblinState('angry');
+          } else {
+            setGoblinState('idle');
+          }
+        }
+
+        function reset() {
+          clearTempTimer();
+          clearTempClasses();
+          lastPhraseIndex = -1;
+          setGoblinState('idle');
+        }
+
+        function getState() {
+          return currentState;
+        }
+
+        return {
+          init: init,
+          setGoblinState: setGoblinState,
+          showPhrase: showPhrase,
+          pickPhrase: pickPhrase,
+          addTempClass: addTempClass,
+          triggerImpactBurst: triggerImpactBurst,
+          resolvePostBonkState: resolvePostBonkState,
+          syncFromIntegrity: syncFromIntegrity,
+          reset: reset,
+          getState: getState,
+          PHRASES: PHRASES,
+        };
+      })();
 
       const WARNING_LABELS = [
         'WARRANTY VOID',
@@ -716,7 +1065,6 @@
 
       let integrity = 100;
       let bonkTotal = 0;
-      let lastPhraseIndex = -1;
       let lastImpact = { x: 50, y: 55 };
 
       let counts = { cracks: 0, smudges: 0, glitches: 0, warnings: 0, tape: 0 };
@@ -731,10 +1079,19 @@
         moodText: document.getElementById('moodText'),
         damageLevelText: document.getElementById('damageLevelText'),
         speechBubble: document.getElementById('speechBubble'),
-        goblinZone: document.getElementById('goblinZone'),
+        goblinContainer: document.getElementById('goblin-container'),
+        impactBurst: document.getElementById('impactBurst'),
       };
 
       const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      GoblinController.init({
+        container: els.goblinContainer,
+        speechBubble: els.speechBubble,
+        impactBurst: els.impactBurst,
+      });
+      window.GoblinController = GoblinController;
+      window.setGoblinState = GoblinController.setGoblinState;
 
       function randomInt(min, max) {
         return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -745,13 +1102,11 @@
       }
 
       function pickPhrase(list) {
-        if (list.length === 1) return list[0];
-        let idx;
-        do {
-          idx = randomInt(0, list.length - 1);
-        } while (idx === lastPhraseIndex && list.length > 1);
-        lastPhraseIndex = idx;
-        return list[idx];
+        return GoblinController.pickPhrase(list);
+      }
+
+      function setPhrase(text, state) {
+        GoblinController.showPhrase(text, state);
       }
 
       function getTierConfig() {
@@ -766,10 +1121,6 @@
           if (integrityVal >= thresholds[i].minIntegrity) return thresholds[i].label;
         }
         return thresholds[thresholds.length - 1].label;
-      }
-
-      function setPhrase(text) {
-        els.speechBubble.textContent = text;
       }
 
       function recordImpact(clientX, clientY) {
@@ -900,13 +1251,34 @@
         }
       }
 
-      function triggerGlitch(durationMs) {
+      function triggerGlitch(durationMs, harder) {
         document.body.classList.add('is-glitching');
-        const bars = integrity <= 25 ? 5 : 3;
+        if (harder) document.body.classList.add('is-worse-glitch');
+        const bars = harder ? 7 : (integrity <= 25 ? 5 : 3);
         for (let i = 0; i < bars; i++) addGlitchBar(false);
+        const ms = prefersReducedMotion ? 50 : (durationMs || 400);
         setTimeout(function () {
-          document.body.classList.remove('is-glitching');
-        }, prefersReducedMotion ? 50 : (durationMs || 400));
+          document.body.classList.remove('is-glitching', 'is-worse-glitch');
+        }, ms);
+      }
+
+      function syncGoblinFromIntegrity() {
+        GoblinController.syncFromIntegrity(integrity);
+      }
+
+      function triggerBonkAnim() {
+        document.body.classList.add('is-bonked');
+        GoblinController.setGoblinState('bonked');
+        GoblinController.showPhrase(null, 'bonked');
+        GoblinController.addTempClass('goblin-hit', 480, function () {
+          if (integrity > 0) {
+            GoblinController.setGoblinState(GoblinController.resolvePostBonkState(integrity));
+          }
+        });
+        GoblinController.triggerImpactBurst();
+        setTimeout(function () {
+          document.body.classList.remove('is-bonked');
+        }, prefersReducedMotion ? 80 : 400);
       }
 
       function ensureTierMinimums() {
@@ -954,6 +1326,10 @@
         ensureTierMinimums();
 
         if (integrity <= 0 && counts.cracks < 15) catastrophicBurst();
+        syncGoblinFromIntegrity();
+        if (integrity <= 0) {
+          setPhrase(GoblinController.pickPhrase('catastrophic'));
+        }
       }
 
       function triggerShake() {
@@ -961,16 +1337,10 @@
         document.body.classList.remove('is-shaking');
         void document.body.offsetWidth;
         document.body.classList.add('is-shaking');
+        GoblinController.addTempClass('goblin-shake', 450);
         setTimeout(function () {
           document.body.classList.remove('is-shaking');
         }, 450);
-      }
-
-      function triggerBonkAnim() {
-        document.body.classList.add('is-bonked', 'is-boxed');
-        setTimeout(function () {
-          document.body.classList.remove('is-bonked', 'is-boxed');
-        }, 400);
       }
 
       function addBonkEffects(amount, heavy) {
@@ -988,15 +1358,14 @@
         if (integrity <= 40 && Math.random() > 0.5) addWarningSticker(integrity <= 15);
       }
 
-      function applyDamage(amount, phraseList, heavy) {
+      function applyDamage(amount, heavy) {
         if (integrity <= 0) {
-          setPhrase('It\'s already catastrophically fine. Hit reset.');
+          setPhrase(GoblinController.pickPhrase('catastrophic'));
           if (!heavy) spawnSmoke(1, lastImpact.x, lastImpact.y);
           return;
         }
         integrity = Math.max(0, integrity - amount);
         bonkTotal += 1;
-        setPhrase(pickPhrase(phraseList || GOBLIN_PHRASES));
         triggerShake();
         triggerBonkAnim();
         addBonkEffects(amount, heavy);
@@ -1006,20 +1375,27 @@
       function bonk(ev) {
         if (ev && ev.clientX != null) recordImpact(ev.clientX, ev.clientY);
         else {
-          const rect = els.goblinZone.getBoundingClientRect();
+          const rect = els.goblinContainer.getBoundingClientRect();
           recordImpact(rect.left + rect.width / 2, rect.top + rect.height * 0.4);
         }
-        applyDamage(randomInt(5, 12), GOBLIN_PHRASES, false);
+        applyDamage(randomInt(5, 12), false);
       }
 
       function repairWithTape() {
         if (integrity <= 0) {
-          integrity = 15;
-          setPhrase('Emergency tape resurrection. Still not fine.');
-        } else {
-          integrity = Math.min(100, integrity + randomInt(15, 25));
-          setPhrase(pickPhrase(TAPE_COMPLAINTS));
+          GoblinController.setGoblinState('catastrophic');
+          setPhrase(GoblinController.pickPhrase('catastrophic'));
+          spawnSmoke(2, lastImpact.x, lastImpact.y);
+          return;
         }
+        integrity = Math.min(100, integrity + randomInt(15, 25));
+        setPhrase(GoblinController.pickPhrase('repair'));
+        GoblinController.setGoblinState('repair');
+        GoblinController.addTempClass('goblin-repair', prefersReducedMotion ? 120 : 1400, function () {
+          if (integrity > 0) {
+            GoblinController.setGoblinState(integrity < 60 ? 'angry' : 'idle');
+          }
+        });
         addTapeStrip();
         if (Math.random() > 0.4) addTapeStrip();
         updateUI();
@@ -1027,7 +1403,18 @@
 
       function makeItWorse() {
         recordImpact(randomFloat(0.2, 0.8) * window.innerWidth, randomFloat(0.2, 0.7) * window.innerHeight);
-        applyDamage(randomInt(18, 32), WORSE_PHRASES, true);
+        integrity = Math.max(0, integrity - randomInt(18, 32));
+        bonkTotal += 1;
+        setPhrase(GoblinController.pickPhrase('worse'));
+        triggerShake();
+        const worseState = Math.random() > 0.5 ? 'angry' : 'dizzy';
+        GoblinController.setGoblinState(worseState);
+        GoblinController.addTempClass('goblin-worse', prefersReducedMotion ? 100 : 750, function () {
+          if (integrity > 0) syncGoblinFromIntegrity();
+        });
+        addBonkEffects(24, true);
+        if (!prefersReducedMotion) triggerGlitch(650, true);
+        updateUI();
       }
 
       function clearDamageLayer() {
@@ -1040,22 +1427,32 @@
       function resetDamage() {
         integrity = 100;
         bonkTotal = 0;
-        lastPhraseIndex = -1;
         lastImpact = { x: 50, y: 55 };
-        setPhrase('Fresh pixels. Try not to bonk the engineer immediately.');
-        document.body.classList.remove('is-shaking', 'is-bonked', 'is-boxed', 'is-glitching', 'is-catastrophic');
+        setPhrase('Fresh pixels. Try not to bonk the engineer immediately.', 'idle');
+        document.body.classList.remove(
+          'is-shaking', 'is-bonked', 'is-glitching', 'is-worse-glitch', 'is-catastrophic'
+        );
         for (let t = 0; t <= 4; t++) document.body.classList.remove('damage-tier-' + t);
+        GoblinController.reset();
+        els.impactBurst.classList.remove('is-active');
         clearDamageLayer();
         updateUI();
       }
 
-      els.goblinZone.addEventListener('click', function (e) {
+      els.goblinContainer.addEventListener('click', function (e) {
         e.preventDefault();
         bonk(e);
       });
 
+      els.goblinContainer.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          bonk();
+        }
+      });
+
       document.getElementById('btnBonk').addEventListener('click', function () {
-        const rect = els.goblinZone.getBoundingClientRect();
+        const rect = els.goblinContainer.getBoundingClientRect();
         recordImpact(rect.left + rect.width / 2, rect.top + rect.height * 0.35);
         bonk();
       });
@@ -1064,7 +1461,7 @@
       document.getElementById('btnWorse').addEventListener('click', makeItWorse);
       document.getElementById('btnReset').addEventListener('click', resetDamage);
 
-      setPhrase('Tap me to bonk. This screen can\'t stop you. Legally.');
+      setPhrase('Tap me to bonk. This screen can\'t stop you. Legally.', 'idle');
       updateUI();
     })();
   </script>

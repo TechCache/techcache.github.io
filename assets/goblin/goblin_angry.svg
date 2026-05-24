@@ -1,0 +1,136 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Angry Goblin Mascot</title>
+  <desc id="desc">An angry goblin engineer character for a cursed phone stand app, designed with separate SVG groups for animation.</desc>
+
+  <defs>
+    <filter id="roughShadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="12" stdDeviation="11" flood-color="#000000" flood-opacity="0.42"/>
+    </filter>
+    <radialGradient id="angrySkinGradient" cx="50%" cy="30%" r="70%">
+      <stop offset="0" stop-color="#c6e85c"/>
+      <stop offset="0.55" stop-color="#8fc83f"/>
+      <stop offset="1" stop-color="#567d2b"/>
+    </radialGradient>
+    <linearGradient id="angryFlush" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f07045" stop-opacity="0.8"/>
+      <stop offset="1" stop-color="#9a3526" stop-opacity="0.25"/>
+    </linearGradient>
+    <linearGradient id="bellyGradient" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#c9df6e"/>
+      <stop offset="1" stop-color="#86aa3d"/>
+    </linearGradient>
+    <pattern id="tapePattern" width="12" height="12" patternUnits="userSpaceOnUse">
+      <rect width="12" height="12" fill="#b8b0a1"/>
+      <path d="M0 6 L12 2 M0 12 L12 8" stroke="#8f8778" stroke-width="1" opacity="0.45"/>
+    </pattern>
+  </defs>
+
+  <!-- Animation-friendly groups:
+       #goblin-body, #goblin-head, #goblin-eyes, #goblin-mouth,
+       #goblin-left-arm, #goblin-right-arm, #goblin-tools, #goblin-feet,
+       #goblin-brows, #anger-symbols -->
+
+  <g id="goblin-angry" filter="url(#roughShadow)">
+    <ellipse id="ground-shadow" cx="256" cy="442" rx="124" ry="29" fill="#111" opacity="0.3"/>
+
+    <!-- angry stomp/action lines -->
+    <g id="anger-symbols" stroke="#ffb13b" stroke-width="8" stroke-linecap="round" opacity="0.95">
+      <path d="M76 156 L49 135"/>
+      <path d="M91 111 L82 76"/>
+      <path d="M436 156 L463 135"/>
+      <path d="M421 111 L430 76"/>
+    </g>
+
+    <!-- feet, wider stance -->
+    <g id="goblin-feet">
+      <path id="left-foot" d="M158 418 C121 423 105 444 121 460 C145 476 200 461 214 436 C220 425 190 414 158 418Z" fill="#506f2b" stroke="#263817" stroke-width="8" stroke-linejoin="round"/>
+      <path id="right-foot" d="M354 418 C391 423 407 444 391 460 C367 476 312 461 298 436 C292 425 322 414 354 418Z" fill="#506f2b" stroke="#263817" stroke-width="8" stroke-linejoin="round"/>
+      <path d="M133 449 L153 440 M169 455 L185 439 M379 449 L359 440 M343 455 L327 439" stroke="#dfe8a8" stroke-width="5" stroke-linecap="round" opacity="0.75"/>
+    </g>
+
+    <!-- arms raised/furious -->
+    <g id="goblin-left-arm">
+      <path d="M163 289 C119 268 96 232 106 203 C114 178 151 181 164 210 C173 231 188 248 210 257" fill="#79b442" stroke="#263817" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="106" cy="202" r="22" fill="#82bd48" stroke="#263817" stroke-width="8"/>
+      <path d="M88 196 L70 184 M94 216 L78 229 M112 222 L111 242" stroke="#dfe8a8" stroke-width="5" stroke-linecap="round"/>
+    </g>
+    <g id="goblin-right-arm">
+      <path d="M349 289 C393 268 416 232 406 203 C398 178 361 181 348 210 C339 231 324 248 302 257" fill="#79b442" stroke="#263817" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="406" cy="202" r="22" fill="#82bd48" stroke="#263817" stroke-width="8"/>
+      <path d="M424 196 L442 184 M418 216 L434 229 M400 222 L401 242" stroke="#dfe8a8" stroke-width="5" stroke-linecap="round"/>
+    </g>
+
+    <!-- body -->
+    <g id="goblin-body">
+      <path d="M157 297 C151 228 186 184 256 184 C326 184 361 228 355 297 L343 403 C339 436 309 455 256 455 C203 455 173 436 169 403Z" fill="url(#angrySkinGradient)" stroke="#263817" stroke-width="11" stroke-linejoin="round"/>
+      <ellipse cx="256" cy="347" rx="68" ry="79" fill="url(#bellyGradient)" stroke="#466920" stroke-width="6" opacity="0.92"/>
+      <path d="M198 286 L314 286" stroke="#263817" stroke-width="7" stroke-linecap="round" opacity="0.35"/>
+      <path d="M198 373 C228 391 285 391 314 373" fill="none" stroke="#466920" stroke-width="6" stroke-linecap="round" opacity="0.45"/>
+      <g id="belly-tape" transform="rotate(-12 258 333)">
+        <rect x="210" y="315" width="100" height="32" rx="5" fill="url(#tapePattern)" stroke="#5f584e" stroke-width="4"/>
+        <path d="M221 331 L300 331" stroke="#5f584e" stroke-width="3" stroke-dasharray="7 8" opacity="0.7"/>
+      </g>
+    </g>
+
+    <!-- head and ears -->
+    <g id="goblin-head">
+      <path id="left-ear" d="M164 164 C103 124 64 88 75 66 C88 40 160 82 205 134Z" fill="#7fbd47" stroke="#263817" stroke-width="10" stroke-linejoin="round"/>
+      <path d="M112 81 C139 94 163 114 183 141" fill="none" stroke="#e18ea1" stroke-width="8" stroke-linecap="round" opacity="0.95"/>
+      <path id="right-ear" d="M348 164 C409 124 448 88 437 66 C424 40 352 82 307 134Z" fill="#7fbd47" stroke="#263817" stroke-width="10" stroke-linejoin="round"/>
+      <path d="M400 81 C373 94 349 114 329 141" fill="none" stroke="#e18ea1" stroke-width="8" stroke-linecap="round" opacity="0.95"/>
+
+      <path id="head-shape" d="M145 178 C145 99 193 56 256 56 C319 56 367 99 367 178 C367 251 322 298 256 298 C190 298 145 251 145 178Z" fill="url(#angrySkinGradient)" stroke="#263817" stroke-width="11" stroke-linejoin="round"/>
+      <path d="M152 194 C168 230 200 253 256 253 C312 253 344 230 360 194 C352 263 311 298 256 298 C201 298 160 263 152 194Z" fill="url(#angryFlush)" opacity="0.45"/>
+
+      <!-- aggressive hair tufts -->
+      <path id="hair" d="M207 74 L218 29 L241 65 L258 23 L276 66 L299 31 L306 76" fill="none" stroke="#1f2a15" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+
+      <!-- eyebrows much lower/more angry -->
+      <g id="goblin-brows" stroke="#1f2a15" stroke-width="12" stroke-linecap="round">
+        <path d="M187 151 L235 171"/>
+        <path d="M325 151 L277 171"/>
+      </g>
+
+      <!-- eyes widened -->
+      <g id="goblin-eyes">
+        <ellipse id="left-eye" cx="214" cy="190" rx="28" ry="31" fill="#fff2bd" stroke="#1f2a15" stroke-width="8"/>
+        <ellipse id="right-eye" cx="298" cy="190" rx="28" ry="31" fill="#fff2bd" stroke="#1f2a15" stroke-width="8"/>
+        <circle id="left-pupil" cx="222" cy="199" r="9" fill="#111"/>
+        <circle id="right-pupil" cx="290" cy="199" r="9" fill="#111"/>
+        <circle cx="225" cy="195" r="3" fill="#fff" opacity="0.85"/>
+        <circle cx="293" cy="195" r="3" fill="#fff" opacity="0.85"/>
+      </g>
+
+      <!-- nose -->
+      <g id="goblin-nose">
+        <path d="M256 203 C243 222 245 236 256 241 C267 236 269 222 256 203Z" fill="#4f742c" stroke="#263817" stroke-width="5" stroke-linejoin="round"/>
+        <circle cx="246" cy="233" r="4" fill="#1b2810"/>
+        <circle cx="266" cy="233" r="4" fill="#1b2810"/>
+      </g>
+
+      <!-- angry open mouth -->
+      <g id="goblin-mouth">
+        <path id="mouth-shape" d="M216 249 C229 229 284 229 297 249 C292 276 223 276 216 249Z" fill="#3b1714" stroke="#1f2a15" stroke-width="8" stroke-linejoin="round"/>
+        <path d="M232 245 L241 270 L252 246" fill="#f4e6ba" stroke="#1f2a15" stroke-width="4" stroke-linejoin="round"/>
+        <path d="M275 246 L286 270 L295 245" fill="#f4e6ba" stroke="#1f2a15" stroke-width="4" stroke-linejoin="round"/>
+        <path d="M237 264 C249 272 268 272 281 264" fill="none" stroke="#e35b58" stroke-width="5" stroke-linecap="round" opacity="0.9"/>
+      </g>
+
+      <!-- cheek stress marks/scars -->
+      <path d="M172 222 L199 213 M175 236 L198 231 M340 222 L313 213 M337 236 L314 231" stroke="#3e5f21" stroke-width="5" stroke-linecap="round" opacity="0.72"/>
+      <path d="M330 129 L350 114 M342 138 L363 127" stroke="#3e5f21" stroke-width="5" stroke-linecap="round" opacity="0.75"/>
+    </g>
+
+    <!-- tools / warning stickers -->
+    <g id="goblin-tools">
+      <g id="tiny-wrench" transform="translate(325 326) rotate(37)">
+        <rect x="0" y="0" width="12" height="64" rx="5" fill="#777" stroke="#333" stroke-width="4"/>
+        <path d="M6 -18 C23 -18 30 -2 20 10 L10 1 L2 9 L12 18 C-6 26 -23 14 -20 -4 C-18 -13 -8 -18 6 -18Z" fill="#888" stroke="#333" stroke-width="4" stroke-linejoin="round"/>
+      </g>
+      <g id="warning-sticker" transform="rotate(-8 183 321)">
+        <rect x="138" y="304" width="91" height="36" rx="4" fill="#f39b2f" stroke="#412814" stroke-width="4"/>
+        <text x="184" y="328" font-family="Verdana, Arial, sans-serif" font-size="12" font-weight="800" text-anchor="middle" fill="#2a180b">DO NOT</text>
+      </g>
+    </g>
+  </g>
+</svg>

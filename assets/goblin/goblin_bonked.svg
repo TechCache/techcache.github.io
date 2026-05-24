@@ -1,0 +1,91 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Bonked goblin character</title>
+  <desc id="desc">A squashed green goblin mascot with dizzy eyes, crooked horns, and an impact bump, designed for a playful phone cracking web app.</desc>
+  <defs>
+    <filter id="roughShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="12" stdDeviation="8" flood-color="#1d1208" flood-opacity="0.38"/>
+    </filter>
+    <linearGradient id="skin" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#91d85a"/>
+      <stop offset="1" stop-color="#4f9a34"/>
+    </linearGradient>
+    <linearGradient id="ear" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#7fc74d"/>
+      <stop offset="1" stop-color="#3f7e2c"/>
+    </linearGradient>
+    <linearGradient id="bruise" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f07a7a"/>
+      <stop offset="1" stop-color="#9f3b58"/>
+    </linearGradient>
+  </defs>
+
+  <g id="goblin-bonked" filter="url(#roughShadow)">
+    <!-- dizzy stars -->
+    <g id="dizzy-stars" opacity="0.95">
+      <path d="M172 58l9 19 21 2-16 14 5 21-18-11-18 11 5-21-16-14 21-2z" fill="#f7df4f" stroke="#4a2b12" stroke-width="6" stroke-linejoin="round"/>
+      <path d="M336 50l7 15 17 1-13 11 4 17-15-9-15 9 4-17-13-11 17-1z" fill="#ff9f43" stroke="#4a2b12" stroke-width="6" stroke-linejoin="round"/>
+      <path d="M260 36l6 13 14 1-11 9 4 14-13-7-12 7 3-14-10-9 14-1z" fill="#d8ff62" stroke="#4a2b12" stroke-width="5" stroke-linejoin="round"/>
+      <path d="M203 94c30-24 78-26 112-2" fill="none" stroke="#5a3a1a" stroke-width="8" stroke-linecap="round" stroke-dasharray="14 14" opacity="0.65"/>
+    </g>
+
+    <!-- ears flattened outward -->
+    <g id="ears">
+      <path id="left-ear" d="M141 208c-54-33-82-60-99-95 43-4 83 13 118 55z" fill="url(#ear)" stroke="#26321b" stroke-width="12" stroke-linejoin="round"/>
+      <path id="right-ear" d="M371 208c54-33 82-60 99-95-43-4-83 13-118 55z" fill="url(#ear)" stroke="#26321b" stroke-width="12" stroke-linejoin="round"/>
+      <path d="M82 129c26 9 48 25 67 48" fill="none" stroke="#2d5d29" stroke-width="8" stroke-linecap="round" opacity="0.7"/>
+      <path d="M430 129c-26 9-48 25-67 48" fill="none" stroke="#2d5d29" stroke-width="8" stroke-linecap="round" opacity="0.7"/>
+    </g>
+
+    <!-- bent horns -->
+    <g id="horns">
+      <path d="M183 133c-9-31 2-59 27-79 9 34 2 58-14 79z" fill="#f1dfb5" stroke="#3f2b18" stroke-width="10" stroke-linejoin="round"/>
+      <path d="M329 133c12-27 4-59-21-80-12 33-7 58 9 81z" fill="#f1dfb5" stroke="#3f2b18" stroke-width="10" stroke-linejoin="round"/>
+      <path d="M196 84c5 16 4 30-2 43" stroke="#b79d6a" stroke-width="5" stroke-linecap="round"/>
+      <path d="M318 84c-5 16-4 30 2 43" stroke="#b79d6a" stroke-width="5" stroke-linecap="round"/>
+    </g>
+
+    <!-- squashed head/body -->
+    <g id="body">
+      <path d="M118 194c9-62 67-100 138-100 78 0 137 42 143 103 4 41-11 82-43 105-27 20-61 28-100 28s-73-8-100-28c-31-23-44-66-38-108z" fill="url(#skin)" stroke="#243319" stroke-width="13" stroke-linejoin="round"/>
+      <path d="M139 271c42 35 187 37 233-2" fill="none" stroke="#2d5d29" stroke-width="8" stroke-linecap="round" opacity="0.45"/>
+      <ellipse cx="255" cy="334" rx="100" ry="34" fill="#3e732d" stroke="#243319" stroke-width="12"/>
+    </g>
+
+    <!-- bump -->
+    <g id="bonk-bump">
+      <ellipse cx="267" cy="111" rx="32" ry="21" fill="url(#bruise)" stroke="#4b2630" stroke-width="8" transform="rotate(-8 267 111)"/>
+      <path d="M247 102c11 9 26 11 41 4" stroke="#ffd0d0" stroke-width="5" stroke-linecap="round" opacity="0.55"/>
+    </g>
+
+    <!-- face -->
+    <g id="face">
+      <g id="eyes">
+        <circle cx="211" cy="205" r="31" fill="#f6ffcf" stroke="#15200f" stroke-width="9"/>
+        <circle cx="303" cy="205" r="31" fill="#f6ffcf" stroke="#15200f" stroke-width="9"/>
+        <path d="M195 190l33 33M228 190l-33 33" stroke="#15200f" stroke-width="9" stroke-linecap="round"/>
+        <path d="M287 190l33 33M320 190l-33 33" stroke="#15200f" stroke-width="9" stroke-linecap="round"/>
+      </g>
+      <path id="left-brow" d="M175 169c22-5 42-2 59 9" stroke="#15200f" stroke-width="13" stroke-linecap="round"/>
+      <path id="right-brow" d="M338 169c-22-5-42-2-59 9" stroke="#15200f" stroke-width="13" stroke-linecap="round"/>
+      <path id="nose" d="M249 225c-9 12-15 24-6 33 10 9 29 5 35-8" fill="none" stroke="#214016" stroke-width="8" stroke-linecap="round"/>
+      <path id="mouth" d="M204 281c29-29 76-29 104 0" fill="none" stroke="#15120d" stroke-width="12" stroke-linecap="round"/>
+      <path d="M228 283l-8 19M286 283l8 19" stroke="#f4e7c4" stroke-width="8" stroke-linecap="round"/>
+      <circle cx="161" cy="238" r="8" fill="#315f2b" opacity="0.55"/>
+      <circle cx="355" cy="240" r="7" fill="#315f2b" opacity="0.55"/>
+    </g>
+
+    <!-- arms/feet flopped -->
+    <g id="limbs">
+      <path d="M137 306c-40 18-67 39-82 65 37 9 70-1 101-36" fill="#5ba83b" stroke="#243319" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M375 306c40 18 67 39 82 65-37 9-70-1-101-36" fill="#5ba83b" stroke="#243319" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"/>
+      <ellipse cx="197" cy="386" rx="42" ry="23" fill="#4f9a34" stroke="#243319" stroke-width="10" transform="rotate(12 197 386)"/>
+      <ellipse cx="315" cy="386" rx="42" ry="23" fill="#4f9a34" stroke="#243319" stroke-width="10" transform="rotate(-12 315 386)"/>
+    </g>
+
+    <!-- impact burst -->
+    <g id="impact-burst" opacity="0.95">
+      <path d="M394 98l34-28-10 42 38 15-41 9 2 43-27-34-39 17 22-37-29-31z" fill="#ffef5a" stroke="#5a3510" stroke-width="8" stroke-linejoin="round"/>
+      <text x="400" y="130" font-family="Arial Black, Impact, sans-serif" font-size="38" fill="#5a3510" transform="rotate(12 400 130)">BONK</text>
+    </g>
+  </g>
+</svg>
