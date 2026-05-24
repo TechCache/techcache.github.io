@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="description" content="Digital business card for Christina Glover, Cybersecurity Professional and Founder of Tech Cachet LLC in the Tampa, FL area. Save contact details, connect on LinkedIn, and explore Tech Cachet.">
+<meta name="theme-color" content="#0c66e4">
+<link rel="canonical" href="https://techcachet.com/card/">
+<link rel="icon" href="/assets/favicon.png" type="image/png" sizes="32x32">
+<link rel="icon" href="/assets/favicon-48.png" type="image/png" sizes="48x48">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png" sizes="180x180">
+<title>Christina Glover | Tech Cachet Digital Card</title>
+<style>
+:root{
+  --bg:#f7f8fa;
+  --surface:#ffffff;
+  --surface-blue:#f1f7ff;
+  --text:#172b4d;
+  --muted:#5e6c84;
+  --blue:#0c66e4;
+  --blue-dark:#0052cc;
+  --blue-soft:#deebff;
+  --border:#dfe1e6;
+  --shadow:0 14px 36px rgba(9,30,66,0.12);
+  --radius:8px;
+  --max:760px;
+}
+
+*{box-sizing:border-box}
+
+html{min-height:100%;background:var(--bg)}
+
+body{
+  margin:0;
+  min-height:100%;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  color:var(--text);
+  background:
+    linear-gradient(180deg,rgba(222,235,255,0.72) 0,rgba(247,248,250,0) 280px),
+    var(--bg);
+  line-height:1.5;
+  padding:
+    max(18px, env(safe-area-inset-top))
+    max(16px, env(safe-area-inset-right))
+    max(28px, env(safe-area-inset-bottom))
+    max(16px, env(safe-area-inset-left));
+}
+
+a{color:inherit}
+
+.page{
+  width:min(100%,var(--max));
+  margin:0 auto;
+}
+
+.brand-link{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  min-height:44px;
+  margin:0 0 12px;
+  color:var(--text);
+  text-decoration:none;
+  font-weight:700;
+}
+
+.brand-link img{
+  width:42px;
+  height:42px;
+  object-fit:contain;
+}
+
+.brand-link:focus-visible,
+.button:focus-visible,
+.link-card:focus-visible{
+  outline:3px solid rgba(12,102,228,0.32);
+  outline-offset:3px;
+}
+
+.profile-card,
+.section-card{
+  background:rgba(255,255,255,0.96);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+}
+
+.profile-card{
+  overflow:hidden;
+}
+
+.hero-band{
+  height:84px;
+  background:
+    linear-gradient(135deg,rgba(12,102,228,0.98),rgba(64,130,246,0.86)),
+    var(--blue);
+}
+
+.profile-body{
+  padding:0 18px 20px;
+}
+
+.avatar{
+  display:grid;
+  place-items:center;
+  width:92px;
+  height:92px;
+  margin-top:-46px;
+  border:4px solid var(--surface);
+  border-radius:24px;
+  background:linear-gradient(135deg,#172b4d,#0c66e4);
+  color:#fff;
+  font-size:2rem;
+  font-weight:800;
+  letter-spacing:0;
+  box-shadow:0 10px 24px rgba(9,30,66,0.22);
+}
+
+h1{
+  margin:16px 0 4px;
+  font-size:clamp(2rem,10vw,3rem);
+  line-height:1.02;
+  letter-spacing:0;
+}
+
+.title{
+  margin:0;
+  color:#253858;
+  font-size:1rem;
+  font-weight:700;
+}
+
+.meta{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin:14px 0 0;
+  padding:0;
+  list-style:none;
+}
+
+.meta li{
+  display:inline-flex;
+  align-items:center;
+  min-height:32px;
+  padding:5px 10px;
+  border:1px solid var(--border);
+  border-radius:999px;
+  background:#fafbfc;
+  color:var(--muted);
+  font-size:0.92rem;
+  font-weight:600;
+}
+
+.cta-list{
+  display:grid;
+  gap:10px;
+  margin:18px 0 0;
+}
+
+.button{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-height:52px;
+  padding:13px 16px;
+  border:1px solid transparent;
+  border-radius:var(--radius);
+  text-decoration:none;
+  font-weight:800;
+  transition:background 0.16s ease,border-color 0.16s ease,color 0.16s ease,transform 0.16s ease,box-shadow 0.16s ease;
+  touch-action:manipulation;
+}
+
+.button:hover,
+.button:active{
+  transform:translateY(-1px);
+}
+
+.button-primary{
+  background:var(--blue);
+  color:#fff;
+  box-shadow:0 8px 18px rgba(12,102,228,0.22);
+}
+
+.button-primary:hover,
+.button-primary:active{
+  background:var(--blue-dark);
+}
+
+.button-secondary{
+  background:#fff;
+  border-color:#b3d4ff;
+  color:var(--blue-dark);
+}
+
+.button-secondary:hover,
+.button-secondary:active{
+  background:var(--surface-blue);
+  border-color:var(--blue);
+}
+
+.section-card{
+  margin-top:14px;
+  padding:18px;
+}
+
+.section-card h2{
+  margin:0 0 10px;
+  font-size:1.05rem;
+  line-height:1.25;
+}
+
+.section-card p{
+  margin:0;
+  color:var(--muted);
+}
+
+.focus-list{
+  display:grid;
+  gap:9px;
+  margin:0;
+  padding:0;
+  list-style:none;
+}
+
+.focus-list li{
+  display:flex;
+  gap:10px;
+  align-items:flex-start;
+  padding:10px 0;
+  border-top:1px solid var(--border);
+  color:#253858;
+  font-weight:650;
+}
+
+.focus-list li:first-child{
+  border-top:0;
+  padding-top:0;
+}
+
+.focus-list li::before{
+  content:"";
+  width:9px;
+  height:9px;
+  margin-top:7px;
+  border-radius:50%;
+  background:var(--blue);
+  box-shadow:0 0 0 4px var(--blue-soft);
+  flex:0 0 auto;
+}
+
+.link-grid{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:10px;
+}
+
+.link-card{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  min-height:58px;
+  padding:14px;
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  background:#fff;
+  color:var(--text);
+  text-decoration:none;
+  font-weight:800;
+  transition:background 0.16s ease,border-color 0.16s ease,transform 0.16s ease,box-shadow 0.16s ease;
+}
+
+.link-card:hover,
+.link-card:active{
+  border-color:#85b8ff;
+  background:var(--surface-blue);
+  box-shadow:0 8px 18px rgba(9,30,66,0.08);
+  transform:translateY(-1px);
+}
+
+.link-card span{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:34px;
+  height:34px;
+  border-radius:8px;
+  background:var(--blue-soft);
+  color:var(--blue-dark);
+  font-size:0.78rem;
+  letter-spacing:0;
+  flex:0 0 auto;
+}
+
+.qr-wrap{
+  display:grid;
+  grid-template-columns:112px 1fr;
+  gap:16px;
+  align-items:center;
+}
+
+.qr-placeholder{
+  position:relative;
+  width:112px;
+  aspect-ratio:1;
+  border:1px solid #b3d4ff;
+  border-radius:var(--radius);
+  background:
+    linear-gradient(90deg,rgba(23,43,77,0.08) 1px,transparent 1px),
+    linear-gradient(rgba(23,43,77,0.08) 1px,transparent 1px),
+    #fff;
+  background-size:14px 14px;
+}
+
+.qr-placeholder::before,
+.qr-placeholder::after{
+  content:"";
+  position:absolute;
+  width:28px;
+  height:28px;
+  border:7px solid var(--text);
+  border-radius:4px;
+  background:#fff;
+}
+
+.qr-placeholder::before{left:12px;top:12px}
+.qr-placeholder::after{right:12px;bottom:12px}
+
+.qr-note strong{
+  display:block;
+  margin-bottom:4px;
+}
+
+.qr-note a{
+  color:var(--blue-dark);
+  font-weight:800;
+  overflow-wrap:anywhere;
+}
+
+footer{
+  padding:18px 4px 0;
+  color:var(--muted);
+  text-align:center;
+  font-size:0.9rem;
+}
+
+@media (min-width:640px){
+  body{padding-top:28px}
+  .profile-body{padding:0 24px 24px}
+  .cta-list{grid-template-columns:repeat(2,1fr)}
+  .link-grid{grid-template-columns:repeat(2,1fr)}
+  .section-card{padding:22px}
+}
+
+@media (hover:none){
+  .button:hover,
+  .link-card:hover{
+    transform:none;
+    box-shadow:none;
+  }
+}
+</style>
+</head>
+<body>
+<main class="page" aria-labelledby="card-title">
+  <a class="brand-link" href="/" aria-label="Tech Cachet home">
+    <img src="/assets/logo.png" alt="" width="42" height="42">
+    <span>Tech Cachet</span>
+  </a>
+
+  <article class="profile-card">
+    <div class="hero-band" aria-hidden="true"></div>
+    <div class="profile-body">
+      <div class="avatar" aria-hidden="true">CG</div>
+      <h1 id="card-title">Christina Glover</h1>
+      <p class="title">Cybersecurity Professional | Threat &amp; Vulnerability Management</p>
+      <ul class="meta" aria-label="Professional details">
+        <li>Founder, Tech Cachet LLC</li>
+        <li>Tampa, FL area</li>
+      </ul>
+
+      <!-- Update contact actions here when profile URLs or email addresses change. -->
+      <nav class="cta-list" aria-label="Primary contact actions">
+        <a class="button button-primary" href="/christina-glover.vcf" type="text/vcard">Save Contact</a>
+        <a class="button button-secondary" href="https://linkedin.com/in/christina-glover-952b33120">Connect on LinkedIn</a>
+        <a class="button button-secondary" href="mailto:christina.glover@techcachet.com">Email Me</a>
+        <a class="button button-secondary" href="/">Visit Tech Cachet</a>
+      </nav>
+    </div>
+  </article>
+
+  <section class="section-card" aria-labelledby="intro-heading">
+    <h2 id="intro-heading">About</h2>
+    <p>Christina builds practical security and operations tooling for teams that need clearer risk signals, cleaner workflows, and automation that fits into how work already happens.</p>
+  </section>
+
+  <section class="section-card" aria-labelledby="focus-heading">
+    <h2 id="focus-heading">Professional Focus</h2>
+    <ul class="focus-list">
+      <li>Threat &amp; Vulnerability Management</li>
+      <li>Bug bounty program leadership</li>
+      <li>Jira/Atlassian Forge apps</li>
+      <li>Security automation</li>
+      <li>Practical tools for operations and security-minded teams</li>
+    </ul>
+  </section>
+
+  <section class="section-card" aria-labelledby="links-heading">
+    <h2 id="links-heading">Professional Footprint</h2>
+    <!-- Update professional footprint links here. -->
+    <div class="link-grid">
+      <a class="link-card" href="https://linkedin.com/in/christina-glover-952b33120"><span>IN</span>LinkedIn</a>
+      <a class="link-card" href="https://github.com/techcachet"><span>GH</span>GitHub</a>
+      <a class="link-card" href="/"><span>TC</span>Tech Cachet</a>
+      <a class="link-card" href="https://marketplace.atlassian.com/vendors/703901290/tech-cachet"><span>AM</span>Atlassian Marketplace</a>
+    </div>
+  </section>
+
+  <section class="section-card" aria-labelledby="qr-heading">
+    <h2 id="qr-heading">Page QR</h2>
+    <div class="qr-wrap">
+      <div class="qr-placeholder" role="img" aria-label="QR code placeholder for techcachet.com/card"></div>
+      <p class="qr-note"><strong>techcachet.com/card</strong><a href="https://techcachet.com/card/">Open digital card</a></p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  Tech Cachet LLC &middot; Tampa, Florida
+</footer>
+</body>
+</html>
