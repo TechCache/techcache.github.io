@@ -175,8 +175,39 @@
       animation: crack-in 0.35s ease forwards;
     }
 
+    .crack-asset {
+      position: absolute;
+      left: var(--x);
+      top: var(--y);
+      width: var(--size);
+      height: var(--size);
+      transform: translate(-50%, -50%) rotate(var(--rot)) scale(var(--sx), var(--sy));
+      transform-origin: center;
+      opacity: 0;
+      pointer-events: none;
+      mix-blend-mode: screen;
+      filter:
+        drop-shadow(0 0 3px rgba(255, 255, 255, 0.22))
+        drop-shadow(0 1px 6px rgba(0, 0, 0, 0.35));
+      animation: crack-asset-in 0.28s ease forwards;
+    }
+
+    .crack-asset img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: contain;
+      opacity: var(--asset-alpha, 0.86);
+    }
+
     @keyframes crack-in {
       to { opacity: 1; }
+    }
+
+    @keyframes crack-asset-in {
+      0% { opacity: 0; transform: translate(-50%, -50%) rotate(var(--rot)) scale(calc(var(--sx) * 0.74), calc(var(--sy) * 0.74)); }
+      72% { opacity: 1; transform: translate(-50%, -50%) rotate(var(--rot)) scale(calc(var(--sx) * 1.025), calc(var(--sy) * 1.025)); }
+      100% { opacity: 1; transform: translate(-50%, -50%) rotate(var(--rot)) scale(var(--sx), var(--sy)); }
     }
 
     .crack-svg path {
@@ -1190,9 +1221,9 @@
 
         function bonk() {
           const t = now();
-          tone(150, 0.11, 'triangle', t, 0.1, 72);
-          tone(540, 0.035, 'square', t + 0.02, 0.025, 260);
-          noise(0.08, t, 0.025, 900);
+          tone(145, 0.075, 'triangle', t, 0.035, 82);
+          tone(480, 0.025, 'square', t + 0.018, 0.008, 280);
+          noise(0.05, t, 0.008, 700);
         }
 
         function repair() {
@@ -1266,6 +1297,21 @@
         { minIntegrity: 26, label: 'OSHA Incident' },
         { minIntegrity: 0,  label: 'Held Together By Hope' },
       ];
+
+      const CRACK_ASSETS = {
+        light: [
+          'glass_chip_small_realistic.svg',
+          'glass_chip_medium_realistic.svg',
+          'glass_chip_corner_realistic.svg',
+        ],
+        heavy: [
+          'glass_chip_large_realistic.svg',
+          'glass_chip_corner_realistic.svg',
+          'glass_shatter_heavy_realistic.svg',
+        ],
+      };
+
+      const CRACK_ASSET_BASE = '/goblin/cracks/';
 
       let integrity = 100;
       let bonkTotal = 0;
@@ -1378,7 +1424,39 @@
         return el;
       }
 
-      function addCrack(originX, originY, intensity) {
+      function addCrackAsset(originX, originY, intensity) {
+        const heavy = intensity === 'heavy';
+        const pool = heavy ? CRACK_ASSETS.heavy : CRACK_ASSETS.light;
+        const asset = pool[randomInt(0, pool.length - 1)];
+        const wrapper = document.createElement('div');
+        const img = document.createElement('img');
+        const size = heavy
+          ? randomFloat(Math.min(window.innerWidth, window.innerHeight) * 0.48, Math.min(window.innerWidth, window.innerHeight) * 0.86)
+          : randomFloat(Math.min(window.innerWidth, window.innerHeight) * 0.28, Math.min(window.innerWidth, window.innerHeight) * 0.55);
+
+        wrapper.className = 'crack-asset';
+        wrapper.style.setProperty('--x', (originX != null ? originX : randomFloat(15, 85)) + '%');
+        wrapper.style.setProperty('--y', (originY != null ? originY : randomFloat(15, 85)) + '%');
+        wrapper.style.setProperty('--size', Math.round(size) + 'px');
+        wrapper.style.setProperty('--rot', randomFloat(-170, 170).toFixed(1) + 'deg');
+        wrapper.style.setProperty('--sx', randomFloat(0.86, 1.18).toFixed(2));
+        wrapper.style.setProperty('--sy', randomFloat(0.82, 1.16).toFixed(2));
+        wrapper.style.setProperty('--asset-alpha', randomFloat(heavy ? 0.78 : 0.66, heavy ? 0.96 : 0.88).toFixed(2));
+
+        img.src = CRACK_ASSET_BASE + asset;
+        img.alt = '';
+        img.setAttribute('aria-hidden', 'true');
+        img.decoding = 'async';
+        img.addEventListener('error', function () {
+          wrapper.remove();
+          addProceduralCrack(originX, originY, intensity);
+        }, { once: true });
+        wrapper.appendChild(img);
+        damageLayer.insertBefore(wrapper, catastrophicStamp);
+        counts.cracks += 1;
+      }
+
+      function addProceduralCrack(originX, originY, intensity) {
         const baseX = originX != null ? originX : randomFloat(15, 85);
         const baseY = originY != null ? originY : randomFloat(15, 85);
         const heavy = intensity === 'heavy';
@@ -1470,6 +1548,10 @@
 
         damageLayer.insertBefore(svg, catastrophicStamp);
         counts.cracks += 1;
+      }
+
+      function addCrack(originX, originY, intensity) {
+        addCrackAsset(originX, originY, intensity);
       }
 
       function addSmudge() {
