@@ -703,6 +703,25 @@
     .ingredient-list li::marker { color: var(--green); }
     .instruction-list li::marker { color: var(--ember); font-weight: 900; }
 
+    .recipe-notes {
+      display: grid;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .recipe-note {
+      padding: 10px 11px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(0, 0, 0, 0.14);
+      color: #f4eddc;
+      font-size: 0.95rem;
+    }
+
+    .recipe-note b {
+      color: var(--gold);
+    }
+
     .slot-list {
       display: grid;
       gap: 10px;
@@ -817,12 +836,6 @@
       margin: 10px 0 0;
       color: var(--dim);
       font-weight: 750;
-    }
-
-    .small-link {
-      margin: 10px 0 0;
-      font-size: 0.9rem;
-      font-weight: 850;
     }
 
     .dungeon-item {
@@ -1047,15 +1060,6 @@
           <option value="4">4 - Questionable Choices</option>
           <option value="5">5 - Are You Nuts?</option>
         </select>
-        <div class="control-block">
-          <div class="toggle-row">
-            <label><input type="checkbox" id="beginnerMode" checked> Beginner mode</label>
-          </div>
-          <div class="toggle-row">
-            <label><input type="checkbox" id="pantryMode"> Pantry priority</label>
-          </div>
-        </div>
-
         <button class="secondary-btn" type="button" id="moreOptionsToggle" aria-expanded="false" aria-controls="moreOptions">More Options</button>
 
         <div class="more-options" id="moreOptions" hidden>
@@ -1072,12 +1076,6 @@
           <div class="control-block">
             <h2>I Already Have</h2>
             <textarea class="pantry-input" id="pantryInput" placeholder="chicken, rice, onion, canned tomatoes"></textarea>
-          </div>
-
-          <div class="control-block">
-            <h2>Exclude Cursed Items</h2>
-            <textarea class="exclude-input" id="excludeInput" placeholder="mushrooms, tuna, cilantro"></textarea>
-            <p class="small-link"><a href="#dungeon">Open the dungeon</a></p>
           </div>
 
           <div class="control-block" id="dungeon">
@@ -1127,6 +1125,7 @@
           <div>
             <section class="section">
               <h2>Instructions</h2>
+              <div class="recipe-notes" id="recipeNotes"></div>
               <ol class="instruction-list" id="instructionList"></ol>
             </section>
 
@@ -1179,7 +1178,7 @@
           nameNouns: ["Skillet", "Rice Bowl", "Pasta", "Tray Bake", "Bean Bowl", "Noodles", "Supper"],
           commentary: ["Warm, simple, and hard to mess up.", "Beginner-friendly food with both feet on the ground.", "Cozy enough for dinner, simple enough for a Tuesday."],
           descriptionOpeners: ["Comforting, familiar, and built to behave.", "Gentle, practical, and friendly to nervous cooks.", "A calm little dinner with no dramatic demands."],
-          proteins: ["chicken thighs", "chicken breast", "sausage", "tofu", "chickpeas", "eggs", "ground beef"],
+          proteins: ["chicken thighs", "chicken breast", "Italian sausage links", "ground sausage", "tofu", "chickpeas", "eggs", "ground beef"],
           bases: ["rice", "potatoes", "pasta", "tortillas", "black beans", "pinto beans", "noodles"],
           vegetables: ["onion", "carrots", "bell peppers", "spinach", "mushrooms", "broccoli", "peas"],
           flavors: ["garlic butter", "lemon herb", "tomato basil", "soy ginger", "creamy parmesan", "smoky BBQ", "red curry", "coconut curry"],
@@ -1196,7 +1195,7 @@
           nameNouns: ["Surprise", "Noodles", "Supreme", "Skillet", "Mac Heap", "Rice Gob", "Casserole"],
           commentary: ["A bold creation favored by cave goblins after successful mushroom raids.", "Messy, suspicious, and somehow still edible.", "The pantry made a noise and this is what happened."],
           descriptionOpeners: ["Chaotic comfort food with a suspicious little sparkle.", "Messy but edible, like a dare that learned manners.", "A weird dinner artifact with actual flavor intent."],
-          proteins: ["hot dogs", "frozen meatballs", "eggs", "sausage", "chickpeas", "ground beef", "tofu"],
+          proteins: ["hot dogs", "frozen meatballs", "eggs", "smoked sausage links", "ground sausage", "chickpeas", "ground beef", "tofu"],
           bases: ["boxed mac", "instant rice", "ramen", "tortillas", "potatoes", "bread", "pasta"],
           vegetables: ["canned corn", "onion", "frozen peas", "cabbage", "bell peppers", "pickles", "mushrooms"],
           flavors: ["buffalo", "smoky BBQ", "soy ginger", "garlic butter", "tomato basil", "cajun", "pickle brine", "red curry"],
@@ -1264,7 +1263,7 @@
           nameNouns: ["Pot", "Stew", "Bowl", "Broth", "Soup", "Roast", "Bread Bowl"],
           commentary: ["Congratulations. Everything is stew now.", "Rustic enough to make a wooden spoon feel important.", "Best eaten near a hearth, or at least near a warm laptop."],
           descriptionOpeners: ["Rustic, hearty, and best eaten like you just returned from a quest.", "Old-world comfort with root-cellar energy.", "A sturdy bowl for tired travelers and practical peasants."],
-          proteins: ["sausage", "chicken thighs", "eggs", "lentils", "white beans", "pork", "chickpeas"],
+          proteins: ["smoked sausage links", "Italian sausage links", "chicken thighs", "eggs", "lentils", "white beans", "pork", "chickpeas"],
           bases: ["potatoes", "stale bread", "lentils", "white beans", "rice", "barley"],
           vegetables: ["turnips", "onion", "carrots", "cabbage", "mushrooms", "peas"],
           flavors: ["herbs and butter", "garlic butter", "smoky BBQ", "lemon herb", "tomato basil"],
@@ -1387,7 +1386,7 @@
       function pantryPick(pool, pantry, excluded, diets) {
         const cleanPool = filterPool(pool, excluded, diets);
         const matches = cleanPool.filter((item) => pantry.some((owned) => normalize(item).includes(owned) || owned.includes(normalize(item))));
-        if (($("pantryMode").checked || pantry.length) && matches.length && Math.random() < 0.74) {
+        if (pantry.length && matches.length && Math.random() < 0.74) {
           return choice(matches);
         }
         return choice(cleanPool);
@@ -1402,7 +1401,7 @@
       function selectRecipe(preserveLocks) {
         const mode = modes[state.mode];
         const pantry = parseList($("pantryInput").value);
-        const excluded = parseList($("excludeInput").value);
+        const excluded = [];
         const diets = activeDiets();
         const targetChaos = Number($("chaosSelect").value);
 
@@ -1425,6 +1424,9 @@
         recipe.description = makeDescription(mode, recipe);
         recipe.commentary = choice(mode.commentary);
         recipe.ingredients = buildIngredients(recipe, rules, diets);
+        recipe.prepNotes = buildPrepNotes(recipe);
+        recipe.cleanup = cleanupLevel(recipe);
+        recipe.warnings = buildWarnings(recipe);
         recipe.instructions = buildInstructions(mode, recipe);
         recipe.modeLabel = mode.label;
         recipe.chaosLabel = chaosLabel(recipe.chaos, state.mode);
@@ -1434,7 +1436,7 @@
       }
 
       function resolveDifficulty(method, chaos) {
-        if ($("beginnerMode").checked || ["microwave bowl", "toast", "rice bowl"].includes(method)) return "Beginner";
+        if (["microwave bowl", "toast", "rice bowl"].includes(method)) return "Beginner";
         if (chaos >= 5 || state.mode === "hoity") return "Chaos Chef";
         if (["stew", "one-pot pasta", "baked casserole"].includes(method)) return "Intermediate";
         return "Beginner";
@@ -1452,8 +1454,14 @@
         if (recipe.method === "one-pot pasta" && !hasPastaBase) {
           return modeMethods.includes("rice bowl") ? "rice bowl" : "skillet";
         }
+        if (recipe.method === "rice bowl" && hasPastaBase) {
+          return modeMethods.includes("one-pot pasta") ? "one-pot pasta" : "skillet";
+        }
         if (recipe.method === "toast" && !hasToastBase) {
           return modeMethods.includes("microwave bowl") ? "microwave bowl" : "rice bowl";
+        }
+        if (hasToastBase && ["rice bowl", "microwave bowl", "stir fry", "one-pot pasta"].includes(recipe.method)) {
+          return modeMethods.includes("toast") ? "toast" : "skillet";
         }
         return recipe.method;
       }
@@ -1525,10 +1533,9 @@
       function buildIngredients(recipe, rules, diets) {
         const staples = ["oil", "salt", "pepper"];
         const extras = rules.add || [];
-        const beginner = $("beginnerMode").checked ? ["water or broth"] : ["water or broth", "something acidic if it tastes flat"];
-        const list = [recipe.protein, recipe.base, recipe.vegetable].concat(extras, staples, beginner);
+        const list = [recipe.protein, recipe.base, recipe.vegetable].concat(extras, staples, ["water or broth", "something acidic if it tastes flat"]);
         return unique(list)
-          .filter((item) => !isBlocked(item, parseList($("excludeInput").value), diets))
+          .filter((item) => !isBlocked(item, [], diets))
           .map((item) => formatIngredient(item, recipe));
       }
 
@@ -1545,6 +1552,21 @@
         }
         if (lower === "chickpeas") {
           return "1 can (15 oz) chickpeas, drained";
+        }
+        if (lower.includes("sausage links")) {
+          return "1 lb " + item + ", sliced into coins";
+        }
+        if (lower === "ground sausage") {
+          return "1 lb ground sausage";
+        }
+        if (lower === "bread") {
+          return "4 slices bread";
+        }
+        if (lower === "stale bread") {
+          return "2 cups stale bread, torn into bite-size pieces";
+        }
+        if (lower === "crusty bread") {
+          return "4 slices crusty bread";
         }
         return amountFor(item, recipe) + " " + titleCase(item);
       }
@@ -1582,6 +1604,63 @@
         ].includes(item);
       }
 
+      function buildPrepNotes(recipe) {
+        const notes = [];
+        if (state.mode === "depression") {
+          notes.push("Use pre-cut, frozen, canned, or leftover ingredients if you have them.");
+        } else {
+          notes.push("Before heating anything, set out the ingredients and open any cans or packages.");
+        }
+        if (needsChop(recipe.vegetable)) {
+          notes.push("Cut " + recipe.vegetable + " into bite-size pieces so they cook evenly.");
+        }
+        if (recipe.method === "roasted tray") {
+          notes.push("Use a rimmed baking sheet so ingredients do not slide off the tray.");
+        }
+        if (recipe.method === "one-pot pasta" || recipe.method === "soup" || recipe.method === "stew") {
+          notes.push("Keep extra water or broth nearby in case the pot starts looking dry.");
+        }
+        return notes;
+      }
+
+      function cleanupLevel(recipe) {
+        if (recipe.method === "microwave bowl" || recipe.method === "toast") return "Very low: 1 bowl or plate.";
+        if (recipe.method === "roasted tray") return "Low: 1 tray, 1 knife, 1 cutting board.";
+        if (recipe.method === "baked casserole") return "Medium: 1 baking dish, 1 spoon, basic prep tools.";
+        if (recipe.method === "soup" || recipe.method === "stew" || recipe.method === "one-pot pasta") return "Medium-low: 1 pot, 1 spoon, basic prep tools.";
+        if (recipe.method === "rice bowl") return "Medium: 1 pan plus a bowl if rice is already cooked.";
+        return "Medium-low: 1 skillet, 1 spoon, basic prep tools.";
+      }
+
+      function buildWarnings(recipe) {
+        const warnings = [];
+        if (recipe.flavor.includes("garlic")) warnings.push("Keep an eye on garlic; it can burn quickly if the heat is too high.");
+        if (recipe.flavor.includes("cream") || recipe.flavor.includes("parmesan")) warnings.push("Creamy sauces can scorch. Use medium-low heat after adding dairy and stir often.");
+        if (recipe.method === "one-pot pasta") warnings.push("Stir pasta every few minutes so it does not stick to the bottom of the pot.");
+        if (recipe.method === "roasted tray") warnings.push("Use oven mitts and let the tray cool for a few minutes before touching or serving.");
+        if (recipe.method === "baked casserole") warnings.push("Use oven mitts. Baking dishes stay hot for a while after leaving the oven.");
+        if (recipe.protein.includes("chicken") || recipe.protein.includes("pork")) warnings.push("Cut into the thickest piece to check it is no longer pink inside, or use a thermometer if you have one.");
+        if (recipe.protein.includes("shrimp")) warnings.push("Shrimp overcooks quickly. Stop when it turns pink and firm.");
+        if (recipe.flavor.includes("buffalo") || recipe.flavor.includes("hot sauce")) warnings.push("Hot sauce gets stronger as it cooks. Start with less if you are unsure.");
+        return warnings;
+      }
+
+      function renderRecipeNotes(recipe) {
+        const notes = [
+          "<div class=\"recipe-note\"><b>Prep:</b> " + recipe.prepNotes.join(" ") + "</div>",
+          "<div class=\"recipe-note\"><b>Cook time:</b> " + recipe.time + "</div>",
+          "<div class=\"recipe-note\"><b>Cleanup:</b> " + recipe.cleanup + "</div>"
+        ];
+        if (recipe.warnings.length) {
+          notes.push("<div class=\"recipe-note\"><b>Watch out:</b> " + recipe.warnings.join(" ") + "</div>");
+        }
+        return notes.join("");
+      }
+
+      function needsChop(vegetable) {
+        return !["peas", "corn", "canned corn", "frozen peas", "spinach", "onion powder"].some((item) => normalize(vegetable).includes(item));
+      }
+
       function buildInstructions(mode, recipe) {
         if (state.mode === "depression") return depressionInstructions(recipe);
         if (state.mode === "goblin") return goblinInstructions(recipe);
@@ -1593,168 +1672,349 @@
       }
 
       function safeInstructions(recipe) {
-        return methodSteps(recipe, {
-          intro: "Heat a little oil in a pan or pot over medium heat.",
-          protein: proteinStep(recipe, "Cook", "Add"),
-          base: "Add " + recipe.base + " and " + recipe.vegetable + ", then stir gently.",
-          sauce: "Stir in the " + recipe.flavor + " ingredients with a splash of water or broth.",
-          simmer: "Cook until everything is hot, tender, and smells like dinner.",
-          finish: "Taste and adjust salt, pepper, or a little lemon juice if needed.",
-          trayHeat: "Heat the oven to 425 F.",
-          trayFinish: "Roast until browned and cooked through.",
-          pastaFinish: "Simmer and stir until the base is tender."
-        });
+        return methodSteps(recipe, instructionTone("safe", {
+          start: "Go slowly here; there is no rush.",
+          proteinCook: "Cook",
+          proteinWarm: "Add",
+          flavor: "Stir in the " + recipe.flavor + " ingredients.",
+          finish: "Taste a small bite. Add a pinch of salt, pepper, or lemon juice if it tastes dull.",
+          done: "You are looking for hot food, tender vegetables, and no raw-looking meat."
+        }));
       }
 
       function goblinInstructions(recipe) {
-        return methodSteps(recipe, {
-          intro: "Heat oil in the biggest pan that looks emotionally available.",
-          protein: proteinStep(recipe, "Brown", "Dump in"),
-          base: "Add " + recipe.base + " and " + recipe.vegetable + ". Stir like you found a secret lever.",
-          sauce: "Add the " + recipe.flavor + " flavor bits and a splash of water or broth. This is the spell.",
-          simmer: "Cook until the pan stops looking like separate ingredients and starts looking like dinner.",
-          finish: "Taste it. If it growls, add salt, butter, or hot sauce until it behaves.",
-          trayHeat: "Heat the oven to 425 F and prepare the sacrifice tray.",
-          trayFinish: "Roast until browned, bubbly, and legally edible.",
-          pastaFinish: "Simmer until tender, stirring so the bottom does not become archaeology."
-        });
+        return methodSteps(recipe, instructionTone("goblin", {
+          start: "Summon your pan. Medium heat is enough; we are cooking dinner, not opening a portal.",
+          proteinCook: "Brown",
+          proteinWarm: "Toss in",
+          flavor: "Stir in the " + recipe.flavor + " flavor bits. This is the potion part.",
+          finish: "Taste it. If the pot seems rude, add a pinch of salt or a tiny splash of hot sauce.",
+          done: "Done means hot, tender, and edible-looking. Strange is allowed; crunchy raw meat is not."
+        }));
       }
 
       function apocalypseInstructions(recipe) {
-        return methodSteps(recipe, {
-          intro: "Open the cans, check the pantry, and heat a pot or skillet.",
-          protein: proteinStep(recipe, "Cook", "Add"),
-          base: "Add " + recipe.base + " and " + recipe.vegetable + ". Use what you have; perfection did not survive.",
-          sauce: "Stir in the " + recipe.flavor + " flavor with water, broth, or reserved can liquid.",
-          simmer: "Simmer until hot and sturdy enough to count as a plan.",
-          finish: "Taste, then adjust with salt, pepper, or hot sauce. Calories are the mission.",
-          trayHeat: "Heat the oven to 425 F if power is available. A skillet also works.",
-          trayFinish: "Roast until hot and browned at the edges.",
-          pastaFinish: "Simmer until the pasta or base is tender and the pot looks useful."
-        });
+        return methodSteps(recipe, instructionTone("apocalypse", {
+          start: "Open any cans first and drain them if the ingredient list says drained.",
+          proteinCook: "Cook",
+          proteinWarm: "Add",
+          flavor: "Stir in the " + recipe.flavor + " flavor with water, broth, or a little reserved can liquid.",
+          finish: "Taste and adjust with salt, pepper, or hot sauce. The mission is warm, filling food.",
+          done: "Done means everything is hot all the way through and the sauce or broth tastes seasoned."
+        }));
       }
 
       function depressionInstructions(recipe) {
         if (recipe.method === "microwave bowl" || recipe.method === "toast") {
           return [
-            "Put " + recipe.base + ", " + recipe.protein + ", and " + recipe.vegetable + " in or on the easiest safe dish.",
-            "Add the " + recipe.flavor + " flavor. Microwave, toast, or warm it until hot.",
-            "Eat it as-is or add salt/hot sauce. You made food. That counts."
+            "Put " + recipe.base + ", " + recipe.protein + ", and " + recipe.vegetable + " in or on the easiest microwave-safe bowl or plate.",
+            "Add the " + recipe.flavor + " flavor. Use a spoon to spread it around a little.",
+            "Microwave for 60-90 seconds, or toast/warm until the food is hot enough to eat.",
+            "If the middle is still cool, heat it 30 seconds more. You do not need to make it perfect.",
+            "Eat it as-is, or add salt or hot sauce. You made food. That counts."
           ];
         }
         return [
-          "Use one pan if you can. Heat a little oil, or skip it if that is the difference between eating and not eating.",
-          proteinStep(recipe, "Warm or cook", "Add"),
-          "Add " + recipe.base + ", " + recipe.vegetable + ", and the " + recipe.flavor + " flavor. Stir until hot.",
-          "Stop when it is edible and comforting. No extra dishes required."
+          "Use one pan if you can. Put it on medium heat and add a little oil, or skip the oil if that helps you start.",
+          proteinAction(recipe, "Warm or cook", "Add") + " If it is already cooked or canned, it just needs 2-3 minutes to get hot.",
+          "Add " + recipe.base + " and " + recipe.vegetable + ". Stir slowly for about 1 minute.",
+          "Add the " + recipe.flavor + " flavor and a small splash of water or broth so nothing sticks.",
+          "Cook for 3-6 minutes, stirring sometimes, until everything is hot.",
+          "Stop when it is edible and comforting. One-pan dinner achieved."
         ];
       }
 
       function gymInstructions(recipe) {
-        const steps = methodSteps(recipe, {
-          intro: "Heat a pan or pot and think in portions: one now, one for later if you can.",
-          protein: proteinStep(recipe, "Cook", "Add"),
-          base: "Add " + recipe.base + " and " + recipe.vegetable + " for carbs, fiber, and something green-adjacent.",
-          sauce: "Stir in the " + recipe.flavor + " flavor with a splash of water or broth.",
-          simmer: "Cook until hot and portion-friendly.",
-          finish: "Taste, adjust seasoning, and divide leftovers into containers if meal prep is the move.",
-          trayHeat: "Heat the oven to 425 F and line a tray for easier cleanup.",
-          trayFinish: "Roast until cooked through, then portion it like future-you deserves support.",
-          pastaFinish: "Simmer until tender, then portion for fuel."
-        });
-        steps.push("Aim for protein in every serving. Flex optional, eating required.");
+        const steps = methodSteps(recipe, instructionTone("gym", {
+          start: "Think in portions before you start: one serving now, leftovers if there is enough.",
+          proteinCook: "Cook",
+          proteinWarm: "Add",
+          flavor: "Stir in the " + recipe.flavor + " flavor with a splash of water or broth.",
+          finish: "Taste, adjust seasoning, then divide leftovers into containers if meal prep is the move.",
+          done: "Done means the protein is cooked or hot, vegetables are tender, and each portion looks like actual fuel."
+        }));
+        steps.push("If you are meal-prepping, let leftovers cool for 10-15 minutes before putting lids on containers.");
         return steps;
       }
 
       function medievalInstructions(recipe) {
-        if (recipe.method === "roasted tray") {
-          return [
-            "Heat the oven to 425 F, your modern hearth.",
-            "Lay " + recipe.base + ", " + recipe.vegetable + ", and " + recipe.protein + " on a tray.",
-            "Coat with " + recipe.flavor + " and roast until browned and hearty.",
-            "Serve with bread if you have it. The village would understand."
-          ];
-        }
-        return [
-          "Set a pot over heat and add a little oil or butter.",
-          proteinStep(recipe, "Brown", "Add"),
-          "Add " + recipe.base + " and " + recipe.vegetable + ", then cover with water or broth.",
-          "Stir in the " + recipe.flavor + " flavor and simmer like the hearth depends on it.",
-          "Serve when tender. Bread on the side makes it feel official."
-        ];
+        return methodSteps(recipe, instructionTone("medieval", {
+          start: "Set your pot or pan over medium heat, your modern hearth.",
+          proteinCook: "Brown",
+          proteinWarm: "Add",
+          flavor: "Stir in the " + recipe.flavor + " flavor like you are blessing the pot.",
+          finish: "Taste the broth or sauce. Add salt and pepper until it tastes hearty.",
+          done: "Done means the pot is hot, the vegetables are soft, and a spoonful feels like supper."
+        }));
       }
 
       function hoityInstructions(recipe) {
-        return methodSteps(recipe, {
-          intro: "Warm the pan with poise and a level of confidence usually reserved for tiny menus.",
-          protein: proteinStep(recipe, "Sear", "Introduce"),
-          base: "Fold in " + recipe.base + " and " + recipe.vegetable + " with deliberate elegance.",
-          sauce: "Add the " + recipe.flavor + " elements and a measured splash of water or broth.",
-          simmer: "Cook until glossy, tender, and ready to be described in unnecessary detail.",
-          finish: "Finish with a restrained flourish. Plate it like someone is charging rent for the table.",
-          trayHeat: "Heat the oven to 425 F, also known here as the thermal atelier.",
-          trayFinish: "Roast until burnished, tender, and smugly photogenic.",
-          pastaFinish: "Simmer until tender, then toss until the sauce clings with aristocratic purpose."
-        });
+        return methodSteps(recipe, instructionTone("hoity", {
+          start: "Place your pan over medium heat with calm, expensive energy.",
+          proteinCook: "Sear",
+          proteinWarm: "Introduce",
+          flavor: "Add the " + recipe.flavor + " elements and stir with tasteful restraint.",
+          finish: "Taste and adjust salt carefully. Plate it with unnecessary confidence.",
+          done: "Done means tender ingredients, a warm glossy sauce, and nothing sticking aggressively to the pan."
+        }));
+      }
+
+      function instructionTone(modeKey, overrides) {
+        return Object.assign({
+          modeKey,
+          start: "Place your pan or pot on the stove over medium heat.",
+          proteinCook: "Cook",
+          proteinWarm: "Add",
+          flavor: "Stir in the flavor ingredients.",
+          finish: "Taste and adjust seasoning.",
+          done: "Done means everything is hot and tender.",
+          warning: modeKey === "goblin" ? "If it starts smoking hard, lower the heat. Goblin smoke is still smoke." : "If anything smells burnt or starts smoking, lower the heat right away."
+        }, overrides);
       }
 
       function methodSteps(recipe, tone) {
-        if (recipe.method === "microwave bowl") {
-          return [
-            "Put " + recipe.base + ", " + recipe.protein + ", and " + recipe.vegetable + " in a microwave-safe bowl.",
-            "Add the " + recipe.flavor + " flavor and a small splash of water.",
-            "Microwave until hot, stirring once.",
-            tone.finish
-          ];
-        }
+        if (recipe.method === "microwave bowl") return microwaveSteps(recipe, tone);
+        if (recipe.method === "toast") return toastSteps(recipe, tone);
+        if (recipe.method === "soup" || recipe.method === "stew") return soupStewSteps(recipe, tone);
+        if (recipe.method === "roasted tray") return roastedTraySteps(recipe, tone);
+        if (recipe.method === "baked casserole") return bakedCasseroleSteps(recipe, tone);
+        if (recipe.method === "one-pot pasta") return onePotPastaSteps(recipe, tone);
+        if (recipe.method === "stir fry") return stirFrySteps(recipe, tone);
+        if (recipe.method === "rice bowl") return riceBowlSteps(recipe, tone);
+        return skilletSteps(recipe, tone);
+      }
 
-        if (recipe.method === "soup" || recipe.method === "stew") {
-          return [
-            tone.intro,
-            tone.protein,
-            "Add " + recipe.vegetable + ", then cover with water or broth.",
-            "Stir in the " + recipe.flavor + " flavor.",
-            "Simmer until everything is tender.",
-            tone.finish
-          ];
-        }
-
-        if (recipe.method === "roasted tray") {
-          return [
-            tone.trayHeat,
-            "Spread " + recipe.base + " and " + recipe.vegetable + " on a tray.",
-            "Add " + recipe.protein + " and coat everything with " + recipe.flavor + ".",
-            tone.trayFinish,
-            tone.finish
-          ];
-        }
-
-        if (recipe.method === "one-pot pasta") {
-          return [
-            tone.intro,
-            tone.protein,
-            "Add " + recipe.base + ", " + recipe.vegetable + ", and enough water or broth to barely cover.",
-            tone.pastaFinish,
-            "Fold in the " + recipe.flavor + " finish.",
-            tone.finish
-          ];
-        }
-
+      function skilletSteps(recipe, tone) {
         return [
-          tone.intro,
-          tone.protein,
-          tone.base,
-          tone.sauce,
-          tone.simmer,
+          tone.start,
+          "Add 1 tablespoon of oil and let it warm for about 30 seconds. The oil should shimmer a little, not smoke.",
+          proteinAction(recipe, tone.proteinCook, tone.proteinWarm),
+          "Cook for " + proteinTiming(recipe) + ". Stir or flip as needed so it browns without burning.",
+          "Add " + recipe.vegetable + ". Stir for 2-4 minutes until it brightens, softens, or smells cooked.",
+          skilletBaseStep(recipe),
+          tone.flavor + " Stir for 1 minute so the flavor coats everything.",
+          tone.warning,
+          "Lower the heat to medium-low and cook for 3-5 minutes. Stir sometimes.",
+          tone.done,
+          tone.finish,
+          "Let it cool for 2-3 minutes before eating."
+        ];
+      }
+
+      function soupStewSteps(recipe, tone) {
+        const steps = [
+          "Place a medium pot on the stove over medium heat.",
+          "Add 1 tablespoon of oil. Let it warm for about 30 seconds.",
+          proteinAction(recipe, tone.proteinCook, tone.proteinWarm),
+          "Cook or warm for " + proteinTiming(recipe) + ", stirring once or twice.",
+          soupBaseStep(recipe),
+          tone.flavor,
+          "Pour in 2 cups of water or broth. Scrape the bottom of the pot gently with the spoon so nothing sticks.",
+          "Raise the heat to medium-high until you see steady bubbles.",
+          "Lower the heat to medium-low. Let it simmer gently for 20-25 minutes, stirring every 5 minutes.",
+        ];
+        if (normalize(recipe.base).includes("stale bread")) {
+          steps.push("Add the torn stale bread during the last 5 minutes. It should soften and thicken the stew.");
+        }
+        steps.push(
+          "It is done when the vegetables and base are soft enough to poke easily with a fork.",
+          tone.finish,
+          "Turn off the heat and let the pot cool for 3-5 minutes before serving."
+        );
+        return steps;
+      }
+
+      function roastedTraySteps(recipe, tone) {
+        return [
+          "Heat the oven to 425 F.",
+          trayBaseStep(recipe),
+          "Add 1 tablespoon of oil, salt, pepper, and the " + recipe.flavor + " flavor. Toss with a spoon until everything is lightly coated.",
+          "Add " + recipe.protein + " to the tray. Spread everything out so pieces are mostly in one layer.",
+          "Roast for 15 minutes.",
+          "Carefully pull the tray out with oven mitts and stir or flip the pieces.",
+          "Roast 10-15 minutes more.",
+          "It is done when vegetables are tender and browned at the edges, and meat is cooked through with no raw-looking center.",
+          tone.finish,
+          "Let the tray cool for 5 minutes before eating."
+        ];
+      }
+
+      function bakedCasseroleSteps(recipe, tone) {
+        return [
+          "Heat the oven to 375 F.",
+          "Lightly oil a baking dish so food is less likely to stick.",
+          "If " + recipe.protein + " is raw, cook it in a skillet over medium heat first. Use this cue: " + proteinDonenessCue(recipe) + ".",
+          casseroleBaseStep(recipe),
+          tone.flavor + " Add 1/2 cup water or broth if the mixture looks dry.",
+          "Stir everything in the dish until the sauce and flavor are spread around.",
+          "Cover with foil if you have it. Bake for 20 minutes.",
+          "Remove the foil and bake 5-10 minutes more, until the edges bubble or the top looks lightly browned.",
+          "It is done when the center is hot and steaming. If you poke the middle with a spoon, it should not feel cold.",
+          "Let it rest for 5 minutes before serving; casseroles hold heat like a grudge."
+        ];
+      }
+
+      function stirFrySteps(recipe, tone) {
+        return [
+          "Put a skillet on medium-high heat. Let it warm for 1 minute before adding food.",
+          "Add 1 tablespoon of oil. The oil should move easily when you tilt the pan.",
+          proteinAction(recipe, tone.proteinCook, tone.proteinWarm),
+          "Cook for " + proteinTiming(recipe) + ", stirring often.",
+          "Add " + recipe.vegetable + ". Stir every 20-30 seconds for 3-5 minutes.",
+          "The vegetables should look brighter and a little softer, but they do not need to be mushy.",
+          stirFryBaseStep(recipe),
+          tone.flavor + " Stir for 1-2 minutes so the sauce coats everything.",
+          "If the pan looks dry or sticky, add 1-2 tablespoons of water and scrape gently.",
           tone.finish
         ];
       }
 
-      function proteinStep(recipe, cookVerb, warmVerb) {
-        const warmOnly = recipe.protein.includes("beans") || recipe.protein.includes("chickpeas") || recipe.protein.includes("lentils") || recipe.protein.includes("tuna") || recipe.protein.includes("greek yogurt") || recipe.protein.includes("burrata");
-        return warmOnly
-          ? warmVerb + " " + recipe.protein + " and warm through."
-          : cookVerb + " " + recipe.protein + " until browned or cooked through.";
+      function onePotPastaSteps(recipe, tone) {
+        return [
+          "Place a medium pot on the stove over medium heat.",
+          "Add 1 tablespoon of oil and warm it for about 30 seconds.",
+          proteinAction(recipe, tone.proteinCook, tone.proteinWarm),
+          "Cook or warm for " + proteinTiming(recipe) + ".",
+          "Add " + recipe.vegetable + " and stir for 1-2 minutes.",
+          "Add " + recipe.base + " and 2 cups of water or broth. The liquid should mostly cover the pasta or noodles.",
+          "Bring it to a gentle boil over medium-high heat.",
+          "Lower to medium heat and cook 9-12 minutes, stirring every 2 minutes so it does not stick.",
+          "The sauce may look thin at first but will thicken as the pasta releases starch.",
+          tone.flavor + " Stir until evenly mixed.",
+          "It is done when the pasta is tender and the sauce coats the spoon.",
+          tone.finish
+        ];
+      }
+
+      function riceBowlSteps(recipe, tone) {
+        return [
+          "Use cooked rice or quick rice for the bowl. If your rice is dry, sprinkle it with 1 tablespoon of water before warming.",
+          "Place a skillet on medium heat and add 1 tablespoon of oil.",
+          proteinAction(recipe, tone.proteinCook, tone.proteinWarm),
+          "Cook or warm for " + proteinTiming(recipe) + ".",
+          "Add " + recipe.vegetable + " and stir for 2-4 minutes until hot and a little softer.",
+          tone.flavor + " Add 2 tablespoons of water if the pan looks dry.",
+          "Spoon the warm " + recipe.base + " into a bowl.",
+          "Put the protein and vegetables on top.",
+          tone.finish,
+          "Let it cool for a minute before eating; bowls hold heat."
+        ];
+      }
+
+      function microwaveSteps(recipe, tone) {
+        return [
+          "Put " + recipe.base + ", " + recipe.protein + ", and " + recipe.vegetable + " in a microwave-safe bowl.",
+          "Add the " + recipe.flavor + " flavor and 1-2 tablespoons of water so it does not dry out.",
+          "Cover loosely with a microwave-safe plate or paper towel.",
+          "Microwave for 1 minute, then stir carefully.",
+          "Microwave 1-2 minutes more until everything is steaming hot.",
+          "Let it sit for 1 minute; the bowl may be very hot.",
+          tone.finish
+        ];
+      }
+
+      function toastSteps(recipe, tone) {
+        return [
+          "Toast or warm the " + recipe.base + " until it is crisp enough to hold toppings.",
+          "Warm " + recipe.protein + " and " + recipe.vegetable + " in a microwave-safe bowl for 60-90 seconds, or in a pan over medium heat for 3-4 minutes.",
+          "Spread or spoon the warm mixture onto the toast.",
+          tone.flavor,
+          "Eat while warm. If it falls apart, that is still dinner."
+        ];
+      }
+
+      function isBreadBase(base) {
+        const lower = normalize(base);
+        return lower.includes("bread") || lower.includes("toast");
+      }
+
+      function skilletBaseStep(recipe) {
+        if (isBreadBase(recipe.base)) {
+          return "Toast or warm the " + recipe.base + " separately, then use it as the base for the hot protein and vegetables.";
+        }
+        return "Add " + recipe.base + ". If it is already cooked or canned, stir until hot. If it seems dry, add 2-3 tablespoons of water or broth.";
+      }
+
+      function soupBaseStep(recipe) {
+        if (normalize(recipe.base).includes("stale bread")) {
+          return "Add " + recipe.vegetable + " now. Save the stale bread for the last 5 minutes so it softens and thickens the stew without disappearing completely.";
+        }
+        if (isBreadBase(recipe.base)) {
+          return "Add " + recipe.vegetable + " now. Keep the " + recipe.base + " on the side for dipping or serving under the finished food.";
+        }
+        return "Add " + recipe.vegetable + " and " + recipe.base + ". Stir for about 1 minute.";
+      }
+
+      function trayBaseStep(recipe) {
+        if (isBreadBase(recipe.base)) {
+          return "Keep the " + recipe.base + " off the tray for now. Toast it during the last 5 minutes or serve it on the side.";
+        }
+        return "Put " + recipe.base + " and " + recipe.vegetable + " on a rimmed baking sheet.";
+      }
+
+      function casseroleBaseStep(recipe) {
+        if (isBreadBase(recipe.base)) {
+          return "Tear the " + recipe.base + " into bite-size pieces and scatter them into the baking dish so they catch the sauce.";
+        }
+        return "Add " + recipe.base + ", " + recipe.vegetable + ", and " + recipe.protein + " to the baking dish.";
+      }
+
+      function stirFryBaseStep(recipe) {
+        if (isBreadBase(recipe.base)) {
+          return "Toast or warm the " + recipe.base + " separately. The skillet mixture will go on top or beside it.";
+        }
+        return "Add " + recipe.base + " and stir until hot.";
+      }
+
+      function proteinAction(recipe, cookVerb, warmVerb) {
+        const protein = normalize(recipe.protein);
+        if (isWarmOnlyProtein(protein)) {
+          return warmVerb + " " + recipe.protein + ". It is already cooked or ready-to-eat, so you are just heating it through.";
+        }
+        if (protein.includes("ground sausage")) {
+          return cookVerb + " ground sausage, breaking it into small pieces with a spoon.";
+        }
+        if (protein.includes("italian sausage links")) {
+          return cookVerb + " Italian sausage links. Slice them into coins first so they cook evenly.";
+        }
+        if (protein.includes("eggs") || protein.includes("egg whites")) {
+          return cookVerb + " " + recipe.protein + " gently until they look set and no longer runny.";
+        }
+        return cookVerb + " " + recipe.protein + " until the outside is lightly browned.";
+      }
+
+      function proteinDonenessCue(recipe) {
+        const protein = normalize(recipe.protein);
+        if (isWarmOnlyProtein(protein)) return "it only needs to be hot";
+        if (protein.includes("chicken") || protein.includes("pork")) return "the thickest piece should not look pink inside";
+        if (protein.includes("ground beef") || protein.includes("ground sausage")) return "no pink should remain";
+        if (protein.includes("italian sausage links")) return "the sausage pieces should be browned outside and no longer pink in the middle";
+        if (protein.includes("eggs") || protein.includes("egg whites")) return "the eggs should look set, not wet or runny";
+        if (protein.includes("tofu")) return "the edges should look lightly golden";
+        if (protein.includes("salmon")) return "it should flake apart when pressed with a fork";
+        if (protein.includes("shrimp")) return "it should be pink and firm";
+        return "it should be hot all the way through";
+      }
+
+      function proteinTiming(recipe) {
+        const protein = normalize(recipe.protein);
+        if (isWarmOnlyProtein(protein)) return "2-3 minutes, until hot";
+        if (protein.includes("chicken thighs") || protein.includes("chicken breast")) return "4-5 minutes per side, until no longer pink in the thickest part";
+        if (protein.includes("ground sausage")) return "6-8 minutes, breaking it up and cooking until no pink remains";
+        if (protein.includes("italian sausage links")) return "8-10 minutes, stirring and flipping until browned outside and no longer pink inside";
+        if (protein.includes("smoked sausage links")) return "4-6 minutes, stirring until the edges are browned and the pieces are hot";
+        if (protein.includes("ground beef") || protein.includes("lean ground beef")) return "6-8 minutes, breaking it up and cooking until no pink remains";
+        if (protein.includes("eggs") || protein.includes("egg whites")) return "2-4 minutes, stirring until set and not runny";
+        if (protein.includes("shrimp")) return "2-3 minutes, until pink and firm";
+        if (protein.includes("salmon")) return "3-4 minutes per side, until it flakes with a fork";
+        if (protein.includes("tofu")) return "5-7 minutes, until lightly golden on the edges";
+        if (protein.includes("hot dogs") || protein.includes("meatballs")) return "4-6 minutes, until hot all the way through";
+        return "4-6 minutes, until cooked or hot all the way through";
+      }
+
+      function isWarmOnlyProtein(protein) {
+        const lower = normalize(protein);
+        return lower.includes("beans") || lower.includes("chickpeas") || lower.includes("lentils") || lower.includes("tuna") || lower.includes("greek yogurt") || lower.includes("burrata") || lower.includes("rotisserie chicken") || lower.includes("spam") || lower.includes("smoked sausage links");
       }
 
       function chaosLabel(value, modeKey) {
@@ -1784,6 +2044,7 @@
         $("recipeDescription").textContent = recipe.description;
         $("modeCommentary").textContent = recipe.commentary;
         $("ingredientList").innerHTML = recipe.ingredients.map((item) => "<li>" + item + "</li>").join("");
+        $("recipeNotes").innerHTML = renderRecipeNotes(recipe);
         $("instructionList").innerHTML = recipe.instructions.map((item) => "<li>" + item + "</li>").join("");
         $("slotList").innerHTML = slots.map((slot) => renderSlot(slot, recipe[slot.key])).join("");
         renderDungeon();
@@ -1892,6 +2153,12 @@
           recipe.description,
           recipe.commentary,
           "",
+          "Prep Notes:",
+          recipe.prepNotes.map((item) => "- " + item).join("\n"),
+          "Cook Time: " + recipe.time,
+          "Cleanup: " + recipe.cleanup,
+          recipe.warnings.length ? "Warnings:\n" + recipe.warnings.map((item) => "- " + item).join("\n") : "Warnings: None",
+          "",
           "Ingredients:",
           recipe.ingredients.map((item) => "- " + item).join("\n"),
           "",
@@ -1972,11 +2239,8 @@
       $("surpriseTop").addEventListener("click", surpriseMe);
       $("copyRecipe").addEventListener("click", copyRecipe);
       $("chaosSelect").addEventListener("change", regenerateIfVisible);
-      $("beginnerMode").addEventListener("change", regenerateIfVisible);
-      $("pantryMode").addEventListener("change", regenerateIfVisible);
       document.querySelectorAll(".dietFilter").forEach((input) => input.addEventListener("change", regenerateIfVisible));
       $("pantryInput").addEventListener("change", regenerateIfVisible);
-      $("excludeInput").addEventListener("change", regenerateIfVisible);
     })();
   </script>
 </body>
