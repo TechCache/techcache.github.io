@@ -568,6 +568,18 @@
       font-size: 1.08rem;
     }
 
+    .mode-commentary {
+      max-width: 66ch;
+      margin: 14px 0 0;
+      padding: 12px 14px;
+      border: 1px solid var(--line);
+      border-left: 4px solid var(--ember);
+      border-radius: var(--radius);
+      background: rgba(0, 0, 0, 0.2);
+      color: #fff5d7;
+      font-weight: 850;
+    }
+
     .art-card {
       min-height: 260px;
       border: 1px solid var(--line);
@@ -699,7 +711,7 @@
 
     .slot {
       display: grid;
-      grid-template-columns: minmax(0, 1fr) auto auto;
+      grid-template-columns: minmax(0, 1fr) auto auto auto;
       align-items: center;
       gap: 8px;
       min-height: 48px;
@@ -781,12 +793,55 @@
       font-size: 1rem;
     }
 
-    .reroll-btn {
-      min-width: 94px;
+    .reroll-btn,
+    .dungeon-btn {
+      min-width: 40px;
+      font-size: 1rem;
     }
 
     .reroll-btn.is-rolling {
       animation: dice-roll 0.55s ease;
+    }
+
+    .dungeon-btn {
+      border-color: rgba(255, 119, 119, 0.45);
+    }
+
+    .dungeon-list {
+      display: grid;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .dungeon-empty {
+      margin: 10px 0 0;
+      color: var(--dim);
+      font-weight: 750;
+    }
+
+    .small-link {
+      margin: 10px 0 0;
+      font-size: 0.9rem;
+      font-weight: 850;
+    }
+
+    .dungeon-item {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 10px;
+      min-height: 42px;
+      padding: 8px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(0, 0, 0, 0.16);
+    }
+
+    .dungeon-item b {
+      color: var(--ink);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
 
     @keyframes dice-roll {
@@ -932,7 +987,7 @@
       .filters { grid-template-columns: 1fr; }
 
       .slot {
-        grid-template-columns: minmax(0, 1fr) auto auto;
+        grid-template-columns: minmax(0, 1fr) auto auto auto;
       }
 
       .recipe-header,
@@ -1022,6 +1077,13 @@
           <div class="control-block">
             <h2>Exclude Cursed Items</h2>
             <textarea class="exclude-input" id="excludeInput" placeholder="mushrooms, tuna, cilantro"></textarea>
+            <p class="small-link"><a href="#dungeon">Open the dungeon</a></p>
+          </div>
+
+          <div class="control-block" id="dungeon">
+            <h2>Dungeon</h2>
+            <p class="dungeon-empty" id="dungeonEmpty">No ingredients are chained up yet.</p>
+            <div class="dungeon-list" id="dungeonList"></div>
           </div>
         </div>
       </aside>
@@ -1030,12 +1092,13 @@
         <header class="recipe-header">
           <div>
             <div class="recipe-kicker">
-              <span class="pill" id="modePill">Goblin Mode</span>
+              <span class="pill" id="modePill">Goblin Kitchen</span>
               <span class="pill" id="methodPill">Skillet</span>
               <span class="pill" id="timePill">25 minutes</span>
             </div>
             <h2 class="recipe-title" id="recipeName">Sludge Pot Supreme</h2>
             <p class="recipe-description" id="recipeDescription">Creamy, cozy, mildly suspicious, and very likely dinner.</p>
+            <p class="mode-commentary" id="modeCommentary">Warm, simple, and hard to mess up.</p>
           </div>
           <div class="art-card" id="artCard">
             <div class="dish-art">
@@ -1104,16 +1167,18 @@
 
   <script>
     (function () {
-      const modes = {
+      const MODE_CONFIG = {
         safe: {
-          label: "Safe Mode",
+          label: "Safe Kitchen",
           tag: "low",
           chaosBias: -1,
           mood: "../assets/goblin/goblin_repair.svg",
           background: "backgrounds/safe.png",
           speech: ["No panic, just dinner.", "A respectable bowl approaches.", "This one has adult supervision."],
-          adjectives: ["Garlic", "Golden", "Cozy", "Lemon", "Weeknight", "Simple", "Roasty"],
-          nouns: ["Chicken Bowl", "Sausage Pasta", "Rice Skillet", "Potato Tray", "Tomato Pasta", "Bean Stew"],
+          namePrefixes: ["Gentle Herb", "Cozy", "Gentle Garlic", "Golden", "Weeknight", "Simple Lemon", "Soft Tomato"],
+          nameNouns: ["Skillet", "Rice Bowl", "Pasta", "Tray Bake", "Bean Bowl", "Noodles", "Supper"],
+          commentary: ["Warm, simple, and hard to mess up.", "Beginner-friendly food with both feet on the ground.", "Cozy enough for dinner, simple enough for a Tuesday."],
+          descriptionOpeners: ["Comforting, familiar, and built to behave.", "Gentle, practical, and friendly to nervous cooks.", "A calm little dinner with no dramatic demands."],
           proteins: ["chicken thighs", "chicken breast", "sausage", "tofu", "chickpeas", "eggs", "ground beef"],
           bases: ["rice", "potatoes", "pasta", "tortillas", "black beans", "pinto beans", "noodles"],
           vegetables: ["onion", "carrots", "bell peppers", "spinach", "mushrooms", "broccoli", "peas"],
@@ -1121,14 +1186,16 @@
           methods: ["skillet", "rice bowl", "roasted tray", "stir fry", "one-pot pasta", "baked casserole"]
         },
         goblin: {
-          label: "Goblin Mode",
+          label: "Goblin Kitchen",
           tag: "medium",
           chaosBias: 1,
           mood: "../assets/goblin/goblin_angry.svg",
           background: "backgrounds/goblin.png",
           speech: ["Stir until legally food.", "The pantry has spoken.", "A little weird. Still dinner."],
-          adjectives: ["Grease Wizard", "Dungeon", "Sludge", "Angry", "Bone Bag", "Trash Crown", "Pickle-Blessed"],
-          nouns: ["Skillet", "Noodles", "Pot", "Mac Heap", "Rice Gob", "Casserole", "Snack Cauldron"],
+          namePrefixes: ["Swamp Wizard", "Grease Goblin", "Mystery Slop", "Dungeon", "Trash Crown", "Pickle-Blessed", "Snack Cauldron"],
+          nameNouns: ["Surprise", "Noodles", "Supreme", "Skillet", "Mac Heap", "Rice Gob", "Casserole"],
+          commentary: ["A bold creation favored by cave goblins after successful mushroom raids.", "Messy, suspicious, and somehow still edible.", "The pantry made a noise and this is what happened."],
+          descriptionOpeners: ["Chaotic comfort food with a suspicious little sparkle.", "Messy but edible, like a dare that learned manners.", "A weird dinner artifact with actual flavor intent."],
           proteins: ["hot dogs", "frozen meatballs", "eggs", "sausage", "chickpeas", "ground beef", "tofu"],
           bases: ["boxed mac", "instant rice", "ramen", "tortillas", "potatoes", "bread", "pasta"],
           vegetables: ["canned corn", "onion", "frozen peas", "cabbage", "bell peppers", "pickles", "mushrooms"],
@@ -1136,29 +1203,33 @@
           methods: ["skillet", "baked casserole", "rice bowl", "one-pot pasta", "stir fry", "soup"]
         },
         apocalypse: {
-          label: "Apocalypse Pantry",
+          label: "Apocalypse Kitchen",
           tag: "shelf",
           chaosBias: 0,
           mood: "../assets/goblin/goblin_dizzy.svg",
           background: "backgrounds/apocalypse.png",
           speech: ["Shelf stable, emotionally unstable.", "The cans are cooperating.", "No fresh herbs survived."],
-          adjectives: ["Bunker", "Blackout", "Last Day", "Storm Cellar", "Tin Roof", "Emergency"],
-          nouns: ["Bean Rice", "Pasta Pot", "Chili", "Ramen Bowl", "Tuna Skillet", "Lentil Soup"],
-          proteins: ["black beans", "kidney beans", "pinto beans", "white beans", "tuna", "spam", "chickpeas", "lentils", "peanut butter", "eggs"],
+          namePrefixes: ["Last Can Standing", "Bunker", "Scavenger", "Blackout", "Storm Cellar", "Tin Roof", "Emergency"],
+          nameNouns: ["Stew", "Bean Bowl", "Pasta Pot", "Chili", "Ramen Bowl", "Skillet", "Soup"],
+          commentary: ["Calories are calories. The wasteland approves.", "Made from what survived the cabinet audit.", "A practical meal for when fresh produce is just a rumor."],
+          descriptionOpeners: ["Shelf-stable, filling, and suitable for eating under a flashlight.", "Pantry-first survival food with enough flavor to keep morale alive.", "Scavenged, sturdy, and unlikely to ask questions."],
+          proteins: ["black beans", "kidney beans", "pinto beans", "white beans", "tuna", "spam", "chickpeas", "lentils", "eggs"],
           bases: ["instant rice", "pasta", "ramen", "canned potatoes", "black beans", "kidney beans", "pinto beans", "lentils"],
           vegetables: ["canned tomatoes", "canned corn", "peas", "onion powder", "jarred peppers", "cabbage"],
           flavors: ["cajun", "tomato basil", "smoky BBQ", "soy ginger", "garlic butter", "buffalo", "coconut curry"],
           methods: ["soup", "stew", "skillet", "rice bowl", "one-pot pasta"]
         },
         depression: {
-          label: "Depression Mode",
+          label: "Depression Kitchen",
           tag: "15m",
           chaosBias: -1,
           mood: "../assets/goblin/goblin_idle.svg",
           background: "backgrounds/depression.png",
           speech: ["Tiny effort. Real food.", "One dish. No judgment.", "The couch accepts offerings."],
-          adjectives: ["Couch", "Blanket", "Bare Minimum", "Sad Girl", "Executive Dysfunction", "Microwave"],
-          nouns: ["Quesadilla", "Rice Bowl", "Potato Bake", "Toast Stack", "Noodles", "Egg Bowl"],
+          namePrefixes: ["Existing Is Enough", "Bare Minimum", "Couch Survival", "Blanket", "No Shame", "Tiny Effort", "Soft Landing"],
+          nameNouns: ["Noodles", "Rice Bowl", "Quesadilla", "Potato Bowl", "Toast Stack", "Egg Bowl", "Dinner"],
+          commentary: ["You made food. That counts.", "No shame. Low effort is still effort.", "This is a meal, and you are allowed to keep it simple."],
+          descriptionOpeners: ["Soft landing food with minimal dishes and no culinary judgment.", "Comforting, low-effort, and designed to get you fed.", "A small practical win in edible form."],
           proteins: ["eggs", "black beans", "pinto beans", "tuna", "tofu", "chickpeas", "cheese", "rotisserie chicken"],
           bases: ["tortillas", "instant rice", "bread", "ramen", "boxed mac", "potatoes"],
           vegetables: ["spinach", "canned corn", "frozen peas", "jarred peppers", "onion", "pickles"],
@@ -1166,14 +1237,16 @@
           methods: ["microwave bowl", "skillet", "rice bowl", "toast", "one-pot pasta"]
         },
         gym: {
-          label: "Gym Rat Mode",
+          label: "Gym Rat Kitchen",
           tag: "protein",
           chaosBias: -1,
           mood: "../assets/goblin/goblin_repair.svg",
           background: "backgrounds/gym_rat.png",
           speech: ["Macros have entered the chat.", "Protein brick acquired.", "Meal prep, but make it edible."],
-          adjectives: ["Gains", "Protein Beast", "Iron", "Chicken Brick", "Macro", "Power"],
-          nouns: ["Bowl", "Skillet", "Rice Stack", "Tuna Plate", "Egg Scramble", "Bean Bowl"],
+          namePrefixes: ["Gains", "Protein Beast", "Iron", "Macro", "Power", "Meal Prep", "Fuel"],
+          nameNouns: ["Bowl", "Supreme", "Skillet", "Rice Stack", "Plate", "Scramble", "Bean Bowl"],
+          commentary: ["Fuel the machine. Respect the meal prep.", "Protein has entered the building.", "Eat now, future-you gets leftovers."],
+          descriptionOpeners: ["High-protein, practical, and ready to become leftovers with purpose.", "Macro-minded food with enough flavor to remain morale-positive.", "Built for fuel, reheating, and not overthinking it."],
           proteins: ["chicken breast", "egg whites", "tuna", "lean ground beef", "tofu", "greek yogurt", "black beans", "white beans"],
           bases: ["rice", "potatoes", "black beans", "pinto beans", "lentils", "tortillas", "pasta"],
           vegetables: ["broccoli", "spinach", "bell peppers", "onion", "mushrooms", "peas"],
@@ -1181,14 +1254,16 @@
           methods: ["rice bowl", "skillet", "roasted tray", "stir fry", "baked casserole"]
         },
         medieval: {
-          label: "Medieval Peasant",
+          label: "Medieval Peasant Kitchen",
           tag: "stew",
           chaosBias: 0,
           mood: "../assets/goblin/goblin_catastrophic.svg",
           background: "backgrounds/peasant.png",
           speech: ["Everything is stew if you believe.", "Fetch the wooden spoon.", "A broth for troubled times."],
-          adjectives: ["Hearth", "Traveler's", "Black Cauldron", "Harvest", "Root Cellar", "Old Road"],
-          nouns: ["Stew", "Broth", "Soup", "Pot", "Roast", "Bread Bowl"],
+          namePrefixes: ["Traveler's Hearth", "Village Supper", "Black Cauldron", "Harvest", "Root Cellar", "Old Road", "Hearthside"],
+          nameNouns: ["Pot", "Stew", "Bowl", "Broth", "Soup", "Roast", "Bread Bowl"],
+          commentary: ["Congratulations. Everything is stew now.", "Rustic enough to make a wooden spoon feel important.", "Best eaten near a hearth, or at least near a warm laptop."],
+          descriptionOpeners: ["Rustic, hearty, and best eaten like you just returned from a quest.", "Old-world comfort with root-cellar energy.", "A sturdy bowl for tired travelers and practical peasants."],
           proteins: ["sausage", "chicken thighs", "eggs", "lentils", "white beans", "pork", "chickpeas"],
           bases: ["potatoes", "stale bread", "lentils", "white beans", "rice", "barley"],
           vegetables: ["turnips", "onion", "carrots", "cabbage", "mushrooms", "peas"],
@@ -1196,14 +1271,16 @@
           methods: ["stew", "soup", "roasted tray"]
         },
         hoity: {
-          label: "Hoity-Toity",
+          label: "Hoity-Toity Kitchen",
           tag: "fancy",
           chaosBias: 1,
           mood: "../assets/goblin/goblin_bonked.svg",
           background: "backgrounds/hoity-toity.png",
           speech: ["Plate it taller.", "That will be forty dollars.", "Whisper truffle at the pan."],
-          adjectives: ["Moonlit", "Velvet", "Saffron-Infused", "Truffle Whisper", "Gold Leaf", "Midnight"],
-          nouns: ["Risotto", "Duck Reduction", "Lobster Emulsion", "Tagliatelle", "Salmon Plate", "Burrata Toast"],
+          namePrefixes: ["Truffle-Infused Moonlit", "Velvet", "Saffron Whisper", "Gold Leaf", "Midnight", "Opulent", "Estate-Grown"],
+          nameNouns: ["Reduction", "Emulsion", "Risotto", "Tagliatelle", "Plate", "Toast", "Composition"],
+          commentary: ["Pairs beautifully with a wine nobody can pronounce.", "A meal wearing a tiny velvet jacket.", "Unnecessarily elegant, but still dinner."],
+          descriptionOpeners: ["Dramatic, glossy, and dressed like it has a reservation.", "Luxurious in tone, practical enough to actually cook.", "A fancy little performance with edible consequences."],
           proteins: ["duck", "lobster", "salmon", "filet mignon", "prosciutto", "burrata", "wild mushrooms"],
           bases: ["fresh tagliatelle", "risotto rice", "crusty bread", "fingerling potatoes", "pasta", "polenta"],
           vegetables: ["shallots", "wild mushrooms", "asparagus", "spinach", "heirloom tomatoes", "fennel"],
@@ -1240,10 +1317,14 @@
       const state = {
         mode: "goblin",
         locked: {},
+        dungeon: [],
+        dungeonHistory: [],
         recipe: null,
         hasRecipe: false,
         thinkingTimer: null
       };
+
+      const modes = MODE_CONFIG;
 
       const modeOrder = ["safe", "goblin", "apocalypse", "depression", "gym", "medieval", "hoity"];
 
@@ -1288,13 +1369,19 @@
       function isBlocked(item, excluded, diets) {
         const lower = normalize(item);
         if (!lower) return true;
-        if (excluded.some((x) => lower.includes(x) || x.includes(lower))) return true;
+        if (allExcluded(excluded).some((x) => lower.includes(x) || x.includes(lower))) return true;
         return diets.some((diet) => dietRules[diet].some((bad) => lower.includes(bad)));
+      }
+
+      function allExcluded(excluded) {
+        return unique(excluded.concat(state.dungeon));
       }
 
       function filterPool(pool, excluded, diets) {
         const filtered = pool.filter((item) => !isBlocked(item, excluded, diets));
-        return filtered.length ? filtered : pool;
+        if (filtered.length) return filtered;
+        const nonDungeon = pool.filter((item) => !state.dungeon.some((blocked) => normalize(item).includes(blocked) || blocked.includes(normalize(item))));
+        return nonDungeon.length ? nonDungeon : pool;
       }
 
       function pantryPick(pool, pantry, excluded, diets) {
@@ -1328,15 +1415,17 @@
         recipe.base = preserveLocks && state.locked.base && state.recipe ? state.recipe.base : pantryPick(mode.bases, pantry, avoid, diets);
         recipe.vegetable = preserveLocks && state.locked.vegetable && state.recipe ? state.recipe.vegetable : pantryPick(mode.vegetables, pantry, avoid, diets);
         recipe.method = preserveLocks && state.locked.method && state.recipe ? state.recipe.method : compatibleMethod(recipe.flavor, mode.methods);
+        recipe.method = safeMethodForIngredients(recipe, mode.methods);
 
         const chaosRaw = Math.max(1, Math.min(5, targetChaos + mode.chaosBias + (state.mode === "hoity" ? 1 : 0) + (recipe.flavor === "pickle brine" ? 1 : 0)));
         recipe.chaos = Math.round(chaosRaw);
         recipe.difficulty = resolveDifficulty(recipe.method, recipe.chaos);
         recipe.time = resolveTime(recipe.method, state.mode);
         recipe.name = makeName(mode, recipe);
-        recipe.description = makeDescription(recipe);
+        recipe.description = makeDescription(mode, recipe);
+        recipe.commentary = choice(mode.commentary);
         recipe.ingredients = buildIngredients(recipe, rules, diets);
-        recipe.instructions = buildInstructions(recipe);
+        recipe.instructions = buildInstructions(mode, recipe);
         recipe.modeLabel = mode.label;
         recipe.chaosLabel = chaosLabel(recipe.chaos, state.mode);
         state.recipe = recipe;
@@ -1351,6 +1440,24 @@
         return "Beginner";
       }
 
+      function safeMethodForIngredients(recipe, modeMethods) {
+        const base = normalize(recipe.base);
+        const hasStewBase = ["beans", "lentils", "barley", "rice"].some((item) => base.includes(item));
+        const hasPastaBase = ["pasta", "noodles", "ramen", "boxed mac", "tagliatelle"].some((item) => base.includes(item));
+        const hasToastBase = ["bread", "toast"].some((item) => base.includes(item));
+
+        if (recipe.method === "roasted tray" && hasStewBase) {
+          return modeMethods.includes("stew") ? "stew" : modeMethods.includes("soup") ? "soup" : "skillet";
+        }
+        if (recipe.method === "one-pot pasta" && !hasPastaBase) {
+          return modeMethods.includes("rice bowl") ? "rice bowl" : "skillet";
+        }
+        if (recipe.method === "toast" && !hasToastBase) {
+          return modeMethods.includes("microwave bowl") ? "microwave bowl" : "rice bowl";
+        }
+        return recipe.method;
+      }
+
       function resolveTime(method, modeKey) {
         if (modeKey === "depression") return "10-15 minutes";
         if (method === "stew" || method === "soup") return "30-40 minutes";
@@ -1360,13 +1467,39 @@
       }
 
       function makeName(mode, recipe) {
-        const adjective = choice(mode.adjectives);
-        const noun = choice(mode.nouns);
-        if (state.mode === "safe" && Math.random() > 0.35) {
+        const specialName = modeSpecificName(recipe);
+        if (specialName && Math.random() > 0.45) return specialName;
+        const prefix = choice(mode.namePrefixes);
+        const noun = choice(mode.nameNouns);
+        if (state.mode === "safe" && Math.random() > 0.6) {
           return titleCase(recipe.flavor + " " + recipe.protein + " " + foodType(recipe.method));
         }
-        if (state.mode === "hoity") return adjective + " " + noun;
-        return adjective + " " + noun;
+        if (state.mode === "depression" && recipe.method === "toast") {
+          return prefix + " Toast";
+        }
+        if (state.mode === "medieval" && (recipe.method === "stew" || recipe.method === "soup")) {
+          return prefix + " " + titleCase(recipe.method);
+        }
+        return prefix + " " + noun;
+      }
+
+      function modeSpecificName(recipe) {
+        if (state.mode === "safe" && recipe.protein.includes("chicken")) return "Gentle Herb Chicken";
+        if (state.mode === "safe" && recipe.base.includes("potatoes")) return "Cozy Potato Skillet";
+        if (state.mode === "goblin" && recipe.base.includes("noodles")) return "Grease Goblin Noodles";
+        if (state.mode === "goblin" && recipe.chaos >= 4) return "Mystery Slop Supreme";
+        if (state.mode === "apocalypse" && recipe.protein.includes("beans")) return "Bunker Bean Bowl";
+        if (state.mode === "apocalypse" && recipe.method === "stew") return "Last Can Standing Stew";
+        if (state.mode === "depression" && recipe.base.includes("noodles")) return "Existing Is Enough Noodles";
+        if (state.mode === "depression" && recipe.base.includes("tortillas")) return "Couch Survival Quesadilla";
+        if (state.mode === "gym" && recipe.protein.includes("chicken")) return "Chicken Brick Mk IV";
+        if (state.mode === "gym") return "Gains Bowl Supreme";
+        if (state.mode === "medieval" && recipe.base.includes("bread") && recipe.vegetable.includes("turnips")) return "Turnip & Bread Stew";
+        if (state.mode === "medieval") return "Traveler's Hearth Pot";
+        if (state.mode === "hoity" && recipe.protein.includes("lobster")) return "Velvet Lobster Emulsion";
+        if (state.mode === "hoity" && recipe.flavor.includes("saffron") && recipe.base.includes("risotto")) return "Saffron Whisper Risotto";
+        if (state.mode === "hoity" && recipe.flavor.includes("truffle")) return "Truffle-Infused Moonlit Reduction";
+        return "";
       }
 
       function titleCase(text) {
@@ -1382,20 +1515,11 @@
         return "skillet";
       }
 
-      function makeDescription(recipe) {
-        const tone = {
-          safe: "Comforting, familiar, and built to behave.",
-          goblin: "Oddly cozy, salty around the edges, and absolutely trying its best.",
-          apocalypse: "Shelf-stable, filling, and suitable for eating under a flashlight.",
-          depression: "Soft landing food with minimal dishes and no culinary judgment.",
-          gym: "High-protein, practical, and ready to become leftovers with purpose.",
-          medieval: "Rustic, hearty, and best eaten like you just returned from a quest.",
-          hoity: "Dramatic, glossy, and dressed like it has a reservation."
-        };
+      function makeDescription(mode, recipe) {
         const flavorLine = recipe.flavor === "buffalo"
           ? "Expect hot-sauce chaos with "
           : "Expect " + recipe.flavor + " flavor with ";
-        return tone[state.mode] + " " + flavorLine + recipe.protein + ", " + recipe.base + ", and " + recipe.vegetable + ".";
+        return choice(mode.descriptionOpeners) + " " + flavorLine + recipe.protein + ", " + recipe.base + ", and " + recipe.vegetable + ".";
       }
 
       function buildIngredients(recipe, rules, diets) {
@@ -1458,72 +1582,179 @@
         ].includes(item);
       }
 
-      function buildInstructions(recipe) {
-        const fancy = state.mode === "hoity";
-        const lowEnergy = state.mode === "depression";
-        const intro = fancy ? "Warm your pan with unnecessary confidence." : lowEnergy ? "Use the easiest pan, bowl, or microwave-safe dish you own." : "Heat a little oil in your cooking vessel.";
-        const proteinStep = recipe.protein.includes("beans") || recipe.protein.includes("chickpeas") || recipe.protein.includes("lentils") || recipe.protein.includes("tuna")
-          ? "Add " + recipe.protein + " and warm through."
-          : "Cook " + recipe.protein + " until browned or heated through.";
-        const baseStep = recipe.method === "roasted tray"
-          ? "Spread " + recipe.base + " and " + recipe.vegetable + " on a tray."
-          : "Add " + recipe.base + " and " + recipe.vegetable + ".";
-        const sauceStep = "Stir in the " + recipe.flavor + " flavor bits with a splash of water or broth.";
-        const finish = fancy
-          ? "Finish with a tiny flourish and describe it as intentional."
-          : recipe.chaos >= 4
-            ? "Taste it. If it scares you politely, add salt, butter, or hot sauce."
-            : "Taste and adjust salt, pepper, or acidity.";
+      function buildInstructions(mode, recipe) {
+        if (state.mode === "depression") return depressionInstructions(recipe);
+        if (state.mode === "goblin") return goblinInstructions(recipe);
+        if (state.mode === "apocalypse") return apocalypseInstructions(recipe);
+        if (state.mode === "gym") return gymInstructions(recipe);
+        if (state.mode === "medieval") return medievalInstructions(recipe);
+        if (state.mode === "hoity") return hoityInstructions(recipe);
+        return safeInstructions(recipe);
+      }
 
+      function safeInstructions(recipe) {
+        return methodSteps(recipe, {
+          intro: "Heat a little oil in a pan or pot over medium heat.",
+          protein: proteinStep(recipe, "Cook", "Add"),
+          base: "Add " + recipe.base + " and " + recipe.vegetable + ", then stir gently.",
+          sauce: "Stir in the " + recipe.flavor + " ingredients with a splash of water or broth.",
+          simmer: "Cook until everything is hot, tender, and smells like dinner.",
+          finish: "Taste and adjust salt, pepper, or a little lemon juice if needed.",
+          trayHeat: "Heat the oven to 425 F.",
+          trayFinish: "Roast until browned and cooked through.",
+          pastaFinish: "Simmer and stir until the base is tender."
+        });
+      }
+
+      function goblinInstructions(recipe) {
+        return methodSteps(recipe, {
+          intro: "Heat oil in the biggest pan that looks emotionally available.",
+          protein: proteinStep(recipe, "Brown", "Dump in"),
+          base: "Add " + recipe.base + " and " + recipe.vegetable + ". Stir like you found a secret lever.",
+          sauce: "Add the " + recipe.flavor + " flavor bits and a splash of water or broth. This is the spell.",
+          simmer: "Cook until the pan stops looking like separate ingredients and starts looking like dinner.",
+          finish: "Taste it. If it growls, add salt, butter, or hot sauce until it behaves.",
+          trayHeat: "Heat the oven to 425 F and prepare the sacrifice tray.",
+          trayFinish: "Roast until browned, bubbly, and legally edible.",
+          pastaFinish: "Simmer until tender, stirring so the bottom does not become archaeology."
+        });
+      }
+
+      function apocalypseInstructions(recipe) {
+        return methodSteps(recipe, {
+          intro: "Open the cans, check the pantry, and heat a pot or skillet.",
+          protein: proteinStep(recipe, "Cook", "Add"),
+          base: "Add " + recipe.base + " and " + recipe.vegetable + ". Use what you have; perfection did not survive.",
+          sauce: "Stir in the " + recipe.flavor + " flavor with water, broth, or reserved can liquid.",
+          simmer: "Simmer until hot and sturdy enough to count as a plan.",
+          finish: "Taste, then adjust with salt, pepper, or hot sauce. Calories are the mission.",
+          trayHeat: "Heat the oven to 425 F if power is available. A skillet also works.",
+          trayFinish: "Roast until hot and browned at the edges.",
+          pastaFinish: "Simmer until the pasta or base is tender and the pot looks useful."
+        });
+      }
+
+      function depressionInstructions(recipe) {
+        if (recipe.method === "microwave bowl" || recipe.method === "toast") {
+          return [
+            "Put " + recipe.base + ", " + recipe.protein + ", and " + recipe.vegetable + " in or on the easiest safe dish.",
+            "Add the " + recipe.flavor + " flavor. Microwave, toast, or warm it until hot.",
+            "Eat it as-is or add salt/hot sauce. You made food. That counts."
+          ];
+        }
+        return [
+          "Use one pan if you can. Heat a little oil, or skip it if that is the difference between eating and not eating.",
+          proteinStep(recipe, "Warm or cook", "Add"),
+          "Add " + recipe.base + ", " + recipe.vegetable + ", and the " + recipe.flavor + " flavor. Stir until hot.",
+          "Stop when it is edible and comforting. No extra dishes required."
+        ];
+      }
+
+      function gymInstructions(recipe) {
+        const steps = methodSteps(recipe, {
+          intro: "Heat a pan or pot and think in portions: one now, one for later if you can.",
+          protein: proteinStep(recipe, "Cook", "Add"),
+          base: "Add " + recipe.base + " and " + recipe.vegetable + " for carbs, fiber, and something green-adjacent.",
+          sauce: "Stir in the " + recipe.flavor + " flavor with a splash of water or broth.",
+          simmer: "Cook until hot and portion-friendly.",
+          finish: "Taste, adjust seasoning, and divide leftovers into containers if meal prep is the move.",
+          trayHeat: "Heat the oven to 425 F and line a tray for easier cleanup.",
+          trayFinish: "Roast until cooked through, then portion it like future-you deserves support.",
+          pastaFinish: "Simmer until tender, then portion for fuel."
+        });
+        steps.push("Aim for protein in every serving. Flex optional, eating required.");
+        return steps;
+      }
+
+      function medievalInstructions(recipe) {
+        if (recipe.method === "roasted tray") {
+          return [
+            "Heat the oven to 425 F, your modern hearth.",
+            "Lay " + recipe.base + ", " + recipe.vegetable + ", and " + recipe.protein + " on a tray.",
+            "Coat with " + recipe.flavor + " and roast until browned and hearty.",
+            "Serve with bread if you have it. The village would understand."
+          ];
+        }
+        return [
+          "Set a pot over heat and add a little oil or butter.",
+          proteinStep(recipe, "Brown", "Add"),
+          "Add " + recipe.base + " and " + recipe.vegetable + ", then cover with water or broth.",
+          "Stir in the " + recipe.flavor + " flavor and simmer like the hearth depends on it.",
+          "Serve when tender. Bread on the side makes it feel official."
+        ];
+      }
+
+      function hoityInstructions(recipe) {
+        return methodSteps(recipe, {
+          intro: "Warm the pan with poise and a level of confidence usually reserved for tiny menus.",
+          protein: proteinStep(recipe, "Sear", "Introduce"),
+          base: "Fold in " + recipe.base + " and " + recipe.vegetable + " with deliberate elegance.",
+          sauce: "Add the " + recipe.flavor + " elements and a measured splash of water or broth.",
+          simmer: "Cook until glossy, tender, and ready to be described in unnecessary detail.",
+          finish: "Finish with a restrained flourish. Plate it like someone is charging rent for the table.",
+          trayHeat: "Heat the oven to 425 F, also known here as the thermal atelier.",
+          trayFinish: "Roast until burnished, tender, and smugly photogenic.",
+          pastaFinish: "Simmer until tender, then toss until the sauce clings with aristocratic purpose."
+        });
+      }
+
+      function methodSteps(recipe, tone) {
         if (recipe.method === "microwave bowl") {
           return [
-            "Put " + recipe.base + ", " + recipe.protein + ", and " + recipe.vegetable + " in a bowl.",
+            "Put " + recipe.base + ", " + recipe.protein + ", and " + recipe.vegetable + " in a microwave-safe bowl.",
             "Add the " + recipe.flavor + " flavor and a small splash of water.",
             "Microwave until hot, stirring once.",
-            finish
+            tone.finish
           ];
         }
 
         if (recipe.method === "soup" || recipe.method === "stew") {
           return [
-            intro,
-            proteinStep,
+            tone.intro,
+            tone.protein,
             "Add " + recipe.vegetable + ", then cover with water or broth.",
             "Stir in the " + recipe.flavor + " flavor.",
             "Simmer until everything is tender.",
-            finish
+            tone.finish
           ];
         }
 
         if (recipe.method === "roasted tray") {
           return [
-            "Heat the oven to 425 F.",
-            baseStep,
+            tone.trayHeat,
+            "Spread " + recipe.base + " and " + recipe.vegetable + " on a tray.",
             "Add " + recipe.protein + " and coat everything with " + recipe.flavor + ".",
-            "Roast until browned and cooked through.",
-            finish
+            tone.trayFinish,
+            tone.finish
           ];
         }
 
         if (recipe.method === "one-pot pasta") {
           return [
-            intro,
-            proteinStep,
+            tone.intro,
+            tone.protein,
             "Add " + recipe.base + ", " + recipe.vegetable + ", and enough water or broth to barely cover.",
-            "Simmer and stir until the base is tender.",
+            tone.pastaFinish,
             "Fold in the " + recipe.flavor + " finish.",
-            finish
+            tone.finish
           ];
         }
 
         return [
-          intro,
-          proteinStep,
-          baseStep,
-          sauceStep,
-          "Cook until the base is tender and the pan looks like dinner.",
-          finish
+          tone.intro,
+          tone.protein,
+          tone.base,
+          tone.sauce,
+          tone.simmer,
+          tone.finish
         ];
+      }
+
+      function proteinStep(recipe, cookVerb, warmVerb) {
+        const warmOnly = recipe.protein.includes("beans") || recipe.protein.includes("chickpeas") || recipe.protein.includes("lentils") || recipe.protein.includes("tuna") || recipe.protein.includes("greek yogurt") || recipe.protein.includes("burrata");
+        return warmOnly
+          ? warmVerb + " " + recipe.protein + " and warm through."
+          : cookVerb + " " + recipe.protein + " until browned or cooked through.";
       }
 
       function chaosLabel(value, modeKey) {
@@ -1551,9 +1782,11 @@
         $("timePill").textContent = recipe.time;
         $("recipeName").textContent = recipe.name;
         $("recipeDescription").textContent = recipe.description;
+        $("modeCommentary").textContent = recipe.commentary;
         $("ingredientList").innerHTML = recipe.ingredients.map((item) => "<li>" + item + "</li>").join("");
         $("instructionList").innerHTML = recipe.instructions.map((item) => "<li>" + item + "</li>").join("");
         $("slotList").innerHTML = slots.map((slot) => renderSlot(slot, recipe[slot.key])).join("");
+        renderDungeon();
         $("difficultyLabel").textContent = recipe.difficulty;
         $("chaosLabel").textContent = recipe.chaosLabel;
         $("difficultyFill").style.setProperty("--value", difficultyValue(recipe.difficulty) + "%");
@@ -1567,7 +1800,7 @@
 
       function renderSlot(slot, value) {
         const locked = !!state.locked[slot.key];
-        return '<div class="slot"><div><span>' + slot.label + '</span><b>' + titleCase(value) + '</b></div><button class="icon-btn lock-btn" type="button" data-lock="' + slot.key + '" aria-label="' + (locked ? "Unlock " : "Lock ") + slot.label + '" title="' + (locked ? "Unlock " : "Lock ") + slot.label + '" aria-pressed="' + locked + '">' + (locked ? "🔒" : "🔓") + '</button><button class="icon-btn reroll-btn" type="button" data-reroll="' + slot.key + '" aria-label="Reroll ' + slot.label + '" title="Reroll ' + slot.label + '">🎲 Reroll</button></div>';
+        return '<div class="slot"><div><span>' + slot.label + '</span><b>' + titleCase(value) + '</b></div><button class="icon-btn lock-btn" type="button" data-lock="' + slot.key + '" aria-label="' + (locked ? "Unlock " : "Lock ") + slot.label + '" title="' + (locked ? "Unlock " : "Lock ") + slot.label + '" aria-pressed="' + locked + '">' + (locked ? "🔒" : "🔓") + '</button><button class="icon-btn reroll-btn" type="button" data-reroll="' + slot.key + '" aria-label="Reroll ' + slot.label + '" title="Reroll ' + slot.label + '">🎲</button><button class="icon-btn dungeon-btn" type="button" data-dungeon="' + slot.key + '" aria-label="Send ' + slot.label + ' to dungeon" title="Send ' + slot.label + ' to dungeon">☠</button></div>';
       }
 
       function colorFor(text, variant) {
@@ -1587,6 +1820,41 @@
         selectRecipe(true);
         state.locked = savedLocks;
         render();
+      }
+
+      function sendToDungeon(key) {
+        if (!state.recipe || !state.recipe[key]) return;
+        const item = normalize(state.recipe[key]);
+        if (!state.dungeon.includes(item)) state.dungeon.push(item);
+        if (!state.dungeonHistory.includes(item)) state.dungeonHistory.push(item);
+        state.locked[key] = false;
+        showToast(titleCase(item) + " was chained in the dungeon.");
+        renderDungeon();
+        if (state.hasRecipe) selectRecipe(true);
+      }
+
+      function toggleDungeonItem(item) {
+        const lower = normalize(item);
+        if (state.dungeon.includes(lower)) {
+          state.dungeon = state.dungeon.filter((entry) => entry !== lower);
+          showToast(titleCase(lower) + " was freed from the dungeon.");
+        } else {
+          state.dungeon.push(lower);
+          if (!state.dungeonHistory.includes(lower)) state.dungeonHistory.push(lower);
+          showToast(titleCase(lower) + " was chained in the dungeon.");
+        }
+        renderDungeon();
+        regenerateIfVisible();
+      }
+
+      function renderDungeon() {
+        const list = $("dungeonList");
+        const empty = $("dungeonEmpty");
+        if (!list || !empty) return;
+        empty.hidden = state.dungeonHistory.length > 0;
+        list.innerHTML = state.dungeonHistory.map((item) => (
+          '<div class="dungeon-item"><b>' + titleCase(item) + '</b><button class="secondary-btn" type="button" data-free="' + item + '" aria-pressed="' + state.dungeon.includes(item) + '">' + (state.dungeon.includes(item) ? "Chained" : "Free") + '</button></div>'
+        )).join("");
       }
 
       function revealRecipe() {
@@ -1622,6 +1890,7 @@
           recipe.name,
           "",
           recipe.description,
+          recipe.commentary,
           "",
           "Ingredients:",
           recipe.ingredients.map((item) => "- " + item).join("\n"),
@@ -1665,10 +1934,12 @@
       }
 
       updateModePresentation(modes[state.mode], null);
+      renderDungeon();
 
       $("slotList").addEventListener("click", (event) => {
         const lock = event.target.closest("[data-lock]");
         const reroll = event.target.closest("[data-reroll]");
+        const dungeon = event.target.closest("[data-dungeon]");
         if (lock) {
           state.locked[lock.dataset.lock] = !state.locked[lock.dataset.lock];
           render();
@@ -1679,6 +1950,13 @@
           reroll.classList.add("is-rolling");
           window.setTimeout(() => rerollSlot(reroll.dataset.reroll), 850);
         }
+        if (dungeon) sendToDungeon(dungeon.dataset.dungeon);
+      });
+
+      $("dungeonList").addEventListener("click", (event) => {
+        const button = event.target.closest("[data-free]");
+        if (!button) return;
+        toggleDungeonItem(button.dataset.free);
       });
 
       $("modeCycler").addEventListener("click", cycleMode);
