@@ -1584,6 +1584,12 @@
         if (lower === "jarred jalapeno slices") {
           return "2 tbsp jarred jalapeno slices, drained";
         }
+        if (lower === "polenta") {
+          return "2 cups prepared polenta";
+        }
+        if (lower === "risotto rice") {
+          return "2 cups cooked risotto rice, or 3/4 cup dry rice cooked separately";
+        }
         return amountFor(item, recipe) + " " + titleCase(item);
       }
 
@@ -1908,7 +1914,7 @@
 
       function riceBowlSteps(recipe, tone) {
         return [
-          "Use cooked rice or quick rice for the bowl. If your rice is dry, sprinkle it with 1 tablespoon of water before warming.",
+          bowlBasePrepStep(recipe.base),
           "Place a skillet on medium heat and add 1 tablespoon of oil.",
           proteinAction(recipe, tone.proteinCook, tone.proteinWarm),
           proteinTimingStep(recipe, "Cook or warm for", ""),
@@ -1919,6 +1925,29 @@
           tone.finish,
           "Let it cool for a minute before eating; bowls hold heat."
         ];
+      }
+
+      function bowlBasePrepStep(base) {
+        const lower = normalize(base);
+        if (lower.includes("polenta")) {
+          return "Use prepared polenta for the bowl. Warm it in a small pot or microwave; if it is very thick, stir in 1-2 tablespoons of water, broth, or milk.";
+        }
+        if (lower.includes("risotto rice")) {
+          return "Use cooked risotto rice for the bowl. If you only have dry risotto rice, cook it separately according to the package before making the topping.";
+        }
+        if (lower.includes("instant rice")) {
+          return "Prepare the instant rice according to the package, then keep it warm for the bowl.";
+        }
+        if (lower.includes("rice")) {
+          return "Use cooked rice or quick rice for the bowl. If your rice is dry, sprinkle it with 1 tablespoon of water before warming.";
+        }
+        if (lower.includes("beans") || lower.includes("lentils")) {
+          return "Use canned, drained, or already cooked " + base + " for the bowl. Warm them with 1 tablespoon of water if they look dry.";
+        }
+        if (lower.includes("potatoes")) {
+          return "Use cooked " + base + " for the bowl. Warm them first, or cut them small and cook until fork-tender before adding toppings.";
+        }
+        return "Warm the " + base + " separately so it is ready to become the bowl base.";
       }
 
       function microwaveSteps(recipe, tone) {
