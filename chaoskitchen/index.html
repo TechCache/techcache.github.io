@@ -36,6 +36,7 @@
       --safe-bottom: env(safe-area-inset-bottom, 0px);
       --font: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       --display: Georgia, "Times New Roman", serif;
+      --mode-bg: url("backgrounds/goblin.png");
     }
 
     * { box-sizing: border-box; }
@@ -47,7 +48,7 @@
       min-height: 100dvh;
       background:
         linear-gradient(180deg, rgba(12, 10, 7, 0.2), rgba(12, 10, 7, 0.78)),
-        url("../assets/goblin/goblin_background.png") center top / cover fixed,
+        var(--mode-bg) center top / cover fixed,
         var(--bg);
       color: var(--ink);
       font-family: var(--font);
@@ -158,6 +159,10 @@
       padding-bottom: 18px;
     }
 
+    .hero-copy.is-compact {
+      max-width: 560px;
+    }
+
     .eyebrow {
       display: inline-flex;
       align-items: center;
@@ -208,6 +213,23 @@
       align-items: center;
       gap: 12px;
       margin-top: 24px;
+    }
+
+    .mode-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 14px;
+      padding: 8px 10px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(12, 10, 7, 0.5);
+      color: var(--muted);
+      font-weight: 850;
+    }
+
+    .mode-status strong {
+      color: var(--ink);
     }
 
     .primary-btn,
@@ -262,6 +284,23 @@
       position: relative;
     }
 
+    .goblin-button {
+      position: relative;
+      display: block;
+      width: min(100%, 360px);
+      margin: 0 auto;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      color: inherit;
+    }
+
+    .goblin-button:focus-visible {
+      outline: 2px solid var(--green);
+      outline-offset: 8px;
+      border-radius: 12px;
+    }
+
     .goblin-display::before {
       content: "";
       position: absolute;
@@ -276,8 +315,7 @@
 
     .goblin-art {
       position: relative;
-      width: min(100%, 360px);
-      margin: 0 auto;
+      width: 100%;
       filter: drop-shadow(0 24px 24px rgba(0, 0, 0, 0.55));
       animation: bob 5s ease-in-out infinite;
     }
@@ -328,6 +366,12 @@
       gap: 18px;
       align-items: start;
       margin-top: -8px;
+    }
+
+    body:not(.has-recipe) .workspace {
+      grid-template-columns: minmax(260px, 520px);
+      justify-content: center;
+      margin-top: 0;
     }
 
     .panel,
@@ -452,6 +496,30 @@
 
     .recipe-card {
       overflow: hidden;
+    }
+
+    .recipe-card.is-hidden {
+      display: none;
+    }
+
+    .more-options {
+      margin-top: 16px;
+    }
+
+    .more-options[hidden] {
+      display: none;
+    }
+
+    .chaos-select {
+      width: 100%;
+      min-height: 46px;
+      margin-top: 12px;
+      padding: 0 12px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(10, 8, 5, 0.54);
+      color: var(--ink);
+      font-weight: 850;
     }
 
     .recipe-header {
@@ -659,10 +727,9 @@
     }
 
     .slot button {
-      width: 38px;
       height: 34px;
       border-radius: 7px;
-      padding: 0;
+      padding: 0 10px;
     }
 
     .slot button[aria-pressed="true"] {
@@ -707,6 +774,96 @@
       flex-wrap: wrap;
       gap: 10px;
       padding: 0 clamp(18px, 3vw, 28px) clamp(18px, 3vw, 28px);
+    }
+
+    .lock-btn {
+      min-width: 40px;
+      font-size: 1rem;
+    }
+
+    .reroll-btn {
+      min-width: 94px;
+    }
+
+    .reroll-btn.is-rolling {
+      animation: dice-roll 0.55s ease;
+    }
+
+    @keyframes dice-roll {
+      0% { transform: rotate(0deg) translateY(0); }
+      18% { transform: rotate(-10deg) translateY(-2px); }
+      38% { transform: rotate(12deg) translateY(1px); }
+      58% { transform: rotate(-8deg) translateY(-1px); }
+      78% { transform: rotate(8deg) translateY(1px); }
+      100% { transform: rotate(0deg) translateY(0); }
+    }
+
+    .thinking-page {
+      position: fixed;
+      inset: 0;
+      z-index: 20;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      background:
+        linear-gradient(180deg, rgba(5, 4, 3, 0.84), rgba(18, 12, 6, 0.94)),
+        var(--mode-bg) center / cover fixed;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.22s ease;
+    }
+
+    .thinking-page.is-visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .thinking-card {
+      width: min(520px, 100%);
+      padding: 22px;
+      border: 1px solid var(--line-strong);
+      border-radius: var(--radius);
+      background: rgba(24, 19, 12, 0.94);
+      text-align: center;
+      box-shadow: 0 26px 70px rgba(0, 0, 0, 0.5);
+    }
+
+    .thinking-card h2 {
+      margin: 0;
+      font-family: var(--display);
+      font-size: clamp(2rem, 8vw, 3.4rem);
+      line-height: 1;
+      letter-spacing: 0;
+      color: var(--ink);
+    }
+
+    .thinking-card p {
+      margin: 10px 0 0;
+      color: var(--muted);
+      font-weight: 800;
+    }
+
+    .thinking-dots {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 18px;
+    }
+
+    .thinking-dots span {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--ember);
+      animation: think-dot 0.9s ease-in-out infinite;
+    }
+
+    .thinking-dots span:nth-child(2) { animation-delay: 0.15s; }
+    .thinking-dots span:nth-child(3) { animation-delay: 0.3s; }
+
+    @keyframes think-dot {
+      0%, 100% { transform: translateY(0); opacity: 0.45; }
+      50% { transform: translateY(-8px); opacity: 1; }
     }
 
     .toast {
@@ -803,40 +960,39 @@
         <span class="brand-mark"><img src="../assets/goblin/goblin_idle.svg" alt=""></span>
         <span>Goblin Kitchen</span>
       </a>
-      <a class="home-link" href="https://techcachet.com/">Tech Cachet Home</a>
     </header>
 
-    <section class="app-hero" aria-labelledby="app-title">
-      <div class="hero-copy">
+    <section class="app-hero" aria-label="Goblin Kitchen recipe generator">
+      <div class="hero-copy is-compact">
         <p class="eyebrow"><span class="spark"></span> Recipe Chaos Generator</p>
-        <h1 id="app-title">Goblin Kitchen</h1>
-        <p class="hero-question">What are we cooking today?</p>
-        <p class="hero-note">Low-pressure meals, suspiciously useful pantry wizardry, and recipes that assume dinner can be solved without becoming a chef.</p>
+        <p class="mode-status">Mode: <strong id="currentModeLabel">Goblin Mode</strong></p>
         <div class="hero-actions">
           <button class="primary-btn" type="button" id="generateTop">Generate Meal</button>
           <button class="secondary-btn" type="button" id="surpriseTop">Surprise Me</button>
         </div>
       </div>
 
-      <div class="goblin-display" aria-hidden="true">
-        <div class="goblin-art">
-          <div class="speech" id="speechBubble">Trust the pot. Mostly.</div>
-          <img id="goblinMood" src="../assets/goblin/goblin_idle.svg" alt="">
-        </div>
+      <div class="goblin-display">
+        <button class="goblin-button" type="button" id="modeCycler" aria-label="Change cooking mode">
+          <div class="goblin-art" aria-hidden="true">
+            <div class="speech" id="speechBubble">Trust the pot. Mostly.</div>
+            <img id="goblinMood" src="../assets/goblin/goblin_idle.svg" alt="">
+          </div>
+        </button>
       </div>
     </section>
 
     <main class="workspace">
       <aside class="panel" aria-label="Generator controls">
-        <h2>Modes</h2>
-        <div class="mode-grid" id="modeGrid"></div>
-
+        <h2>Chaos Level</h2>
+        <select class="chaos-select" id="chaosSelect" aria-label="Chaos level">
+          <option value="1">1 - Beginner</option>
+          <option value="2">2 - A Little Spicy</option>
+          <option value="3" selected>3 - Pantry Goblin</option>
+          <option value="4">4 - Questionable Choices</option>
+          <option value="5">5 - Are You Nuts?</option>
+        </select>
         <div class="control-block">
-          <h2>Chaos</h2>
-          <div class="slider-row">
-            <input type="range" id="chaosSlider" min="1" max="5" value="3" aria-label="Chaos rating">
-            <strong id="chaosSliderValue">3</strong>
-          </div>
           <div class="toggle-row">
             <label><input type="checkbox" id="beginnerMode" checked> Beginner mode</label>
           </div>
@@ -845,28 +1001,32 @@
           </div>
         </div>
 
-        <div class="control-block">
-          <h2>Dietary Filters</h2>
-          <div class="filters">
-            <label><input type="checkbox" value="vegetarian" class="dietFilter"> Vegetarian</label>
-            <label><input type="checkbox" value="seafood-free" class="dietFilter"> No seafood</label>
-            <label><input type="checkbox" value="dairy-free" class="dietFilter"> Dairy-free</label>
-            <label><input type="checkbox" value="gluten-light" class="dietFilter"> Gluten-light</label>
+        <button class="secondary-btn" type="button" id="moreOptionsToggle" aria-expanded="false" aria-controls="moreOptions">More Options</button>
+
+        <div class="more-options" id="moreOptions" hidden>
+          <div class="control-block">
+            <h2>Dietary Filters</h2>
+            <div class="filters">
+              <label><input type="checkbox" value="vegetarian" class="dietFilter"> Vegetarian</label>
+              <label><input type="checkbox" value="seafood-free" class="dietFilter"> No seafood</label>
+              <label><input type="checkbox" value="dairy-free" class="dietFilter"> Dairy-free</label>
+              <label><input type="checkbox" value="gluten-light" class="dietFilter"> Gluten-light</label>
+            </div>
           </div>
-        </div>
 
-        <div class="control-block">
-          <h2>I Already Have</h2>
-          <textarea class="pantry-input" id="pantryInput" placeholder="chicken, rice, onion, canned tomatoes"></textarea>
-        </div>
+          <div class="control-block">
+            <h2>I Already Have</h2>
+            <textarea class="pantry-input" id="pantryInput" placeholder="chicken, rice, onion, canned tomatoes"></textarea>
+          </div>
 
-        <div class="control-block">
-          <h2>Exclude</h2>
-          <textarea class="exclude-input" id="excludeInput" placeholder="mushrooms, tuna, cilantro"></textarea>
+          <div class="control-block">
+            <h2>Exclude Cursed Items</h2>
+            <textarea class="exclude-input" id="excludeInput" placeholder="mushrooms, tuna, cilantro"></textarea>
+          </div>
         </div>
       </aside>
 
-      <article class="recipe-card" aria-live="polite">
+      <article class="recipe-card is-hidden" id="recipeCard" aria-live="polite">
         <header class="recipe-header">
           <div>
             <div class="recipe-kicker">
@@ -932,6 +1092,14 @@
     </main>
   </div>
 
+  <div class="thinking-page" id="thinkingPage" aria-live="polite" aria-hidden="true">
+    <div class="thinking-card">
+      <h2>Consulting the pot</h2>
+      <p id="thinkingMessage">Sniffing ingredients and making choices.</p>
+      <div class="thinking-dots" aria-hidden="true"><span></span><span></span><span></span></div>
+    </div>
+  </div>
+
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <script>
@@ -942,11 +1110,12 @@
           tag: "low",
           chaosBias: -1,
           mood: "../assets/goblin/goblin_repair.svg",
+          background: "backgrounds/safe.png",
           speech: ["No panic, just dinner.", "A respectable bowl approaches.", "This one has adult supervision."],
           adjectives: ["Garlic", "Golden", "Cozy", "Lemon", "Weeknight", "Simple", "Roasty"],
           nouns: ["Chicken Bowl", "Sausage Pasta", "Rice Skillet", "Potato Tray", "Tomato Pasta", "Bean Stew"],
           proteins: ["chicken thighs", "chicken breast", "sausage", "tofu", "chickpeas", "eggs", "ground beef"],
-          bases: ["rice", "potatoes", "pasta", "tortillas", "beans", "noodles"],
+          bases: ["rice", "potatoes", "pasta", "tortillas", "black beans", "pinto beans", "noodles"],
           vegetables: ["onion", "carrots", "bell peppers", "spinach", "mushrooms", "broccoli", "peas"],
           flavors: ["garlic butter", "lemon herb", "tomato basil", "soy ginger", "creamy parmesan", "smoky BBQ", "red curry", "coconut curry"],
           methods: ["skillet", "rice bowl", "roasted tray", "stir fry", "one-pot pasta", "baked casserole"]
@@ -956,6 +1125,7 @@
           tag: "medium",
           chaosBias: 1,
           mood: "../assets/goblin/goblin_angry.svg",
+          background: "backgrounds/goblin.png",
           speech: ["Stir until legally food.", "The pantry has spoken.", "A little weird. Still dinner."],
           adjectives: ["Grease Wizard", "Dungeon", "Sludge", "Angry", "Bone Bag", "Trash Crown", "Pickle-Blessed"],
           nouns: ["Skillet", "Noodles", "Pot", "Mac Heap", "Rice Gob", "Casserole", "Snack Cauldron"],
@@ -970,11 +1140,12 @@
           tag: "shelf",
           chaosBias: 0,
           mood: "../assets/goblin/goblin_dizzy.svg",
+          background: "backgrounds/apocalypse.png",
           speech: ["Shelf stable, emotionally unstable.", "The cans are cooperating.", "No fresh herbs survived."],
           adjectives: ["Bunker", "Blackout", "Last Day", "Storm Cellar", "Tin Roof", "Emergency"],
           nouns: ["Bean Rice", "Pasta Pot", "Chili", "Ramen Bowl", "Tuna Skillet", "Lentil Soup"],
-          proteins: ["canned beans", "tuna", "spam", "chickpeas", "lentils", "peanut butter", "eggs"],
-          bases: ["instant rice", "pasta", "ramen", "canned potatoes", "beans", "lentils"],
+          proteins: ["black beans", "kidney beans", "pinto beans", "white beans", "tuna", "spam", "chickpeas", "lentils", "peanut butter", "eggs"],
+          bases: ["instant rice", "pasta", "ramen", "canned potatoes", "black beans", "kidney beans", "pinto beans", "lentils"],
           vegetables: ["canned tomatoes", "canned corn", "peas", "onion powder", "jarred peppers", "cabbage"],
           flavors: ["cajun", "tomato basil", "smoky BBQ", "soy ginger", "garlic butter", "buffalo", "coconut curry"],
           methods: ["soup", "stew", "skillet", "rice bowl", "one-pot pasta"]
@@ -984,10 +1155,11 @@
           tag: "15m",
           chaosBias: -1,
           mood: "../assets/goblin/goblin_idle.svg",
+          background: "backgrounds/depression.png",
           speech: ["Tiny effort. Real food.", "One dish. No judgment.", "The couch accepts offerings."],
           adjectives: ["Couch", "Blanket", "Bare Minimum", "Sad Girl", "Executive Dysfunction", "Microwave"],
           nouns: ["Quesadilla", "Rice Bowl", "Potato Bake", "Toast Stack", "Noodles", "Egg Bowl"],
-          proteins: ["eggs", "canned beans", "tuna", "tofu", "chickpeas", "cheese", "rotisserie chicken"],
+          proteins: ["eggs", "black beans", "pinto beans", "tuna", "tofu", "chickpeas", "cheese", "rotisserie chicken"],
           bases: ["tortillas", "instant rice", "bread", "ramen", "boxed mac", "potatoes"],
           vegetables: ["spinach", "canned corn", "frozen peas", "jarred peppers", "onion", "pickles"],
           flavors: ["garlic butter", "buffalo", "soy ginger", "smoky BBQ", "creamy parmesan", "tomato basil"],
@@ -998,11 +1170,12 @@
           tag: "protein",
           chaosBias: -1,
           mood: "../assets/goblin/goblin_repair.svg",
+          background: "backgrounds/gym_rat.png",
           speech: ["Macros have entered the chat.", "Protein brick acquired.", "Meal prep, but make it edible."],
           adjectives: ["Gains", "Protein Beast", "Iron", "Chicken Brick", "Macro", "Power"],
           nouns: ["Bowl", "Skillet", "Rice Stack", "Tuna Plate", "Egg Scramble", "Bean Bowl"],
-          proteins: ["chicken breast", "egg whites", "tuna", "lean ground beef", "tofu", "greek yogurt", "beans"],
-          bases: ["rice", "potatoes", "beans", "lentils", "tortillas", "pasta"],
+          proteins: ["chicken breast", "egg whites", "tuna", "lean ground beef", "tofu", "greek yogurt", "black beans", "white beans"],
+          bases: ["rice", "potatoes", "black beans", "pinto beans", "lentils", "tortillas", "pasta"],
           vegetables: ["broccoli", "spinach", "bell peppers", "onion", "mushrooms", "peas"],
           flavors: ["lemon herb", "soy ginger", "cajun", "smoky BBQ", "garlic butter", "buffalo"],
           methods: ["rice bowl", "skillet", "roasted tray", "stir fry", "baked casserole"]
@@ -1012,11 +1185,12 @@
           tag: "stew",
           chaosBias: 0,
           mood: "../assets/goblin/goblin_catastrophic.svg",
+          background: "backgrounds/peasant.png",
           speech: ["Everything is stew if you believe.", "Fetch the wooden spoon.", "A broth for troubled times."],
           adjectives: ["Hearth", "Traveler's", "Black Cauldron", "Harvest", "Root Cellar", "Old Road"],
           nouns: ["Stew", "Broth", "Soup", "Pot", "Roast", "Bread Bowl"],
-          proteins: ["sausage", "chicken thighs", "eggs", "lentils", "beans", "pork", "chickpeas"],
-          bases: ["potatoes", "stale bread", "lentils", "beans", "rice", "barley"],
+          proteins: ["sausage", "chicken thighs", "eggs", "lentils", "white beans", "pork", "chickpeas"],
+          bases: ["potatoes", "stale bread", "lentils", "white beans", "rice", "barley"],
           vegetables: ["turnips", "onion", "carrots", "cabbage", "mushrooms", "peas"],
           flavors: ["herbs and butter", "garlic butter", "smoky BBQ", "lemon herb", "tomato basil"],
           methods: ["stew", "soup", "roasted tray"]
@@ -1026,6 +1200,7 @@
           tag: "fancy",
           chaosBias: 1,
           mood: "../assets/goblin/goblin_bonked.svg",
+          background: "backgrounds/hoity-toity.png",
           speech: ["Plate it taller.", "That will be forty dollars.", "Whisper truffle at the pan."],
           adjectives: ["Moonlit", "Velvet", "Saffron-Infused", "Truffle Whisper", "Gold Leaf", "Midnight"],
           nouns: ["Risotto", "Duck Reduction", "Lobster Emulsion", "Tagliatelle", "Salmon Plate", "Burrata Toast"],
@@ -1065,8 +1240,20 @@
       const state = {
         mode: "goblin",
         locked: {},
-        recipe: null
+        recipe: null,
+        hasRecipe: false,
+        thinkingTimer: null
       };
+
+      const modeOrder = ["safe", "goblin", "apocalypse", "depression", "gym", "medieval", "hoity"];
+
+      const thinkingMessages = [
+        "Sniffing ingredients and making choices.",
+        "Asking the pantry what it has done.",
+        "Rolling the tiny dinner dice.",
+        "Checking if this counts as cooking.",
+        "Negotiating with the sauce."
+      ];
 
       const slots = [
         { key: "protein", label: "Protein" },
@@ -1130,7 +1317,7 @@
         const pantry = parseList($("pantryInput").value);
         const excluded = parseList($("excludeInput").value);
         const diets = activeDiets();
-        const targetChaos = Number($("chaosSlider").value);
+        const targetChaos = Number($("chaosSelect").value);
 
         const recipe = {};
         recipe.flavor = preserveLocks && state.locked.flavor && state.recipe ? state.recipe.flavor : pantryPick(mode.flavors, pantry, excluded, diets);
@@ -1153,7 +1340,7 @@
         recipe.modeLabel = mode.label;
         recipe.chaosLabel = chaosLabel(recipe.chaos, state.mode);
         state.recipe = recipe;
-        updateMood(mode, recipe);
+        updateModePresentation(mode, recipe);
         render();
       }
 
@@ -1205,7 +1392,10 @@
           medieval: "Rustic, hearty, and best eaten like you just returned from a quest.",
           hoity: "Dramatic, glossy, and dressed like it has a reservation."
         };
-        return tone[state.mode] + " Expect " + recipe.flavor + " notes with " + recipe.protein + ", " + recipe.base + ", and " + recipe.vegetable + ".";
+        const flavorLine = recipe.flavor === "buffalo"
+          ? "Expect hot-sauce chaos with "
+          : "Expect " + recipe.flavor + " flavor with ";
+        return tone[state.mode] + " " + flavorLine + recipe.protein + ", " + recipe.base + ", and " + recipe.vegetable + ".";
       }
 
       function buildIngredients(recipe, rules, diets) {
@@ -1213,14 +1403,66 @@
         const extras = rules.add || [];
         const beginner = $("beginnerMode").checked ? ["water or broth"] : ["water or broth", "something acidic if it tastes flat"];
         const list = [recipe.protein, recipe.base, recipe.vegetable].concat(extras, staples, beginner);
-        return unique(list).filter((item) => !isBlocked(item, parseList($("excludeInput").value), diets));
+        return unique(list)
+          .filter((item) => !isBlocked(item, parseList($("excludeInput").value), diets))
+          .map((item) => formatIngredient(item, recipe));
+      }
+
+      function formatIngredient(item, recipe) {
+        const lower = normalize(item);
+        if (lower === "something acidic if it tastes flat") {
+          return "Optional: 1 tsp lemon juice or vinegar, if needed";
+        }
+        if (isBeanVariety(lower)) {
+          return "1 can (15 oz) " + lower + ", drained";
+        }
+        if (lower === "lentils") {
+          return "1 cup cooked lentils, or 1 can drained";
+        }
+        if (lower === "chickpeas") {
+          return "1 can (15 oz) chickpeas, drained";
+        }
+        return amountFor(item, recipe) + " " + titleCase(item);
+      }
+
+      function amountFor(item, recipe) {
+        const lower = normalize(item);
+        if (lower === recipe.protein) return "1 lb";
+        if (lower === recipe.base) {
+          if (lower.includes("bread") || lower.includes("tortillas")) return "4 pieces";
+          if (lower.includes("potatoes")) return "1 1/2 lb";
+          return "1 cup";
+        }
+        if (lower === recipe.vegetable) return "2 cups";
+        if (lower.includes("salt") || lower.includes("pepper") || lower.includes("paprika") || lower.includes("herbs")) return "1/2 tsp";
+        if (lower.includes("oil") || lower.includes("butter") || lower.includes("truffle oil")) return "1 tbsp";
+        if (lower.includes("sauce") || lower.includes("paste") || lower.includes("mustard")) return "2 tbsp";
+        if (lower.includes("cream") || lower.includes("coconut milk") || lower.includes("broth") || lower.includes("water")) return "1 cup";
+        if (lower.includes("wine") || lower.includes("pickle juice") || lower.includes("lemon")) return "1/4 cup";
+        if (lower.includes("parmesan") || lower.includes("cheddar")) return "1/2 cup";
+        if (lower.includes("garlic") || lower.includes("ginger")) return "2 tsp";
+        return "to taste";
+      }
+
+      function isBeanVariety(item) {
+        return [
+          "beans",
+          "canned beans",
+          "black beans",
+          "kidney beans",
+          "pinto beans",
+          "white beans",
+          "garbanzo beans",
+          "cannellini beans",
+          "navy beans"
+        ].includes(item);
       }
 
       function buildInstructions(recipe) {
         const fancy = state.mode === "hoity";
         const lowEnergy = state.mode === "depression";
         const intro = fancy ? "Warm your pan with unnecessary confidence." : lowEnergy ? "Use the easiest pan, bowl, or microwave-safe dish you own." : "Heat a little oil in your cooking vessel.";
-        const proteinStep = recipe.protein.includes("beans") || recipe.protein.includes("chickpeas") || recipe.protein.includes("tuna")
+        const proteinStep = recipe.protein.includes("beans") || recipe.protein.includes("chickpeas") || recipe.protein.includes("lentils") || recipe.protein.includes("tuna")
           ? "Add " + recipe.protein + " and warm through."
           : "Cook " + recipe.protein + " until browned or heated through.";
         const baseStep = recipe.method === "roasted tray"
@@ -1293,16 +1535,12 @@
         return label === "Beginner" ? 34 : label === "Intermediate" ? 66 : 96;
       }
 
-      function updateMood(mode, recipe) {
-        $("goblinMood").src = recipe.chaos >= 5 ? "../assets/goblin/goblin_catastrophic.svg" : mode.mood;
-        $("speechBubble").textContent = choice(mode.speech);
-      }
-
-      function renderModes() {
-        $("modeGrid").innerHTML = Object.keys(modes).map((key) => {
-          const mode = modes[key];
-          return '<button class="mode-btn" type="button" data-mode="' + key + '" aria-pressed="' + (key === state.mode ? "true" : "false") + '"><span>' + mode.label + '</span><span class="mode-tag">' + mode.tag + '</span></button>';
-        }).join("");
+      function updateModePresentation(mode, recipe) {
+        document.documentElement.style.setProperty("--mode-bg", 'url("' + mode.background + '")');
+        $("currentModeLabel").textContent = mode.label;
+        $("modeCycler").setAttribute("aria-label", "Change cooking mode. Current mode is " + mode.label);
+        $("goblinMood").src = recipe && recipe.chaos >= 5 ? "../assets/goblin/goblin_catastrophic.svg" : mode.mood;
+        $("speechBubble").textContent = recipe ? choice(mode.speech) : "Click me to change modes.";
       }
 
       function render() {
@@ -1313,7 +1551,7 @@
         $("timePill").textContent = recipe.time;
         $("recipeName").textContent = recipe.name;
         $("recipeDescription").textContent = recipe.description;
-        $("ingredientList").innerHTML = recipe.ingredients.map((item) => "<li>" + titleCase(item) + "</li>").join("");
+        $("ingredientList").innerHTML = recipe.ingredients.map((item) => "<li>" + item + "</li>").join("");
         $("instructionList").innerHTML = recipe.instructions.map((item) => "<li>" + item + "</li>").join("");
         $("slotList").innerHTML = slots.map((slot) => renderSlot(slot, recipe[slot.key])).join("");
         $("difficultyLabel").textContent = recipe.difficulty;
@@ -1329,7 +1567,7 @@
 
       function renderSlot(slot, value) {
         const locked = !!state.locked[slot.key];
-        return '<div class="slot"><div><span>' + slot.label + '</span><b>' + titleCase(value) + '</b></div><button class="icon-btn lock-btn" type="button" data-lock="' + slot.key + '" aria-label="Lock ' + slot.label + '" title="Lock ' + slot.label + '" aria-pressed="' + locked + '">' + (locked ? "L" : "U") + '</button><button class="icon-btn reroll-btn" type="button" data-reroll="' + slot.key + '" aria-label="Reroll ' + slot.label + '" title="Reroll ' + slot.label + '">R</button></div>';
+        return '<div class="slot"><div><span>' + slot.label + '</span><b>' + titleCase(value) + '</b></div><button class="icon-btn lock-btn" type="button" data-lock="' + slot.key + '" aria-label="' + (locked ? "Unlock " : "Lock ") + slot.label + '" title="' + (locked ? "Unlock " : "Lock ") + slot.label + '" aria-pressed="' + locked + '">' + (locked ? "🔒" : "🔓") + '</button><button class="icon-btn reroll-btn" type="button" data-reroll="' + slot.key + '" aria-label="Reroll ' + slot.label + '" title="Reroll ' + slot.label + '">🎲 Reroll</button></div>';
       }
 
       function colorFor(text, variant) {
@@ -1351,6 +1589,33 @@
         render();
       }
 
+      function revealRecipe() {
+        state.hasRecipe = true;
+        document.body.classList.add("has-recipe");
+        $("recipeCard").classList.remove("is-hidden");
+      }
+
+      function hideThinking() {
+        $("thinkingPage").classList.remove("is-visible");
+        $("thinkingPage").setAttribute("aria-hidden", "true");
+      }
+
+      function beginGenerate(preserveLocks) {
+        window.clearTimeout(state.thinkingTimer);
+        $("thinkingMessage").textContent = choice(thinkingMessages);
+        $("thinkingPage").classList.add("is-visible");
+        $("thinkingPage").setAttribute("aria-hidden", "false");
+        state.thinkingTimer = window.setTimeout(() => {
+          selectRecipe(preserveLocks);
+          revealRecipe();
+          hideThinking();
+        }, 3000 + Math.floor(Math.random() * 2000));
+      }
+
+      function regenerateIfVisible() {
+        if (state.hasRecipe) selectRecipe(true);
+      }
+
       function copyRecipe() {
         const recipe = state.recipe;
         const text = [
@@ -1359,7 +1624,7 @@
           recipe.description,
           "",
           "Ingredients:",
-          recipe.ingredients.map((item) => "- " + titleCase(item)).join("\n"),
+          recipe.ingredients.map((item) => "- " + item).join("\n"),
           "",
           "Instructions:",
           recipe.instructions.map((item, index) => (index + 1) + ". " + item).join("\n"),
@@ -1387,22 +1652,19 @@
         const keys = Object.keys(modes);
         state.mode = choice(keys);
         state.locked = {};
-        $("chaosSlider").value = String(Math.floor(Math.random() * 5) + 1);
-        $("chaosSliderValue").textContent = $("chaosSlider").value;
-        renderModes();
-        selectRecipe(false);
+        $("chaosSelect").value = String(Math.floor(Math.random() * 5) + 1);
+        updateModePresentation(modes[state.mode], state.recipe);
+        beginGenerate(false);
       }
 
-      renderModes();
-      selectRecipe(false);
+      function cycleMode() {
+        const currentIndex = modeOrder.indexOf(state.mode);
+        state.mode = modeOrder[(currentIndex + 1) % modeOrder.length];
+        updateModePresentation(modes[state.mode], state.recipe);
+        regenerateIfVisible();
+      }
 
-      $("modeGrid").addEventListener("click", (event) => {
-        const button = event.target.closest("[data-mode]");
-        if (!button) return;
-        state.mode = button.dataset.mode;
-        renderModes();
-        selectRecipe(true);
-      });
+      updateModePresentation(modes[state.mode], null);
 
       $("slotList").addEventListener("click", (event) => {
         const lock = event.target.closest("[data-lock]");
@@ -1411,23 +1673,32 @@
           state.locked[lock.dataset.lock] = !state.locked[lock.dataset.lock];
           render();
         }
-        if (reroll) rerollSlot(reroll.dataset.reroll);
+        if (reroll) {
+          reroll.classList.remove("is-rolling");
+          void reroll.offsetWidth;
+          reroll.classList.add("is-rolling");
+          window.setTimeout(() => rerollSlot(reroll.dataset.reroll), 850);
+        }
       });
 
-      $("generateTop").addEventListener("click", () => selectRecipe(true));
-      $("generateBottom").addEventListener("click", () => selectRecipe(true));
+      $("modeCycler").addEventListener("click", cycleMode);
+      $("moreOptionsToggle").addEventListener("click", () => {
+        const more = $("moreOptions");
+        const expanded = more.hasAttribute("hidden");
+        more.toggleAttribute("hidden", !expanded);
+        $("moreOptionsToggle").setAttribute("aria-expanded", String(expanded));
+      });
+      $("generateTop").addEventListener("click", () => beginGenerate(true));
+      $("generateBottom").addEventListener("click", () => beginGenerate(true));
       $("rerollUnlocked").addEventListener("click", () => selectRecipe(true));
       $("surpriseTop").addEventListener("click", surpriseMe);
       $("copyRecipe").addEventListener("click", copyRecipe);
-      $("chaosSlider").addEventListener("input", () => {
-        $("chaosSliderValue").textContent = $("chaosSlider").value;
-      });
-      $("chaosSlider").addEventListener("change", () => selectRecipe(true));
-      $("beginnerMode").addEventListener("change", () => selectRecipe(true));
-      $("pantryMode").addEventListener("change", () => selectRecipe(true));
-      document.querySelectorAll(".dietFilter").forEach((input) => input.addEventListener("change", () => selectRecipe(true)));
-      $("pantryInput").addEventListener("change", () => selectRecipe(true));
-      $("excludeInput").addEventListener("change", () => selectRecipe(true));
+      $("chaosSelect").addEventListener("change", regenerateIfVisible);
+      $("beginnerMode").addEventListener("change", regenerateIfVisible);
+      $("pantryMode").addEventListener("change", regenerateIfVisible);
+      document.querySelectorAll(".dietFilter").forEach((input) => input.addEventListener("change", regenerateIfVisible));
+      $("pantryInput").addEventListener("change", regenerateIfVisible);
+      $("excludeInput").addEventListener("change", regenerateIfVisible);
     })();
   </script>
 </body>
