@@ -374,6 +374,19 @@
       margin-top: 0;
     }
 
+    body.has-recipe .topbar,
+    body.has-recipe .app-hero,
+    body.has-recipe .panel {
+      display: none;
+    }
+
+    body.has-recipe .workspace {
+      display: block;
+      max-width: min(1180px, calc(100vw - 32px));
+      margin: 0 auto;
+      padding: 18px 0 max(32px, var(--safe-bottom));
+    }
+
     .panel,
     .recipe-card {
       border: 1px solid var(--line);
@@ -495,11 +508,47 @@
     }
 
     .recipe-card {
+      grid-column: 1 / -1;
+      position: relative;
       overflow: hidden;
+      border: 1px solid var(--book-line, var(--line));
+      border-radius: 14px;
+      background:
+        linear-gradient(90deg, transparent calc(50% - 1px), rgba(0, 0, 0, 0.18) 50%, transparent calc(50% + 1px)),
+        var(--book-bg, rgba(24, 19, 12, 0.94));
+      box-shadow: 0 30px 90px rgba(0, 0, 0, 0.42);
+      color: var(--page-ink, var(--ink));
+      transform: translateY(12px);
+      opacity: 0;
+      transition: opacity 0.28s ease, transform 0.28s ease;
     }
 
     .recipe-card.is-hidden {
       display: none;
+    }
+
+    .recipe-card.is-open {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .cookbook-label {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px clamp(18px, 3vw, 28px);
+      border-bottom: 1px solid var(--book-line, var(--line));
+      background: var(--book-band, rgba(0, 0, 0, 0.18));
+      color: var(--page-muted, var(--muted));
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-size: 0.8rem;
+    }
+
+    .book-stamp {
+      color: var(--book-accent, var(--gold));
     }
 
     .more-options {
@@ -527,10 +576,8 @@
       grid-template-columns: minmax(0, 1fr) minmax(210px, 300px);
       gap: 18px;
       padding: clamp(18px, 3vw, 28px);
-      background:
-        linear-gradient(120deg, rgba(255, 179, 71, 0.12), transparent 40%),
-        rgba(0, 0, 0, 0.16);
-      border-bottom: 1px solid var(--line);
+      background: var(--page-bg, rgba(0, 0, 0, 0.16));
+      border-bottom: 1px solid var(--book-line, var(--line));
     }
 
     .recipe-kicker {
@@ -547,8 +594,8 @@
       padding: 4px 9px;
       border: 1px solid var(--line);
       border-radius: 999px;
-      color: var(--muted);
-      background: rgba(0, 0, 0, 0.2);
+      color: var(--page-muted, var(--muted));
+      background: var(--pill-bg, rgba(0, 0, 0, 0.2));
       font-weight: 850;
       font-size: 0.78rem;
     }
@@ -559,12 +606,13 @@
       font-size: clamp(2.2rem, 5vw, 4.6rem);
       line-height: 0.95;
       letter-spacing: 0;
+      color: var(--page-ink, var(--ink));
     }
 
     .recipe-description {
       max-width: 65ch;
       margin: 14px 0 0;
-      color: #f2e7c8;
+      color: var(--page-ink, #f2e7c8);
       font-size: 1.08rem;
     }
 
@@ -572,11 +620,38 @@
       max-width: 66ch;
       margin: 14px 0 0;
       padding: 12px 14px;
-      border: 1px solid var(--line);
-      border-left: 4px solid var(--ember);
+      border: 1px solid var(--page-line, var(--line));
+      border-left: 4px solid var(--book-accent, var(--ember));
       border-radius: var(--radius);
-      background: rgba(0, 0, 0, 0.2);
-      color: #fff5d7;
+      background: var(--note-bg, rgba(0, 0, 0, 0.2));
+      color: var(--page-ink, #fff5d7);
+      font-weight: 850;
+    }
+
+    .suspicious-callout {
+      max-width: 66ch;
+      margin: 12px 0 0;
+      padding: 12px 14px;
+      border: 1px solid rgba(255, 205, 112, 0.5);
+      border-left: 4px solid #ffd166;
+      border-radius: var(--radius);
+      background: rgba(104, 58, 17, 0.34);
+      color: #fff8dc;
+    }
+
+    .suspicious-callout[hidden] {
+      display: none;
+    }
+
+    .suspicious-callout h3 {
+      margin: 0 0 6px;
+      font-size: 0.86rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .suspicious-callout p {
+      margin: 0;
       font-weight: 850;
     }
 
@@ -681,9 +756,10 @@
     .section {
       min-width: 0;
       padding: 16px;
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      background: rgba(0, 0, 0, 0.16);
+      border: 1px solid var(--page-line, var(--line));
+      border-radius: var(--page-radius, var(--radius));
+      background: var(--page-bg, rgba(0, 0, 0, 0.16));
+      color: var(--page-ink, #f4eddc);
     }
 
     .section + .section { margin-top: 14px; }
@@ -697,11 +773,11 @@
     .ingredient-list li,
     .instruction-list li {
       margin: 7px 0;
-      color: #f4eddc;
+      color: var(--page-ink, #f4eddc);
     }
 
-    .ingredient-list li::marker { color: var(--green); }
-    .instruction-list li::marker { color: var(--ember); font-weight: 900; }
+    .ingredient-list li::marker { color: var(--book-accent, var(--green)); }
+    .instruction-list li::marker { color: var(--book-accent, var(--ember)); font-weight: 900; }
 
     .recipe-notes {
       display: grid;
@@ -711,15 +787,15 @@
 
     .recipe-note {
       padding: 10px 11px;
-      border: 1px solid var(--line);
+      border: 1px solid var(--page-line, var(--line));
       border-radius: var(--radius);
-      background: rgba(0, 0, 0, 0.14);
-      color: #f4eddc;
+      background: var(--note-bg, rgba(0, 0, 0, 0.14));
+      color: var(--page-ink, #f4eddc);
       font-size: 0.95rem;
     }
 
     .recipe-note b {
-      color: var(--gold);
+      color: var(--book-accent, var(--gold));
     }
 
     .slot-list {
@@ -735,14 +811,14 @@
       gap: 8px;
       min-height: 48px;
       padding: 8px;
-      border: 1px solid var(--line);
+      border: 1px solid var(--page-line, var(--line));
       border-radius: var(--radius);
-      background: rgba(255, 255, 255, 0.035);
+      background: var(--note-bg, rgba(255, 255, 255, 0.035));
     }
 
     .slot b {
       display: block;
-      color: var(--ink);
+      color: var(--page-ink, var(--ink));
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -750,7 +826,7 @@
 
     .slot span {
       display: block;
-      color: var(--dim);
+      color: var(--page-muted, var(--dim));
       font-size: 0.76rem;
       font-weight: 850;
       letter-spacing: 0.08em;
@@ -805,6 +881,7 @@
       flex-wrap: wrap;
       gap: 10px;
       padding: 0 clamp(18px, 3vw, 28px) clamp(18px, 3vw, 28px);
+      background: var(--book-bg, transparent);
     }
 
     .lock-btn {
@@ -855,6 +932,113 @@
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
+    }
+
+    .cookbook-theme-safe {
+      --book-bg: #eadfca;
+      --book-band: #f8efd9;
+      --book-line: rgba(129, 92, 48, 0.34);
+      --book-accent: #a8652c;
+      --page-bg: #fff7e6;
+      --page-ink: #302417;
+      --page-muted: #7b6040;
+      --page-line: rgba(129, 92, 48, 0.25);
+      --note-bg: rgba(168, 101, 44, 0.09);
+      --pill-bg: rgba(168, 101, 44, 0.1);
+      --page-radius: 14px;
+    }
+
+    .cookbook-theme-goblin {
+      --book-bg: #302718;
+      --book-band: #1f2a17;
+      --book-line: rgba(128, 163, 71, 0.44);
+      --book-accent: #9fca58;
+      --page-bg: #d4c38e;
+      --page-ink: #241b10;
+      --page-muted: #5d4b2d;
+      --page-line: rgba(67, 82, 28, 0.36);
+      --note-bg: rgba(74, 93, 31, 0.13);
+      --pill-bg: rgba(63, 82, 31, 0.14);
+      --page-radius: 8px;
+    }
+
+    .cookbook-theme-apocalypse {
+      --book-bg: #2d3029;
+      --book-band: #3b3d34;
+      --book-line: rgba(226, 197, 113, 0.32);
+      --book-accent: #d7b24b;
+      --page-bg: #d8d0b5;
+      --page-ink: #25251f;
+      --page-muted: #64614f;
+      --page-line: rgba(73, 72, 60, 0.32);
+      --note-bg: rgba(56, 59, 49, 0.1);
+      --pill-bg: rgba(56, 59, 49, 0.12);
+      --page-radius: 4px;
+    }
+
+    .cookbook-theme-depression {
+      --book-bg: #d8d4cb;
+      --book-band: #eee9dc;
+      --book-line: rgba(119, 107, 90, 0.28);
+      --book-accent: #8876a8;
+      --page-bg: #fbf6ea;
+      --page-ink: #2c2730;
+      --page-muted: #70677a;
+      --page-line: rgba(119, 107, 90, 0.22);
+      --note-bg: rgba(136, 118, 168, 0.1);
+      --pill-bg: rgba(136, 118, 168, 0.12);
+      --page-radius: 10px;
+    }
+
+    .cookbook-theme-gym {
+      --book-bg: #202724;
+      --book-band: #151c1a;
+      --book-line: rgba(101, 214, 158, 0.32);
+      --book-accent: #65d69e;
+      --page-bg: #edf5ee;
+      --page-ink: #14251d;
+      --page-muted: #4c6659;
+      --page-line: rgba(34, 101, 70, 0.25);
+      --note-bg: rgba(35, 138, 83, 0.09);
+      --pill-bg: rgba(35, 138, 83, 0.11);
+      --page-radius: 6px;
+    }
+
+    .cookbook-theme-medieval {
+      --book-bg: #3c2a18;
+      --book-band: #4b321b;
+      --book-line: rgba(202, 155, 82, 0.38);
+      --book-accent: #c98e42;
+      --page-bg: #e0c58d;
+      --page-ink: #2c1a0d;
+      --page-muted: #6b4b28;
+      --page-line: rgba(93, 58, 25, 0.3);
+      --note-bg: rgba(92, 56, 25, 0.1);
+      --pill-bg: rgba(92, 56, 25, 0.12);
+      --page-radius: 5px;
+    }
+
+    .cookbook-theme-hoity {
+      --book-bg: #0d0c0b;
+      --book-band: #171411;
+      --book-line: rgba(214, 177, 91, 0.46);
+      --book-accent: #d6b15b;
+      --page-bg: #f7f0df;
+      --page-ink: #15110c;
+      --page-muted: #6f5b34;
+      --page-line: rgba(214, 177, 91, 0.35);
+      --note-bg: rgba(214, 177, 91, 0.1);
+      --pill-bg: rgba(214, 177, 91, 0.12);
+      --page-radius: 2px;
+    }
+
+    .cookbook-theme-goblin .recipe-header,
+    .cookbook-theme-medieval .recipe-header,
+    .cookbook-theme-apocalypse .recipe-header {
+      background:
+        radial-gradient(circle at 14% 20%, rgba(92, 62, 25, 0.2), transparent 16%),
+        radial-gradient(circle at 82% 74%, rgba(56, 40, 16, 0.16), transparent 18%),
+        var(--page-bg);
     }
 
     @keyframes dice-roll {
@@ -965,6 +1149,10 @@
         grid-template-columns: 1fr;
       }
 
+      .recipe-card {
+        background: var(--book-bg, rgba(24, 19, 12, 0.94));
+      }
+
       .app-hero {
         min-height: auto;
         padding-top: 8px;
@@ -1066,6 +1254,7 @@
           <div class="control-block">
             <h2>Dietary Filters</h2>
             <div class="filters">
+              <label><input type="checkbox" id="suspiciousToggle" checked> Enable Suspicious Ingredients</label>
               <label><input type="checkbox" value="vegetarian" class="dietFilter"> Vegetarian</label>
               <label><input type="checkbox" value="seafood-free" class="dietFilter"> No seafood</label>
               <label><input type="checkbox" value="dairy-free" class="dietFilter"> Dairy-free</label>
@@ -1087,6 +1276,10 @@
       </aside>
 
       <article class="recipe-card is-hidden" id="recipeCard" aria-live="polite">
+        <div class="cookbook-label">
+          <span id="bookLabel">Goblin Grimoire</span>
+          <span class="book-stamp" id="bookStamp">Goblin approved</span>
+        </div>
         <header class="recipe-header">
           <div>
             <div class="recipe-kicker">
@@ -1097,6 +1290,10 @@
             <h2 class="recipe-title" id="recipeName">Sludge Pot Supreme</h2>
             <p class="recipe-description" id="recipeDescription">Creamy, cozy, mildly suspicious, and very likely dinner.</p>
             <p class="mode-commentary" id="modeCommentary">Warm, simple, and hard to mess up.</p>
+            <div class="suspicious-callout" id="suspiciousCallout" hidden>
+              <h3 id="suspiciousTitle">Culinary Risk Detected</h3>
+              <p><strong id="suspiciousIngredient">Crushed chips</strong>: <span id="suspiciousCommentary">The crunch is suspiciously effective.</span></p>
+            </div>
           </div>
           <div class="art-card" id="artCard">
             <div class="dish-art">
@@ -1149,6 +1346,7 @@
           <button class="primary-btn" type="button" id="generateBottom">Generate Meal</button>
           <button class="secondary-btn" type="button" id="copyRecipe">Copy Recipe</button>
           <button class="secondary-btn" type="button" id="rerollUnlocked">Reroll Unlocked</button>
+          <button class="secondary-btn" type="button" id="closeCookbook">Back to Kitchen</button>
         </div>
       </article>
     </main>
@@ -1306,11 +1504,101 @@
         "herbs and butter": { add: ["dried herbs", "butter"], avoid: [], methods: ["stew", "soup", "roasted tray"] }
       };
 
+      const SUSPICIOUS_INGREDIENTS = {
+        safe: [
+          suspicious("apple slices", "1/2 apple, thinly sliced", ["toast", "tortilla", "skillet", "cheese", "pork", "chicken", "smoky bbq"], "Layer the apple slices on at the end for a sweet crunch.", ["Sweet crunch has entered quietly.", "This is wholesome mischief, not danger."]),
+          suspicious("hot honey drizzle", "1 tbsp hot honey", ["toast", "tortilla", "roasted tray", "chicken", "sausage", "potatoes", "smoky bbq"], "Drizzle the hot honey over the finished food right before eating.", ["Sweet heat makes a strong argument.", "A tiny drizzle is doing surprisingly adult work."]),
+          suspicious("parmesan popcorn crumble", "1/2 cup parmesan popcorn, lightly crushed", ["toast", "baked casserole", "pasta", "creamy parmesan", "tomato basil"], "Sprinkle the crushed popcorn over the finished dish so it stays crunchy.", ["Crunchy, salty, and suspiciously polite.", "Movie snack logic has become dinner logic."]),
+          suspicious("maple drizzle", "1 tbsp maple syrup", ["roasted tray", "potatoes", "pork", "sausage", "smoky bbq"], "Drizzle a little maple over the hot food, then taste before adding more.", ["Breakfast made a quiet dinner cameo.", "Sweet and savory are shaking hands."])
+        ],
+        goblin: [
+          suspicious("crushed jalapeno chips", "1/2 cup crushed jalapeno chips", ["toast", "tortilla", "boxed mac", "rice bowl", "baked casserole", "buffalo", "cajun"], "Sprinkle the crushed chips on top right before eating so they stay crunchy.", ["That sounds illegal, but the crunch works.", "The goblins insist this improves morale."]),
+          suspicious("pickle juice splash", "1 tbsp pickle juice", ["potatoes", "tuna", "rice bowl", "skillet", "pickle brine", "smoky bbq"], "Stir in the pickle juice at the end, then taste before adding any extra salt.", ["Acid goblin approved.", "It wakes the whole pan up, possibly against its will."]),
+          suspicious("peanut butter drizzle", "1 tbsp peanut butter thinned with warm water", ["ramen", "noodles", "soy ginger", "buffalo", "red curry"], "Mix the peanut butter with 1 tablespoon warm water, then stir it in until it turns saucy.", ["Wait. Hold on. This is basically pantry satay.", "Questionable at first, persuasive by bite two."]),
+          suspicious("crispy fried onions", "1/3 cup crispy fried onions", ["baked casserole", "rice bowl", "skillet", "boxed mac", "potatoes"], "Scatter the crunchy onions over the finished food.", ["The crunch is suspiciously effective.", "A tiny casserole hat has appeared."])
+        ],
+        apocalypse: [
+          suspicious("crushed crackers", "1/2 cup crushed crackers", ["soup", "stew", "chili", "tuna", "beans", "canned tomatoes"], "Crush crackers over the bowl right before eating, or stir them in to thicken soup.", ["Calories are calories. The crackers understand.", "Survival crunch has joined the mission."]),
+          suspicious("spam crispies", "1/3 cup diced spam, browned until crisp", ["rice bowl", "ramen", "skillet", "cajun", "soy ginger"], "Brown the diced spam in the pan first if it is not already the main protein, then use it like salty croutons.", ["The bunker calls this garnish.", "Crispy salty bits rarely fail morale."]),
+          suspicious("canned corn crunch", "1/2 cup canned corn, drained well", ["rice bowl", "skillet", "cajun", "buffalo", "smoky bbq"], "Drain the corn well and stir it in during the last 2 minutes.", ["The can did its best, and honestly, fair.", "A little sweet pop makes the pantry feel less bleak."]),
+          suspicious("ramen seasoning dust", "1/2 ramen seasoning packet", ["rice bowl", "skillet", "soup", "stew"], "Sprinkle in half the seasoning packet, then taste before adding more salt.", ["Tiny silver packet, large opinions.", "The wasteland has seasoning now."])
+        ],
+        depression: [
+          suspicious("slice of cheese in ramen", "1 slice cheese", ["ramen", "noodles", "buffalo", "soy ginger"], "Turn off the heat, lay the cheese on top, and let it melt for 1 minute before stirring.", ["Surprisingly common among exhausted college students.", "Soft, salty comfort has clocked in."]),
+          suspicious("butter cinnamon sugar tortilla", "1 tortilla with butter, cinnamon, and sugar", ["tortilla", "toast"], "Warm the buttered cinnamon-sugar tortilla on the side as a tiny dessert or comfort side.", ["Dinner brought a blanket.", "Not every useful food has to be serious."]),
+          suspicious("frozen meatball shortcut", "4 frozen meatballs, heated through", ["pasta", "boxed mac", "rice bowl", "tomato basil", "smoky bbq"], "Heat the meatballs according to the package, then add them to the finished bowl or pasta.", ["Low effort, high morale.", "The freezer contributed and we respect that."]),
+          suspicious("ranch swirl", "1 tbsp ranch", ["boxed mac", "potatoes", "buffalo", "smoky bbq", "toast"], "Swirl in the ranch after cooking, off the heat, so it tastes creamy instead of split.", ["The comfort-food committee approves.", "A little ranch is doing emotional support work."])
+        ],
+        gym: [
+          suspicious("cottage cheese hot sauce", "1/2 cup cottage cheese with hot sauce", ["rice bowl", "potatoes", "buffalo", "cajun", "chicken", "tuna"], "Spoon the cottage cheese on after cooking, then add hot sauce to taste.", ["Protein found a spicy little hat.", "Fuel the machine, but make it weirdly creamy."]),
+          suspicious("peanut butter protein drizzle", "1 tbsp peanut butter thinned with warm water", ["rice bowl", "soy ginger", "chicken", "tofu"], "Mix peanut butter with warm water until pourable, then drizzle it over the finished bowl.", ["Meal prep discovered sauce.", "A little nutty, a little useful."]),
+          suspicious("crushed protein chips", "1/2 cup crushed protein chips", ["rice bowl", "tortilla", "skillet", "buffalo", "smoky bbq"], "Add the crushed chips at the end for crunch.", ["Crunch, but it tracks macros.", "A loud topping with gym-bag confidence."]),
+          suspicious("greek yogurt sauce", "1/3 cup Greek yogurt sauce", ["rice bowl", "potatoes", "lemon herb", "cajun", "smoky bbq"], "Keep the yogurt sauce cool and spoon it over the hot food after cooking.", ["Cool sauce, hot dinner, reasonable gains.", "This one is less cursed than it looks."])
+        ],
+        medieval: [
+          suspicious("stale bread chunks", "1 cup stale bread chunks", ["soup", "stew", "broth", "tomato basil", "herbs and butter"], "Add the bread during the last 5 minutes if you want it soft, or serve it on top if you want chew.", ["Old bread has found its destiny.", "Congratulations. The stew has structure now."]),
+          suspicious("vinegar splash", "1 tsp vinegar", ["stew", "soup", "lentils", "beans", "cabbage"], "Stir in the vinegar at the very end, then taste. It should brighten the pot, not take over.", ["The broth has awakened.", "A peasant trick with real range."]),
+          suspicious("apple and cabbage", "1/2 apple, thinly sliced", ["cabbage", "pork", "sausage", "roasted tray", "stew"], "Add the apple with the cabbage so it softens slightly but does not disappear.", ["Rustic sweetness has entered the village.", "This is older than it sounds."]),
+          suspicious("jam with meat", "1 tbsp dark jam", ["pork", "sausage", "duck", "roasted tray", "skillet"], "Stir the jam into the pan juices or spoon a tiny bit beside the meat.", ["Medieval sauce behavior detected.", "Sweet fruit with salty meat is doing ancient work."])
+        ],
+        hoity: [
+          suspicious("truffle honey", "1 tbsp truffle honey", ["duck", "prosciutto", "burrata", "crusty bread", "roasted tray"], "Drizzle the truffle honey at the very end, with maximum unnecessary confidence.", ["An aristocratic amount of truffle has been applied.", "This sounds fake, which means it is probably on a menu."]),
+          suspicious("balsamic strawberries", "1/3 cup strawberries with balsamic", ["burrata", "salmon", "crusty bread", "lemon herb"], "Spoon the balsamic strawberries beside or over the finished plate, not into the hot pan.", ["Fruit has become architecture.", "Sweet acidity, wearing formalwear."]),
+          suspicious("fig jam accent", "1 tbsp fig jam", ["duck", "filet", "prosciutto", "crusty bread", "skillet"], "Add a small spoonful of fig jam beside the protein or melt it into the pan sauce.", ["Pairs beautifully with a wine nobody can pronounce.", "A tiny luxury fruit situation has developed."]),
+          suspicious("edible flowers", "1 tbsp edible flowers", ["burrata", "salmon", "heirloom tomatoes", "lemon herb", "toast"], "Scatter edible flowers over the plate after cooking. Do not cook them.", ["The plate is now auditioning for a magazine.", "Decorative, edible, and deeply unserious."])
+        ]
+      };
+
+      const MODE_COOKBOOK_THEMES = {
+        safe: {
+          className: "cookbook-theme-safe",
+          label: "Cozy Home Cookbook",
+          stamp: "Kitchen tested",
+          loadingMessage: "Warming the oven..."
+        },
+        goblin: {
+          className: "cookbook-theme-goblin",
+          label: "Goblin Grimoire",
+          stamp: "Goblin approved",
+          loadingMessage: "Consulting the pot goblins..."
+        },
+        apocalypse: {
+          className: "cookbook-theme-apocalypse",
+          label: "Wasteland Survival Manual",
+          stamp: "Ration log",
+          loadingMessage: "Checking the bunker pantry..."
+        },
+        depression: {
+          className: "cookbook-theme-depression",
+          label: "Bare Minimum Notebook",
+          stamp: "No shame",
+          loadingMessage: "Finding something manageable..."
+        },
+        gym: {
+          className: "cookbook-theme-gym",
+          label: "Meal Prep Training Log",
+          stamp: "Protein logged",
+          loadingMessage: "Calculating gains..."
+        },
+        medieval: {
+          className: "cookbook-theme-medieval",
+          label: "Hearthside Recipe Tome",
+          stamp: "Stew ledger",
+          loadingMessage: "Summoning the stew ledger..."
+        },
+        hoity: {
+          className: "cookbook-theme-hoity",
+          label: "Grand Tasting Menu",
+          stamp: "Chef's flourish",
+          loadingMessage: "Polishing the silver spoons..."
+        }
+      };
+
       const dietRules = {
         vegetarian: ["chicken", "beef", "sausage", "salmon", "shrimp", "pork", "tuna", "spam", "hot dogs", "meatballs", "duck", "lobster", "filet", "prosciutto"],
         "seafood-free": ["salmon", "shrimp", "tuna", "lobster"],
-        "dairy-free": ["cheese", "cream", "parmesan", "butter", "burrata", "greek yogurt"],
-        "gluten-light": ["pasta", "bread", "ramen", "boxed mac", "tagliatelle", "tortillas", "flour tortillas"]
+        "dairy-free": ["cheese", "cream", "parmesan", "butter", "burrata", "greek yogurt", "cottage cheese", "ranch"],
+        "gluten-light": ["pasta", "bread", "ramen", "boxed mac", "tagliatelle", "tortillas", "flour tortillas", "crackers"]
       };
 
       const state = {
@@ -1326,14 +1614,6 @@
       const modes = MODE_CONFIG;
 
       const modeOrder = ["safe", "goblin", "apocalypse", "depression", "gym", "medieval", "hoity"];
-
-      const thinkingMessages = [
-        "Sniffing ingredients and making choices.",
-        "Asking the pantry what it has done.",
-        "Rolling the tiny dinner dice.",
-        "Checking if this counts as cooking.",
-        "Negotiating with the sauce."
-      ];
 
       const slots = [
         { key: "protein", label: "Protein" },
@@ -1420,6 +1700,8 @@
         recipe.chaos = Math.round(chaosRaw);
         recipe.difficulty = resolveDifficulty(recipe.method, recipe.chaos);
         recipe.time = resolveTime(recipe.method, state.mode);
+        recipe.suspicious = selectSuspiciousIngredient(recipe, diets);
+        recipe.suspiciousCommentary = recipe.suspicious ? choice(recipe.suspicious.commentary) : "";
         recipe.name = makeName(mode, recipe);
         recipe.description = makeDescription(mode, recipe);
         recipe.commentary = choice(mode.commentary);
@@ -1427,7 +1709,7 @@
         recipe.prepNotes = buildPrepNotes(recipe);
         recipe.cleanup = cleanupLevel(recipe);
         recipe.warnings = buildWarnings(recipe);
-        recipe.instructions = buildInstructions(mode, recipe);
+        recipe.instructions = addSuspiciousInstruction(buildInstructions(mode, recipe), recipe);
         recipe.modeLabel = mode.label;
         recipe.chaosLabel = chaosLabel(recipe.chaos, state.mode);
         state.recipe = recipe;
@@ -1534,20 +1816,86 @@
         const flavorLine = recipe.flavor === "buffalo"
           ? "Expect hot-sauce chaos with "
           : "Expect " + recipe.flavor + " flavor with ";
-        return choice(mode.descriptionOpeners) + " " + flavorLine + recipe.protein + ", " + recipe.base + ", and " + recipe.vegetable + ".";
+        const suspiciousLine = recipe.suspicious ? " A suspicious " + recipe.suspicious.ingredient + " move is involved." : "";
+        return choice(mode.descriptionOpeners) + " " + flavorLine + recipe.protein + ", " + recipe.base + ", and " + recipe.vegetable + "." + suspiciousLine;
       }
 
       function buildIngredients(recipe, rules, diets) {
         const staples = ["oil", "salt", "pepper"];
         const extras = rules.add || [];
-        const list = [recipe.protein, recipe.base, recipe.vegetable].concat(extras, staples, ["water or broth", "something acidic if it tastes flat"]);
+        const suspicious = recipe.suspicious ? [recipe.suspicious.ingredient] : [];
+        const list = [recipe.protein, recipe.base, recipe.vegetable].concat(extras, suspicious, staples, ["water or broth", "something acidic if it tastes flat"]);
         return unique(list)
           .filter((item) => !isBlocked(item, [], diets))
           .map((item) => formatIngredient(item, recipe));
       }
 
+      function suspicious(ingredient, amount, compatibleWith, use, commentary) {
+        return { ingredient, amount, compatibleWith, use, commentary };
+      }
+
+      function suspiciousEnabled() {
+        const toggle = $("suspiciousToggle");
+        return !!toggle && toggle.checked;
+      }
+
+      function suspiciousChance(modeKey, chaos) {
+        const base = {
+          safe: 0.16,
+          goblin: 0.82,
+          apocalypse: 0.56,
+          depression: 0.44,
+          gym: 0.34,
+          medieval: 0.46,
+          hoity: 0.5
+        }[modeKey] || 0.25;
+        return Math.max(0.05, Math.min(0.92, base + ((chaos - 3) * 0.07)));
+      }
+
+      function selectSuspiciousIngredient(recipe, diets) {
+        if (!suspiciousEnabled()) return null;
+        if (Math.random() > suspiciousChance(state.mode, recipe.chaos)) return null;
+        const pool = SUSPICIOUS_INGREDIENTS[state.mode] || [];
+        const compatible = pool.filter((item) => {
+          if (isBlocked(item.ingredient, [], diets)) return false;
+          if (state.dungeon.some((blocked) => normalize(item.ingredient).includes(blocked) || blocked.includes(normalize(item.ingredient)))) return false;
+          return suspiciousCompatible(item, recipe);
+        });
+        return compatible.length ? choice(compatible) : null;
+      }
+
+      function suspiciousCompatible(item, recipe) {
+        const tokens = recipeTokens(recipe);
+        return item.compatibleWith.some((match) => tokens.includes(normalize(match)));
+      }
+
+      function recipeTokens(recipe) {
+        const tokens = [
+          recipe.method,
+          recipe.flavor,
+          recipe.protein,
+          recipe.base,
+          recipe.vegetable,
+          foodType(recipe.method)
+        ].map(normalize);
+        const base = normalize(recipe.base);
+        const method = normalize(recipe.method);
+        if (base.includes("tortilla")) tokens.push("tortilla", "burrito");
+        if (base.includes("bread") || method.includes("toast")) tokens.push("toast", "sandwich");
+        if (base.includes("boxed mac")) tokens.push("boxed mac", "mac_and_cheese");
+        if (base.includes("ramen")) tokens.push("ramen", "noodles");
+        if (method.includes("rice bowl")) tokens.push("rice bowl", "rice_bowl", "bowl");
+        if (method.includes("soup")) tokens.push("soup", "broth");
+        if (method.includes("stew")) tokens.push("stew", "broth");
+        if (method.includes("casserole")) tokens.push("baked casserole");
+        return unique(tokens);
+      }
+
       function formatIngredient(item, recipe) {
         const lower = normalize(item);
+        if (recipe.suspicious && lower === normalize(recipe.suspicious.ingredient)) {
+          return recipe.suspicious.amount;
+        }
         if (lower === "something acidic if it tastes flat") {
           return "Optional: 1 tsp lemon juice or vinegar, if needed";
         }
@@ -1583,6 +1931,9 @@
         }
         if (lower === "jarred jalapeno slices") {
           return "2 tbsp jarred jalapeno slices, drained";
+        }
+        if (lower === "pickles") {
+          return "1/3 cup sliced pickles";
         }
         if (lower === "polenta") {
           return "2 cups prepared polenta";
@@ -1695,6 +2046,14 @@
         if (state.mode === "medieval") return medievalInstructions(recipe);
         if (state.mode === "hoity") return hoityInstructions(recipe);
         return safeInstructions(recipe);
+      }
+
+      function addSuspiciousInstruction(steps, recipe) {
+        if (!recipe.suspicious) return steps;
+        const copy = steps.slice();
+        const insertAt = Math.max(0, copy.length - 1);
+        copy.splice(insertAt, 0, "Suspicious ingredient move: " + recipe.suspicious.use);
+        return copy;
       }
 
       function safeInstructions(recipe) {
@@ -2271,12 +2630,14 @@
       function render() {
         const recipe = state.recipe;
         if (!recipe) return;
+        applyCookbookTheme(state.mode);
         $("modePill").textContent = recipe.modeLabel;
         $("methodPill").textContent = titleCase(recipe.method);
         $("timePill").textContent = recipe.time;
         $("recipeName").textContent = recipe.name;
         $("recipeDescription").textContent = recipe.description;
         $("modeCommentary").textContent = recipe.commentary;
+        renderSuspiciousCallout(recipe);
         $("ingredientList").innerHTML = recipe.ingredients.map((item) => "<li>" + item + "</li>").join("");
         $("recipeNotes").innerHTML = renderRecipeNotes(recipe);
         $("instructionList").innerHTML = recipe.instructions.map((item) => "<li>" + item + "</li>").join("");
@@ -2291,6 +2652,28 @@
         $("artCard").style.setProperty("--accent-food", colorFor(recipe.protein, "a"));
         $("artCard").style.setProperty("--veg-food", colorFor(recipe.vegetable, "b"));
         $("artCard").style.setProperty("--protein-food", colorFor(recipe.protein, "b"));
+      }
+
+      function cookbookTheme(modeKey) {
+        return MODE_COOKBOOK_THEMES[modeKey] || MODE_COOKBOOK_THEMES.safe;
+      }
+
+      function applyCookbookTheme(modeKey) {
+        const card = $("recipeCard");
+        const theme = cookbookTheme(modeKey);
+        Object.values(MODE_COOKBOOK_THEMES).forEach((item) => card.classList.remove(item.className));
+        card.classList.add(theme.className);
+        $("bookLabel").textContent = theme.label;
+        $("bookStamp").textContent = theme.stamp;
+      }
+
+      function renderSuspiciousCallout(recipe) {
+        const callout = $("suspiciousCallout");
+        callout.hidden = !recipe.suspicious;
+        if (!recipe.suspicious) return;
+        $("suspiciousTitle").textContent = state.mode === "goblin" ? "Suspicious Ingredient Added" : "Culinary Risk Detected";
+        $("suspiciousIngredient").textContent = titleCase(recipe.suspicious.ingredient);
+        $("suspiciousCommentary").textContent = recipe.suspiciousCommentary;
       }
 
       function renderSlot(slot, value) {
@@ -2356,6 +2739,22 @@
         state.hasRecipe = true;
         document.body.classList.add("has-recipe");
         $("recipeCard").classList.remove("is-hidden");
+        window.requestAnimationFrame(() => $("recipeCard").classList.add("is-open"));
+        if (window.location.hash !== "#cookbook") {
+          history.pushState({ view: "cookbook" }, "", "#cookbook");
+        }
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+
+      function closeCookbook() {
+        state.hasRecipe = false;
+        document.body.classList.remove("has-recipe");
+        $("recipeCard").classList.remove("is-open");
+        window.setTimeout(() => $("recipeCard").classList.add("is-hidden"), 220);
+        if (window.location.hash === "#cookbook") {
+          history.pushState({ view: "kitchen" }, "", window.location.pathname + window.location.search);
+        }
+        window.scrollTo({ top: 0, behavior: "smooth" });
       }
 
       function hideThinking() {
@@ -2365,7 +2764,7 @@
 
       function beginGenerate(preserveLocks) {
         window.clearTimeout(state.thinkingTimer);
-        $("thinkingMessage").textContent = choice(thinkingMessages);
+        $("thinkingMessage").textContent = cookbookTheme(state.mode).loadingMessage;
         $("thinkingPage").classList.add("is-visible");
         $("thinkingPage").setAttribute("aria-hidden", "false");
         state.thinkingTimer = window.setTimeout(() => {
@@ -2386,6 +2785,7 @@
           "",
           recipe.description,
           recipe.commentary,
+          recipe.suspicious ? "Suspicious Ingredient: " + titleCase(recipe.suspicious.ingredient) + " - " + recipe.suspiciousCommentary : "",
           "",
           "Prep Notes:",
           recipe.prepNotes.map((item) => "- " + item).join("\n"),
@@ -2469,10 +2869,12 @@
       });
       $("generateTop").addEventListener("click", () => beginGenerate(true));
       $("generateBottom").addEventListener("click", () => beginGenerate(true));
-      $("rerollUnlocked").addEventListener("click", () => selectRecipe(true));
+      $("rerollUnlocked").addEventListener("click", () => beginGenerate(true));
       $("surpriseTop").addEventListener("click", surpriseMe);
       $("copyRecipe").addEventListener("click", copyRecipe);
+      $("closeCookbook").addEventListener("click", closeCookbook);
       $("chaosSelect").addEventListener("change", regenerateIfVisible);
+      $("suspiciousToggle").addEventListener("change", regenerateIfVisible);
       document.querySelectorAll(".dietFilter").forEach((input) => input.addEventListener("change", regenerateIfVisible));
       $("pantryInput").addEventListener("change", regenerateIfVisible);
     })();
